@@ -1,0 +1,86 @@
+.btnIniciarSesion {
+    border: 1px;
+    border-radius: 25px;
+    height: 50px;
+    width: 300px !important;
+    display: inline !important;
+    background-color: #74E36B;
+    color: #0F4F80;
+}
+
+.tituloBienvenido {
+    color: #1780E8;
+}
+
+.inputsFormulario {
+    text-align: center;
+    border: 1px solid #1780E8;
+    border-radius: 1.5em;
+    height: 50px;
+    width: 300px;
+    display: inline;
+    background-color: #E8EAED;
+}
+
+body {
+    background-image: url("../../assets/img/vumOfficeImgs/background-autenticacion.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.fontBienvenido {
+    font-weight: 700;
+}
+
+.labelInpiut {
+    font-size: 1rem;
+}
+
+.inputWithIcon {
+    width: 300px !important;
+    display: inline-flex;
+}
+
+.input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu),
+.input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3) {
+    border-top-right-radius: 1.5em !important;
+    border-bottom-right-radius: 1.5em !important;
+    border-top-left-radius: 1.5em !important;
+    border-bottom-left-radius: 1.5em !important;
+}
+
+.input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-left-radius: 1.5em !important;
+    border-bottom-left-radius: 1.5em !important;
+}
+
+#iconEye {
+    cursor: pointer;
+}
+
+.fontLinkLabel {
+    font-weight: 600;
+}
+
+.fontFooter {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
+    .btnIniciarSesion,
+    .inputsFormulario,
+    .inputWithIcon {
+        width: 100% !important;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) {
+    .btnIniciarSesion,
+    .inputsFormulario,
+    .inputWithIcon {
+        width: 100% !important;
+    }
+}

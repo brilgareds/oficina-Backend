@@ -1,0 +1,172 @@
+.paddingContainer {
+    padding: 0% 1.03% 0% 0%;
+}
+
+.navbarMobile {
+    background-color: white;
+    margin-left: 0;
+}
+
+.navbar-vertical.navbar-expand-xl.navbar-card .navbar-collapse,
+.navbar-vertical.navbar-expand-xl.navbar-card .navbar-vertical-content,
+.navbar-vertical.navbar-expand-xl.navbar-vibrant .navbar-collapse,
+.navbar-vertical.navbar-expand-xl.navbar-vibrant .navbar-vertical-content,
+.navbar-vertical.navbar-expand-xl.navbar-inverted .navbar-collapse,
+.navbar-vertical.navbar-expand-xl.navbar-inverted .navbar-vertical-content {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-vertical.navbar-expand-xl.navbar-card .toggle-icon-wrapper,
+.navbar-vertical.navbar-expand-xl.navbar-vibrant .toggle-icon-wrapper,
+.navbar-vertical.navbar-expand-xl.navbar-inverted .toggle-icon-wrapper {
+    margin-right: 2.5rem;
+}
+
+main.main {
+    background-image: url("../../assets/img/vumOfficeImgs/background-home.png");
+    background-repeat: no-repeat;
+    /* background-size: 100% 100%; */
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.navbar-vertical.navbar-expand-xl+.content .navbar-top {
+    background-color: none !important;
+}
+
+.navbar-top {
+    background-color: white;
+}
+
+.navbar-top .navbar-toggler {
+    margin-left: 0.375rem;
+}
+
+.iconUser {
+    font-size: 20px;
+}
+
+.navbarPadding {
+    background-color: white;
+    height: calc(100vh - 9.3125rem) !important;
+}
+
+.avatarIcon {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.sombraNavbarInhabilitada {
+    box-shadow: unset !important;
+    margin: 0 !important;
+}
+
+.navbar-vertical .toggle-icon-wrapper {
+    margin-left: 0.25rem;
+}
+
+.divCerrarSesion {
+    background-color: #74E36B;
+    height: auto;
+    padding: 5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.hrNavBar {
+    background-color: #5F5F5F !important;
+}
+
+.navbar-vertical .navbar-collapse {
+    background-color: white !important;
+}
+
+.spanCerrarSesion {
+    color: #0F4F80;
+}
+
+.iconoCerrarSesion {
+    width: 30px;
+}
+
+.tituloUsuarioCard {
+    color: #1780E8;
+}
+
+@media (min-width: 1200px) {
+    .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-collapse {
+        width: 100% !important;
+    }
+    /* Css para colocar el icono de cerrar sesion al 80% solamente cuando esté el menú comprimido*/
+    .navbar-vertical-collapsed:not(.navbar-vertical-collapsed-hover).navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-collapse>.divCerrarSesion>.row>.col-md-12>.iconoCerrarSesion {
+        width: 80%;
+        transition: transform .1s;
+    }
+    .navbar-vertical.navbar-expand-xl+.content {
+        margin-left: 13.6rem;
+    }
+    .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-vertical-content {
+        padding-left: 0.5rem;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
+    .paddingContainer {
+        padding: 0px 20px 20px 20px;
+    }
+    .headerMobile {
+        display: flex !important;
+    }
+    .navbar-glass {
+        background-color: white !important;
+    }
+    .navbar-vertical.navbar-card,
+    .navbar-vertical.navbar-vibrant,
+    .navbar-vertical.navbar-inverted {
+        padding-left: unset;
+        padding-right: unset;
+    }
+    .navbarMobile {
+        padding: 0% 2% 0% 0% !important;
+        background-color: unset !important;
+        margin-left: -15.1px;
+    }
+    #generalContent {
+        padding: 1% !important;
+    }
+    .navbarPadding {
+        max-height: 500px !important;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
+    .paddingContainer {
+        padding: 0px 20px 20px 20px;
+    }
+    .headerMobile {
+        display: flex !important;
+    }
+    .navbar-glass {
+        background-color: white !important;
+    }
+    .navbar-vertical.navbar-card,
+    .navbar-vertical.navbar-vibrant,
+    .navbar-vertical.navbar-inverted {
+        padding-left: unset;
+        padding-right: unset;
+    }
+    .navbarMobile {
+        padding: 0% 2% 0% 0% !important;
+        background-color: unset !important;
+        margin-left: -15.1px;
+    }
+    #generalContent {
+        padding: 1% !important;
+    }
+    .navbarPadding {
+        max-height: 500px !important;
+    }
+}
