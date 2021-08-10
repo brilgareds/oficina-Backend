@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Dashboard } from "./pages/Dashboard/Dashboard";
-// import { Login } from "./pages/Login/Login";
+import './index.css';
+import { AppRouter } from "./routers/AppRouter";
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <Dashboard/>
+    <AppRouter/>
   </React.StrictMode>,
-  document.getElementById("top")
+  document.getElementById("rootVum")
 );
