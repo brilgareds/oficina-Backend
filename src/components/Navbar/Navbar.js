@@ -1,0 +1,38 @@
+import React from 'react';
+import { MenuPrincipal } from '../MenuPrincipal/MenuPrincipal'
+
+export const Navbar = ({ menu }) => {
+
+
+    return (
+        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile">
+
+            <div className="d-flex align-items-center" style={{ paddingLeft: "5%" }}>
+                <div className="toggle-icon-wrapper">
+                    <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Menú Principal"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
+                </div>
+                <a className="navbar-brand" href="index.html">
+                    <div className="d-flex align-items-center py-3">
+                        <img className="me-2" src="./assets/img/logo-vum-login.svg" alt="" width="80" />
+                    </div>
+                </a>
+            </div>
+
+            <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
+                <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
+                    <MenuPrincipal menu={ menu } k={ 'menu_1' } key={ 'menu_1' } />
+                </div>
+                <div className="divCerrarSesion text-center">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <img className="iconoCerrarSesion" src="./assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
+                        </div>
+                        <div className="col-md-12">
+                            <span className="spanCerrarSesion nav-link-text">Cerrar Sesion</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    )
+}

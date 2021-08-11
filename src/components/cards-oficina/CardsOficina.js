@@ -38,7 +38,7 @@ export const CardsOficina = () => {
 
         oficinas.map(({ imgUrl, nombre, copy, redirecTo }, idx) => {
             return (
-                <div id={idx} className='col-sm-12 col-lg-3 mb-4 zoom' >
+                <div key={idx} className='col-sm-12 col-lg-3 mb-4 zoom' >
                     <Link to={{ pathname: redirecTo }}>
                         <div className='card sombraCards'>
                             <div>
