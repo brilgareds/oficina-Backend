@@ -1,34 +1,13 @@
-.sombraCards {
-    -webkit-box-shadow: 6px 6px 13px -1px rgba(0, 0, 0, 0.41);
-    -moz-box-shadow: 6px 6px 13px -1px rgba(0, 0, 0, 0.41);
-    box-shadow: 6px 6px 13px -1px rgba(0, 0, 0, 0.41);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
+/* main.main {
+    background-image: url("../../assets/img/vumOfficeImgs/background-home.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+} */
 
-.imgHeaderCard {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-.oficinaBotomCopy {
-    background-color: #1780E8;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    height: 180px;
-    max-height: 180px;
-}
-
-.tittleCardOficina {
-    font-weight: 500;
-    color: white;
-    font-size: 29px;
-}
-
-.bodyCardOficina {
-    font-weight: 200;
-    color: white;
-    font-size: 14px;
+.dashboard {
+    background-image: url("../../assets/img/vumOfficeImgs/background-home.png");
 }
 
 .btnVumOffice {
@@ -47,17 +26,6 @@
 
 .imgVumHeader {
     width: 20%;
-}
-
-.zoom {
-    transition: transform .3s;
-}
-
-.zoom:hover {
-    -ms-transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
-    transition: transform .3s;
 }
 
 .spanNombreUsuario{
@@ -87,9 +55,8 @@
     .imgVumHeader {
         width: 70%;
     }
-    .oficinaBotomCopy {
-        height: auto;
-        max-height: unset;
+    #root{
+        padding: 10px !important;
     }
 }
 
@@ -101,8 +68,7 @@
     .imgVumHeader {
         width: 70%;
     }
-    .oficinaBotomCopy {
-        height: auto;
-        max-height: unset;
+    #root{
+        padding: 10px !important;
     }
 }
