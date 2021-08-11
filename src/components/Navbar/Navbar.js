@@ -3,17 +3,13 @@ import { MenuPrincipal } from '../MenuPrincipal/MenuPrincipal'
 
 export const Navbar = ({ menu }) => {
 
-    if (!menu) {
-        return <></>;
-    }
-
 
     return (
         <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile">
 
             <div className="d-flex align-items-center" style={{ paddingLeft: "5%" }}>
                 <div className="toggle-icon-wrapper">
-                    <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Menú"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
+                    <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Menú Principal"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
                 </div>
                 <a className="navbar-brand" href="index.html">
                     <div className="d-flex align-items-center py-3">

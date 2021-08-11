@@ -50,15 +50,10 @@ export const Dashboard = () => {
     return (
         <main className="main dashboard" id="top">
             <div className="paddingContainer" data-layout="container">
-
                 <Navbar menu={ menu[0] } />
-
                 <div className="content">
-
-                   <Header menu={ menu[1] } />
-                        
+                    <Header menu={ menu[1] } />
                     <div className="row p-4" id="root">
-
                         <div className="card-body">
                             <div className="tab-content">
                                 <div className="tab-pane preview-tab-pane active" role="tabpanel" aria-labelledby="tab-dom-533ab411-31a3-4e27-87a1-2e6e0f25835c" id="dom-533ab411-31a3-4e27-87a1-2e6e0f25835c">
@@ -84,15 +79,11 @@ export const Dashboard = () => {
                                                 Califícanos y comunícate
                                             </button>
                                         </div>
-
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                     <Footer />
                 </div>
             </div>
