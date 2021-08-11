@@ -2,7 +2,6 @@ import React from 'react';
 import Footer from '../../components/shared/footer/Footer';
 import Header from '../../components/shared/header/Header';
 import './sst.css';
-import { environment } from '../../environments/environments.ts';
 
 export const Sst = () => {
 

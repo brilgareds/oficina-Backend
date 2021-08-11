@@ -1,13 +1,13 @@
-import React from 'react'
-import { Redirect, Switch } from 'react-router-dom/cjs/react-router-dom.min';
+import React from 'react';
 import Footer from '../../../components/shared/footer/Footer';
 import Header from '../../../components/shared/header/Header';
-import { environment } from '../../../environments/environments.ts';
 import './../rrhh.css';
+// import { Redirect, Switch } from 'react-router-dom/cjs/react-router-dom.min';
+// import { environment } from '../../../environments/environments.ts';
 
 export const FormRrhh = (props) => {
 
-    const { path } = environment;
+    // const { path } = environment;
     // const typeForm = props.location?.params?.typeForm ?? '';
 
     return (
