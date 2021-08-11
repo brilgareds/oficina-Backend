@@ -8,8 +8,10 @@ export const DashboardRoutes = () => {
 
     return (
         <Switch>
-            <Route exact path={path.rrhh.url} component={path.rrhh.componente} />
             <Route exact path={path.home.url} component={path.home.componente} />
+            <Route exact path={path.rrhh.url} component={path.rrhh.componente} />
+            <Route path={path.rrhh.subPages.formRrhh.url} component={path.rrhh.subPages.formRrhh.componente} />
+            <Route exact path={path.sst.url} component={path.sst.componente} />
             <Redirect to={path.home.url} />
         </Switch>
     )

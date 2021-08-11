@@ -209,23 +209,6 @@ export const Dashboard = () => {
 
     }
 
-    const controlIngresoSalidaHtml = `
-        <li class="nav-item">
-            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-              <div class="col ps-0">
-                <hr class="mb-0 navbar-vertical-divider">
-              </div>
-            </div>
-
-            <a class="nav-link" href="documentation/gulp.html" role="button">
-              <div class="d-flex align-items-center btn" style="color: #1780E8; background: #4be064;">
-                <span class="nav-link-icon" style="font-size: 1em;"><i class="bi bi-door-open"></i></span>
-                <span class="nav-link-text ps-1">Control de ingreso y salida</span>
-              </div>
-            </a>
-        </li>
-    `;
-
 
     return (
         <main className="main dashboard" id="top">

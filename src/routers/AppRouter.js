@@ -4,7 +4,6 @@ import {
     Switch,
     Route
 } from "react-router-dom";
-import { Login } from '../pages/Login/Login';
 import { DashboardRoutes } from './DashboardRoutes';
 import { environment } from '../environments/environments.ts';
 

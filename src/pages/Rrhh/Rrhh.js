@@ -2,10 +2,13 @@ import React from 'react'
 import Header from '../../components/shared/header/Header';
 import Footer from '../../components/shared/footer/Footer';
 import './rrhh.css';
+import { Link } from 'react-router-dom';
 import { environment } from '../../environments/environments.ts';
 
 export const Rrhh = () => {
-    
+
+    const { path } = environment;
+
     return (
         <main className="main rrhh" id="top">
             <div className="paddingContainer" data-layout="container">
@@ -64,18 +67,24 @@ export const Rrhh = () => {
                         </div>
 
                         <div className="col-md-12 paddingRRHH text-left mb-3">
-                            <button className=" btns-rrhh zoomBtn mb-3" type="submit" name="submit">
-                                <img className="imgbtnRrhh" src="./assets/img/rrhh/icono-estamos-para-ti.svg" alt="icono-estamos-para-ti" />
-                                Estamos para ti
-                            </button>
-                            <button className=" btns-rrhh zoomBtn mb-4" type="submit" name="submit">
-                                <img className="imgbtnRrhh" src="./assets/img/rrhh/icono-talk-to-you.svg" alt="icono-estamos-para-ti" />
-                                Talk to us
-                            </button> <br/>
-                            <button className=" btns-rrhh zoomBtn mb-3" type="submit" name="submit">
-                                <img className="imgbtnRrhh" src="./assets/img/rrhh/icono-solitidues-RRHH.svg" alt="icono-estamos-para-ti" />
-                                Solicitudes de RRHH
-                            </button>
+                            <Link to={{ pathname: path.rrhh.subPages.formRrhh.url, params: { typeForm: "estamosParaTi" } }}>
+                                <button className=" btns-rrhh zoomBtn mb-3" type="button">
+                                    <img className="imgbtnRrhh" src="./assets/img/rrhh/icono-estamos-para-ti.svg" alt="icono-estamos-para-ti" />
+                                    Estamos para ti
+                                </button>
+                            </Link>
+                            <Link to={{ pathname: path.rrhh.subPages.formRrhh.url, params: { typeForm: "talkToUs" } }}>
+                                <button className=" btns-rrhh zoomBtn mb-4" type="button">
+                                    <img className="imgbtnRrhh" src="./assets/img/rrhh/icono-talk-to-you.svg" alt="icono-estamos-para-ti" />
+                                    Talk to us
+                                </button> <br />
+                            </Link>
+                            <Link to={{ pathname: path.rrhh.subPages.formRrhh.url, params: { typeForm: "SolicitudesRRHH" } }}>
+                                <button className=" btns-rrhh zoomBtn mb-3" type="button">
+                                    <img className="imgbtnRrhh" src="./assets/img/rrhh/icono-solitidues-RRHH.svg" alt="icono-estamos-para-ti" />
+                                    Solicitudes de RRHH
+                                </button>
+                            </Link>
                         </div>
 
                         <div className="col-md-12 paddingRRHH text-left mb-3">
