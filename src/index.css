@@ -1,3 +1,10 @@
+main.main{
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
 .paddingContainer {
     padding: 0% 1.03% 0% 0%;
 }
@@ -21,15 +28,6 @@
 .navbar-vertical.navbar-expand-xl.navbar-vibrant .toggle-icon-wrapper,
 .navbar-vertical.navbar-expand-xl.navbar-inverted .toggle-icon-wrapper {
     margin-right: 2.5rem;
-}
-
-main.main {
-    background-image: url("../img/vumOfficeImgs/background-home.png");
-    background-repeat: no-repeat;
-    /* background-size: 100% 100%; */
-    background-position: center center;
-    background-attachment: fixed;
-    background-size: cover;
 }
 
 .navbar-vertical.navbar-expand-xl+.content .navbar-top {

@@ -24,7 +24,7 @@
 }
 
 main.main {
-    background-image: url("../../assets/img/vumOfficeImgs/background-home.png");
+    /* background-image: url("../../assets/img/vumOfficeImgs/background-home.png"); */
     background-repeat: no-repeat;
     /* background-size: 100% 100%; */
     background-position: center center;

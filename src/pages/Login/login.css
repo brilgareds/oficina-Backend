@@ -22,12 +22,8 @@
     background-color: #E8EAED;
 }
 
-body {
+.login {
     background-image: url("../../assets/img/vumOfficeImgs/background-autenticacion.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    background-size: cover;
 }
 
 .fontBienvenido {
@@ -75,6 +71,11 @@ body {
     .inputWithIcon {
         width: 100% !important;
     }
+    .fontBienvenido {
+        font-weight: 700;
+        line-height: 40px;
+        font-size: 30px !important;
+    }
 }
 
 @media only screen and (min-width: 320px) and (max-width: 736px) {
@@ -82,5 +83,10 @@ body {
     .inputsFormulario,
     .inputWithIcon {
         width: 100% !important;
+    }
+    .fontBienvenido {
+        font-weight: 700;
+        line-height: 40px;
+        font-size: 30px !important;
     }
 }
