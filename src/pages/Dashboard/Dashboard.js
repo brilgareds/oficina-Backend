@@ -1,42 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { MenuSecundario } from '../../components/MenuSecundario/MenuSecundario';
+import { MenuPrincipal } from '../../components/MenuPrincipal/MenuPrincipal';
 import './estilos-vum-office.css';
 import './dashboard.css';
 
 export const Dashboard = () => {
 
-    let arrayMenu;
-    let elementMenuPrincipal;
-    let elementMenuSecundario;
+    const [menu, setMenu] = useState([]);
+    let elementModalRedireccion = document.querySelector('#modalImagenRedireccion');
+    let elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
+    let elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
 
-    let urlImagenRedireccion;
-    let elementModalPrincipal;
-    let elementModalRedireccion;
-    let elementModalUrlRedireccion;
-    let elementModalImgImagenRedireccion;
+    useEffect(() => {
 
-    window.onload = async () => {
-        elementMenuPrincipal = document.querySelector('#navbarVerticalNav');
-        elementMenuSecundario = document.querySelector('#menu_secundario');
+        const getMenu = () => {
 
-        elementModalPrincipal = document.querySelector('#modalPricipal');
-        elementModalRedireccion = document.querySelector('#modalImagenRedireccion');
-        elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
-        elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
+            fetch('http://localhost:3001/api/v1/navigator/')
+                .then(data => data.json())
+                .then(data => { setMenu(data) }, err => { console.log('Error is: ', err); setMenu([]) });
+            
+        };
 
-        elementModalRedireccion.addEventListener('show.bs.modal', abriendoModalRedireccion);
-
-        arrayMenu = await consultarMenu();
-        elementMenuPrincipal.innerHTML = await obtenerMenuPrincipal(arrayMenu[0]);
-        elementMenuSecundario.innerHTML = await obtenerMenuSecundario(arrayMenu[1]);
-    }
-
-
-    const test = (e) => {
-        if (e.target.hash) {
-            console.log('TEST TEST');
-            e.preventDefault();
-        }
-    }
+        getMenu();
+    }, []);
 
 
     const abriendoModalRedireccion = (e) => {
@@ -46,183 +32,15 @@ export const Dashboard = () => {
         const urlRedireccion = button.getAttribute('img-redireccion');
         const target = (urlRedireccion && urlRedireccion !== '#') ? '_blank' : '_self';
 
-        elementModalImgImagenRedireccion.src = (imgUrl) ? `../../../${imgUrl}` : '';
+        elementModalImgImagenRedireccion.src = (imgUrl) ? `./assets/${imgUrl}` : '';
         elementModalUrlRedireccion.href = urlRedireccion;
         elementModalUrlRedireccion.target = target;
         elementModalUrlRedireccion.addEventListener('click', test);
     };
 
+    
+    elementModalRedireccion.addEventListener('show.bs.modal', abriendoModalRedireccion);
 
-
-    const consultarMenu = async () => {
-
-        try {
-            const url = 'http://localhost:3001/api/v1/navigator/';
-            return (await fetch(url)).json();
-        }
-        catch (e) {
-            console.error(e);
-            alert('Error al consultar el menu principal!');
-        }
-    };
-
-
-    const obtenerMenuPrincipal = async (menus) => {
-        let menuHtml = '';
-
-        try {
-            menus.subMenus.forEach((menu, a) => {
-
-                menuHtml += `
-                    <li class="nav-item">
-                        <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                            <div class="col-auto navbar-vertical-label">${menu.titulo}</div>
-                            <div class="col ps-0"><hr class="mb-0 navbar-vertical-divider" /></div>
-                        </div>
-                `;
-
-                menu.subMenus.forEach((subMenu, b) => {
-                    const obj = {
-                        a: a + 1,
-                        b: b + 1
-                    };
-                    menuHtml += obtenerMenuHtml(subMenu, obj, true);
-                });
-
-                menuHtml += `</li>`;
-            });
-
-            return menuHtml;
-        } catch (e) {
-
-            console.error(e);
-            alert('Error al construir el menu principal!');
-        }
-    };
-
-
-
-    const obtenerMenuSecundario = (menu) => {
-
-        let menuSecundarioHtml = '';
-
-        menu.subMenus.forEach(subMenu => {
-
-            menuSecundarioHtml += `<a class="dropdown-item" href="#">${subMenu.titulo}</a>`;
-
-        });
-
-        return menuSecundarioHtml;
-    }
-
-
-
-    const nextLetter = (s) => {
-        return s.replace(/([a-zA-Z])[^a-zA-Z]*$/, function (a) {
-            var c = a.charCodeAt(0);
-            switch (c) {
-                case 90:
-                    return 'A';
-                case 122:
-                    return 'a';
-                default:
-                    return String.fromCharCode(++c);
-            }
-        });
-    }
-
-
-    const construirId = (obj) => {
-
-        let nuevoid = 'menu';
-        for (let prop in obj) {
-            nuevoid += `_${obj[prop]}`;
-        }
-
-        return nuevoid;
-    };
-
-
-
-    const definirPropiedadesSubMenu = (menu, obj, first) => {
-        const { descripcion, clasesIcono, titulo, redireccionar, recurso, tipoAccion } = menu;
-        const tieneSubMenus = !!(menu.subMenus.length);
-
-        return {
-            titulo,
-            recurso,
-            tipoAccion,
-            clasesIcono,
-            descripcion,
-            redireccionar,
-            tieneSubMenus,
-            colorTitulo: (first) ? '' : 'color: #5e6e82;',
-            target: (tipoAccion === 'R') ? 'target="_blank"' : '',
-            dropDown: (tieneSubMenus) ? 'dropdown-indicator' : '',
-            collapse: (tieneSubMenus) ? 'data-bs-toggle="collapse"' : '',
-            href: (tipoAccion === 'R') ? redireccionar : `#${construirId(obj)}`,
-            icono: !(first) ? '' : `<span class="nav-link-icon"><i class="${clasesIcono}"></i></span>`,
-            abrirModal: (tipoAccion === 'RI') ? `img-redireccion="${redireccionar ?? '#'}" img-url="${recurso ?? ''}" data-bs-toggle="modal" data-bs-target="#modalImagenRedireccion"` : ''
-        }
-    };
-
-
-
-
-    const obtenerMenuHtml = (menu, obj, first = false) => {
-
-        const {
-            tieneSubMenus, colorTitulo, target, dropDown, collapse, href, icono, abrirModal,
-            descripcion, clasesIcono, titulo, redireccionar, recurso, tipoAccion
-        } = definirPropiedadesSubMenu(menu, obj, first);
-
-        let menuHtml = `
-            <a class="nav-link ${dropDown}" href="${href}" ${abrirModal} ${collapse} aria-controls="${href}" ${target} title="${descripcion}">
-                <div class="d-flex align-items-center" style="color: #1780E8;">
-                    ${icono}
-                    <span class="nav-link-text ps-1" style="${colorTitulo}" >${titulo}</span>
-                </div>
-            </a>
-        `;
-
-        if (tieneSubMenus) {
-
-            menuHtml += `<ul class="nav collapse false" id="${construirId(obj)}"><li class="nav-item">`;
-
-            const propiedades = Object.keys(obj);
-            const nuevaProp = nextLetter(propiedades[propiedades.length - 1]);
-
-            menu.subMenus.forEach((subMenu, i) => {
-                obj[nuevaProp] = i + 1;
-
-                menuHtml += obtenerMenuHtml(subMenu, obj);
-            });
-
-            delete obj[nuevaProp];
-
-            menuHtml += `</li></ul>`;
-        }
-
-        return menuHtml;
-
-    }
-
-    const controlIngresoSalidaHtml = `
-        <li class="nav-item">
-            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-              <div class="col ps-0">
-                <hr class="mb-0 navbar-vertical-divider">
-              </div>
-            </div>
-
-            <a class="nav-link" href="documentation/gulp.html" role="button">
-              <div class="d-flex align-items-center btn" style="color: #1780E8; background: #4be064;">
-                <span class="nav-link-icon" style="font-size: 1em;"><i class="bi bi-door-open"></i></span>
-                <span class="nav-link-text ps-1">Control de ingreso y salida</span>
-              </div>
-            </a>
-        </li>
-    `;
 
 
     return (
@@ -243,10 +61,7 @@ export const Dashboard = () => {
 
                 <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
                     <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
-
-                        <ul className="navbar-nav flex-column mb-3" id="navbarVerticalNav" style={{ padding: "13px", paddingTop: "0px" }}>
-                        </ul>
-
+                        <MenuPrincipal menu={ menu[0] } k={ 'menu_1' } key={ 'menu_1' } />
                     </div>
                     <div className="divCerrarSesion text-center">
                         <div className="row">
@@ -276,10 +91,13 @@ export const Dashboard = () => {
                                     <i className="fas fa-user rounded-circle iconUser"></i>
                                 </div>
                             </a>
+                            <MenuSecundario menu={ menu[1] } key={ 'menu_2' } k={ 'menu_2' } />
+                            
                             <div className="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser" data-bs-popper="none">
                                 <div className="bg-white dark__bg-1000 rounded-2 py-2">
                                     <span className="dropdown-item fw-bold tituloUsuarioCard">¡Hola Gabriel!</span>
                                     <div className="dropdown-divider"></div>
+                                    
                                     <div id="menu_secundario">
 
                                     </div>
