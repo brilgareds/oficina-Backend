@@ -12,6 +12,8 @@ export const DashboardRoutes = () => {
 
     useEffect(() => {
 
+        console.log("useEffect");
+
         const getMenu = () => {
 
             fetch('http://localhost:3001/api/v1/navigator/')
