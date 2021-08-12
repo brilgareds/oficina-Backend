@@ -9,7 +9,6 @@ export const environment = {
         login: { url: '/login', componente: Login },
         rrhh: routesRrhh,
         sst: { url: '/sst', componente: Sst },
-
     }
 }
 

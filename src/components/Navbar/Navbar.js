@@ -1,8 +1,10 @@
 import React from 'react';
-import { MenuPrincipal } from '../MenuPrincipal/MenuPrincipal'
-
+import { environment } from '../../environments/environments';
+import { MenuPrincipal } from '../MenuPrincipal/MenuPrincipal';
+import { Link } from 'react-router-dom';
 export const Navbar = ({ setMenu }) => {
 
+    const { path } = environment;
 
     return (
         <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile">
@@ -11,11 +13,14 @@ export const Navbar = ({ setMenu }) => {
                 <div className="toggle-icon-wrapper">
                     <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Menú Principal"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
                 </div>
-                <a className="navbar-brand" href="index.html">
-                    <div className="d-flex align-items-center py-3">
-                        <img className="me-2" src="./assets/img/logo-vum-login.svg" alt="" width="80" />
+                <Link to={{ pathname: path.home.url }}>
+
+                    <div className="navbar-brand">
+                        <div className="d-flex align-items-center py-3">
+                            <img className="me-2" src="./assets/img/logo-vum-login.svg" alt="" width="80" />
+                        </div>
                     </div>
-                </a>
+                </Link>
             </div>
 
             <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">

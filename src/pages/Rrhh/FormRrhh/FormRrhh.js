@@ -1,6 +1,4 @@
-import React from 'react';
-import Footer from '../../../components/shared/footer/Footer';
-import Header from '../../../components/shared/header/Header';
+import React, { useEffect } from 'react';
 import './../rrhh.css';
 // import { Redirect, Switch } from 'react-router-dom/cjs/react-router-dom.min';
 // import { environment } from '../../../environments/environments.ts';
@@ -10,51 +8,36 @@ export const FormRrhh = (props) => {
     // const { path } = environment;
     // const typeForm = props.location?.params?.typeForm ?? '';
 
+    useEffect(() => {
+        document.getElementById('top').className = 'main dashboard rrhh';
+    }, [])
+
+
     return (
-        <main className="main rrhh" id="top">
-            <div className="paddingContainer" data-layout="container">
 
-                <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile">
+        <div className="card-body bg-light">
+            <div className="row">
+                <div className="col-12 col-lg-4">
+                    <label className="form-label" htmlFor="descripcion">Categoría: </label>
+                    <select>
+                        <option value="nulls">Seleccione..</option>
+                    </select>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <label className="form-label" htmlFor="descripcion">Descripción: </label>
+                    <input id="descripcion" name="descripcion" className="form-control" placeholder="Descripción" type="text" />
+                </div>
+                <div className="col-12 col-lg-4">
+                    <label className="form-label" htmlFor="correoEnvio">Correo Envío Respuesta: </label>
+                    <input id="correoEnvioRespuesta" name="correoEnvio" className="form-control" placeholder="Correo Envío Respuesta" type="text" />
+                </div>
+                <div className="col-12 col-lg-4">
+                    <label className="form-label" htmlFor="OtroMedioRespuesta">Otro Medio de Respuesta: </label>
 
-                    <div className="d-flex align-items-center" style={{ paddingLeft: "5%" }}>
-                        <div className="toggle-icon-wrapper">
-                            <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Menú"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
-                        </div>
-                        <a className="navbar-brand" href="index.html">
-                            <div className="d-flex align-items-center py-3">
-                                <img className="me-2" src="./../assets/img/logo-vum-login.svg" alt="" width="80" />
-                            </div>
-                        </a>
-                    </div>
-
-                    <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
-                        <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
-
-                            <ul className="navbar-nav flex-column mb-3" id="navbarVerticalNav" style={{ padding: "13px", paddingTop: "0px" }}>
-                            </ul>
-
-                        </div>
-                        <div className="divCerrarSesion text-center">
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <img className="iconoCerrarSesion" src="./../assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
-                                </div>
-                                <div className="col-md-12">
-                                    <span className="spanCerrarSesion nav-link-text">Cerrar Sesion</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-
-                <div className="content">
-                    <Header />
-
-
-                    <Footer />
                 </div>
             </div>
-        </main>
+        </div>
+
     )
 
 }
