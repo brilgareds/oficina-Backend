@@ -12,8 +12,6 @@ export const DashboardRoutes = () => {
 
     useEffect(() => {
 
-        console.log("useEffect");
-
         const getMenu = () => {
 
             fetch('http://localhost:3001/api/v1/navigator/')
@@ -37,7 +35,7 @@ export const DashboardRoutes = () => {
                         <Switch>
                             <Route exact path={path.home.url} component={path.home.componente} />
                             <Route exact path={path.rrhh.url} component={path.rrhh.componente} />
-                            <Route path={path.rrhh.subPages.formRrhh.url} component={path.rrhh.subPages.formRrhh.componente} />
+                            <Route exact path={path.rrhh.subPages.formRrhh.url} component={path.rrhh.subPages.formRrhh.componente} />
                             <Route exact path={path.sst.url} component={path.sst.componente} />
                             <Redirect to={path.home.url} />
                         </Switch>
