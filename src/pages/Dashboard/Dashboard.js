@@ -14,21 +14,9 @@ export const Dashboard = () => {
     let elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
     let elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
 
-    const [menu, setMenu] = useState([]);
+    const [menu, setMenu] = useState([false, false]);
 
-    useEffect(() => {
-
-        const getMenu = () => {
-
-            fetch('http://localhost:3001/api/v1/navigator/')
-                .then(data => data.json())
-                .then(data => { setMenu(data) }, err => { console.log('Error is: ', err); setMenu([]) });
-            
-        };
-
-        getMenu();
-    }, []);
-
+    console.log('Menu inicial es: ', menu)
 
     const abriendoModalRedireccion = (e) => {
 
@@ -50,7 +38,7 @@ export const Dashboard = () => {
     return (
         <main className="main dashboard" id="top">
             <div className="paddingContainer" data-layout="container">
-                <Navbar menu={ menu[0] } />
+                <Navbar setMenu={ setMenu } />
                 <div className="content">
                     <Header menu={ menu[1] } />
                     <div className="row p-4" id="root">

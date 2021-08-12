@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuPrincipal } from '../MenuPrincipal/MenuPrincipal'
 
-export const Navbar = ({ menu }) => {
+export const Navbar = ({ setMenu }) => {
 
 
     return (
@@ -20,7 +20,7 @@ export const Navbar = ({ menu }) => {
 
             <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
                 <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
-                    <MenuPrincipal menu={ menu } k={ 'menu_1' } key={ 'menu_1' } />
+                    <MenuPrincipal k={ 'menu_1' } key={ 'menu_1' } setMenu={ setMenu } />
                 </div>
                 <div className="divCerrarSesion text-center">
                     <div className="row">

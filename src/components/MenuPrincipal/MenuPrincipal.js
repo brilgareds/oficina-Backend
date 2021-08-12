@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CategoriaMenuPrincipal } from '../CategoriaMenuPrincipal/CategoriaMenuPrincipal';
 
-export const MenuPrincipal = ({ menu, k }) => (
+export const MenuPrincipal = ({ k, setMenu }) => {
 
-    (menu && menu.subMenus) ?
+    let menu = [];
+
+    useEffect(() => {
+
+        const getMenu = () => {
+            setMenu([]);
+
+            fetch('http://localhost:3001/api/v1/navigator/')
+                .then(data => data.json())
+                .then(data => data, err => { console.log('Error ', err) });
+            
+        };
+
+        menu = getMenu();
+        setMenu(menu);
+    }, []);
+
+
+    return (menu && menu.subMenus) ?
 
         <ul className="navbar-nav flex-column mb-3" id="navbarVerticalNav" style={{ padding: '13px', paddingTop: '0px' }}>{
             menu.subMenus.map((categoria, b) => (
@@ -12,4 +30,4 @@ export const MenuPrincipal = ({ menu, k }) => (
         </ul>
         :
         <></>
-);
+};
