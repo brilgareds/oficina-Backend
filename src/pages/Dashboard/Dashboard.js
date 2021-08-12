@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './estilos-vum-office.css';
 import './dashboard.css';
 import { CardsOficina } from '../../components/cards-oficina/CardsOficina';
@@ -12,9 +12,6 @@ export const Dashboard = () => {
     let elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
     let elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
 
-    const [menu, setMenu] = useState([false, false]);
-
-    console.log('Menu inicial es: ', menu)
 
     const abriendoModalRedireccion = (e) => {
 

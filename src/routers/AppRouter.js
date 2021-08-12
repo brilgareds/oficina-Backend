@@ -5,17 +5,15 @@ import {
     Route
 } from "react-router-dom";
 import { DashboardRoutes } from './DashboardRoutes';
-import { environment } from '../environments/environments.ts';
+import { routes } from '../environments/environments.ts';
 
 export const AppRouter = () => {
-
-    const { path } = environment;
 
     return (
         <Router>
             <div>
                 <Switch>
-                    <Route exact path={path.login.url} component={path.login.componente} />
+                    <Route exact path={routes.login.url} component={routes.login.componente} />
                     <Route path="/" component={DashboardRoutes} />
                 </Switch>
             </div>

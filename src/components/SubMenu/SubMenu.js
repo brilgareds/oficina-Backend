@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const SubMenu = ({ menu, k, first=false }) => {
 
@@ -11,7 +12,7 @@ export const SubMenu = ({ menu, k, first=false }) => {
             colorTitulo: (first) ? '' : '#5e6e82',
             collapse: (tieneSubMenus) ? 'collapse' : '',
             target: (tipoAccion === 'R') ? '_blank' : '',
-            href: (tipoAccion === 'R') ? redireccionar : `#${k}`,
+            href: (['R','M'].includes(tipoAccion)) ? redireccionar : `#${k}`,
             dropDown: (tieneSubMenus) ? 'dropdown-indicator' : '',
             dataBsTarget: (tipoAccion === 'RI') ? '#modalImagenRedireccion' : '',
             dataBsToggle: (tieneSubMenus) ? 'collapse' : ((tipoAccion === 'RI') ? 'modal':''),
@@ -32,12 +33,12 @@ export const SubMenu = ({ menu, k, first=false }) => {
 
     return (menu) ? 
         <>
-            <a className={ `nav-link ${dropDown }` } href={ `${href}`} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle }  aria-controls={ href } target={ target } title={ descripcion }>
+            <Link className={ `nav-link ${dropDown }` } to={{ pathname: `${href}` }} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle }  aria-controls={ href } target={ target } title={ descripcion }>
                 <div className="d-flex align-items-center" style={{ color: "#1780E8" }}>
                     { (first) ? <span className="nav-link-icon"><i className={clasesIcono}></i></span> : <></> }
                     <span className="nav-link-text ps-1" style={{ color: colorTitulo }} >{titulo}</span>
                 </div>
-            </a>
+            </Link>
             <ul className="nav collapse" id={ k }>
                 <li className="nav-item">
                     {
