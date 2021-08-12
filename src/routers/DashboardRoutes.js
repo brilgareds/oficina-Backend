@@ -1,43 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
 import { Header } from '../components/Header/Header';
 import { Navbar } from '../components/Navbar/Navbar';
+import { getAllMenu } from '../repositories/Menu/Menu';
 import Footer from '../components/shared/footer/Footer';
-import { environment } from '../environments/environments.ts';
+import { routes } from '../environments/environments.ts';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 export const DashboardRoutes = () => {
 
-    const { path } = environment;
     const [menu, setMenu] = useState([]);
 
     useEffect(() => {
-
-        const getMenu = () => {
-
-            fetch('http://localhost:3001/api/v1/navigator/')
-                .then(data => data.json())
-                .then(data => { setMenu(data) }, err => { console.log('Error is: ', err); setMenu([]) });
-
-        };
-
-        getMenu();
+        getAllMenu(setMenu);
     }, []);
-
+    
 
     return (
-
         <main className="main dashboard" id="top">
             <div className="paddingContainer" data-layout="container">
-                <Navbar menu={menu[0]} />
+                <Navbar menu={ menu[0] } />
                 <div className="content">
                     <Header menu={menu[1]} />
                     <div className="row p-4" id="root">
                         <Switch>
-                            <Route exact path={path.home.url} component={path.home.componente} />
-                            <Route exact path={path.rrhh.url} component={path.rrhh.componente} />
-                            <Route exact path={path.rrhh.subPages.formRrhh.url} component={path.rrhh.subPages.formRrhh.componente} />
-                            <Route exact path={path.sst.url} component={path.sst.componente} />
-                            <Redirect to={path.home.url} />
+                            <Route exact path={routes.home.url} component={routes.home.componente} />
+                            <Route exact path={routes.rrhh.url} component={routes.rrhh.componente} />
+                            <Route path={routes.rrhh.subPages.formRrhh.url} component={routes.rrhh.subPages.formRrhh.componente} />
+                            <Route exact path={routes.sst.url} component={routes.sst.componente} />
+                            <Route exact path={routes.bienestar.url} component={routes.bienestar.componente} />
+                            <Redirect to={routes.home.url} />
                         </Switch>
                     </div>
                     <Footer />

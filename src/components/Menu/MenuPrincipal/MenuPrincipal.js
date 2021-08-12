@@ -1,9 +1,9 @@
 import React from 'react';
-import { CategoriaMenuPrincipal } from '../CategoriaMenuPrincipal/CategoriaMenuPrincipal';
+import { CategoriaMenuPrincipal } from '../../CategoriaMenuPrincipal/CategoriaMenuPrincipal';
 
-export const MenuPrincipal = ({ menu, k }) => (
+export const MenuPrincipal = ({ menu, k }) => {
 
-    (menu && menu.subMenus) ?
+    return (menu && menu.subMenus) ?
 
         <ul className="navbar-nav flex-column mb-3" id="navbarVerticalNav" style={{ padding: '13px', paddingTop: '0px' }}>{
             menu.subMenus.map((categoria, b) => (
@@ -12,4 +12,4 @@ export const MenuPrincipal = ({ menu, k }) => (
         </ul>
         :
         <></>
-);
+};
