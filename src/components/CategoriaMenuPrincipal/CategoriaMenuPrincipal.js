@@ -1,5 +1,5 @@
 import React from 'react';
-import { SubMenu } from '../SubMenu/SubMenu';
+import { SubMenu } from '../Menu/SubMenu/SubMenu';
 
 export const CategoriaMenuPrincipal = ({ categoria, k }) => (
 
