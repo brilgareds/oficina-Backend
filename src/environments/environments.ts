@@ -4,7 +4,7 @@ import { Login } from "../pages/Login/Login.js";
 import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
 
-const frontendPath = window.location.protocol+'//'+window.location.host;
+const frontendPath = window.location.protocol + '//' + window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';
 
 const routes = {
@@ -21,7 +21,11 @@ const files = {
 
 const api = {
     path: backendPath,
-    getAllMenu: `${backendPath}/navigator/`
+    getAllMenu: `${backendPath}/navigator/`,
+    getTokenPath: `${backendPath}/auth/login`,
+    getUserInfoPath: `${backendPath}/auth/me`,
+    getDocumentTypes: `${backendPath}/documentType/get`,
+    getAllEps: `${backendPath}/eps/get`,
 };
 
 export {

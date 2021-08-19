@@ -2,6 +2,7 @@ import React from 'react';
 import { routes } from '../../environments/environments';
 import { MenuPrincipal } from '../Menu/MenuPrincipal/MenuPrincipal';
 import { Link } from 'react-router-dom';
+import { useLogin } from '../../pages/Login/hooks/useLogin.js';
 
 export const Navbar = ({ menu }) => {
 
@@ -24,7 +25,7 @@ export const Navbar = ({ menu }) => {
 
             <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
                 <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
-                    <MenuPrincipal k={ 'menu_1' } key={ 'menu_1' } menu={ menu } />
+                    <MenuPrincipal k={'menu_1'} key={'menu_1'} menu={menu} />
                 </div>
                 <div className="divCerrarSesion text-center">
                     <div className="row">
@@ -32,7 +33,7 @@ export const Navbar = ({ menu }) => {
                             <img className="iconoCerrarSesion" src="./assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
                         </div>
                         <div className="col-md-12">
-                            <span className="spanCerrarSesion nav-link-text">Cerrar Sesion</span>
+                            <span onClick={useLogin.logOut} className="spanCerrarSesion nav-link-text">Cerrar sesion</span>
                         </div>
                     </div>
                 </div>

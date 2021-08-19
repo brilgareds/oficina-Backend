@@ -1,5 +1,6 @@
-import React from 'react'
-import { MenuSecundario } from '../Menu/MenuSecundario/MenuSecundario'
+import React from 'react';
+import { MenuSecundario } from '../Menu/MenuSecundario/MenuSecundario';
+import { useLogin } from '../../pages/Login/hooks/useLogin.js';
 
 export const NavbarUserProfile = ({ menu }) => {
 
@@ -26,7 +27,7 @@ export const NavbarUserProfile = ({ menu }) => {
 
                         </div>
                         <div className="dropdown-divider"></div>
-                        <a className="dropdown-item" href="pages/authentication/card/logout.html">Cerrar Sesion</a>
+                        <div onClick={useLogin.logOut} className="dropdown-item">Cerrar sesion</div>
                     </div>
                 </div>
             </li>

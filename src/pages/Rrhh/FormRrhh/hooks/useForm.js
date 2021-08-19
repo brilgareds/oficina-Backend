@@ -113,7 +113,7 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {
                 html: `
                     <div className="row">
                         <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                            Revisa el formulario con las siguientes indicacones:
+                            Revisa el formulario con las siguientes indicaciones:
                         </div>
                         <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">
                             ◉ Los campos no deben estar vacios <br/>

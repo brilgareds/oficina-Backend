@@ -1,7 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { useLogin } from '../../../pages/Login/hooks/useLogin.js';
 
 export const MenuSecundarioFooter = () => {
+
+    const { logOut } = useLogin({ identification: '' });
+
     return (
-        <a className="dropdown-item" href="pages/authentication/card/logout.html">Cerrar Sesion</a>
+        <div onClick={logOut} className="dropdown-item">Cerrar sesion</div>
     )
 }
