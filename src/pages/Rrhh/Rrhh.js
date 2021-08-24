@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import './rrhh.css';
 import { Link } from 'react-router-dom';
 import { routes } from '../../environments/environments.ts';
+import { getFullNameUser } from '../../generalHelpers';
 
 export const Rrhh = () => {
 
@@ -22,7 +23,7 @@ export const Rrhh = () => {
 
             <div className="col-md-12 paddingRRHH divTitulosRRHH">
                 <h3 className="tituloModulo">RRHH</h3>
-                <span className="spanNameUserRRHH">Jose Carlos Avila Perea</span>
+                <span className="spanNameUserRRHH">{getFullNameUser()}</span>
                 <p className="copyPage mt-4">Aquí encontraras acompañamiento en lo que necesites para tu bienestar integral como ser humano.</p>
             </div>
 

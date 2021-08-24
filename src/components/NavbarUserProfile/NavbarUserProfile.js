@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { MenuSecundario } from '../Menu/MenuSecundario/MenuSecundario';
 
 export const NavbarUserProfile = ({ menu }) => {

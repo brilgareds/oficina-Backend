@@ -3,6 +3,8 @@ import './estilos-vum-office.css';
 import './dashboard.css';
 import { CardsOficina } from '../../components/cards-oficina/CardsOficina';
 import { ImportanBottons } from '../../components/ImportantBottons/ImportanBottons';
+import { getFullNameUser } from '../../generalHelpers';
+
 export const Dashboard = () => {
 
     useEffect(() => {
@@ -21,7 +23,7 @@ export const Dashboard = () => {
 
                         <div className="col-md-12 text-center mb-5">
                             <h3 className="tituloComoTePodemosAyudar">¿Como te podemos ayudar?</h3>
-                            <span className="spanNombreUsuario">Jose Carlos Avila Perea</span>
+                            <span className="spanNombreUsuario">{getFullNameUser()}</span>
                         </div>
 
                         <CardsOficina />

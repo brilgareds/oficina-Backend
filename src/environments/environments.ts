@@ -6,7 +6,7 @@ import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
 import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
 
-const frontendPath = window.location.protocol+'//'+window.location.host;
+const frontendPath = window.location.protocol + '//' + window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';
 
 const routes = {
@@ -24,7 +24,15 @@ const files = {
 };
 
 const api = {
-    getAllMenu: `${backendPath}/navigator/`
+    path: backendPath,
+    getAllMenu: `${backendPath}/navigator/`,
+    getTokenPath: `${backendPath}/auth/login`,
+    getUserInfoPath: `${backendPath}/auth/me`,
+    getDocumentTypes: `${backendPath}/documentType/get`,
+    getAllEps: `${backendPath}/eps/get`,
+    getForYouCategory: `${backendPath}/rrhh/for_you_categories`,
+    getresourceRequestCategory: `${backendPath}/rrhh/resource_request_categories`,
+    postSaveFormRRHH: `${backendPath}/rrhh/saveFormRRHH`,
 };
 
 export {

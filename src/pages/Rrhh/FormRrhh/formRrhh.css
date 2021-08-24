@@ -3,7 +3,7 @@
 }
 
 .bg-image-vum{
-    background-image: url("../../../assets/img/vumOfficeImgs//background-rrhh-hastag.png");
+    background-image: url("../../../assets/img/vumOfficeImgs/background-rrhh-hastag.png");
     background-size: 180px;
 }
 
@@ -18,4 +18,8 @@
 .btnEnviar{
     background-color: #1783EE;
     border: 1px solid #1783EE;
+}
+
+.divsModal{
+    text-align: left;
 }
