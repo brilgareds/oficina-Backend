@@ -3,17 +3,20 @@ import { Redirect } from 'react-router-dom';
 import { useFormRrhh } from './hooks/useForm.js';
 import { routes } from '../../../environments/environments.ts';
 import Select from 'react-select';
+import Cookies from 'universal-cookie/es6';
 
 import './formRrhh.css';
 
 
 export const FormRrhh = (props) => {
 
+    const cookies = new Cookies();
     const typeForm = props.location.params;
 
     const {
         formValue,
         stateTitle,
+        optionsCategory,
         onChangeInputHandle,
         oncheckedButtonMedioRespuestaHandle,
         onChangeSelectHandle,
@@ -22,19 +25,13 @@ export const FormRrhh = (props) => {
 
     } = useFormRrhh({
         descripcion: '',
-        correoEnvioRespuesta: '',
+        correoEnvioRespuesta: cookies.get('d_u').mail,
         numeroTelefonico: '',
     },
         typeForm,
     );
 
     const { descripcion, correoEnvioRespuesta, numeroTelefonico, } = formValue;
-
-    const options = [
-        { value: 'FAMILIAR', label: 'FAMILIAR' },
-        { value: 'LABORAL', label: 'LABORAL' },
-        { value: 'FORMACION', label: 'FORMACIÓN' },
-    ];
 
     return (
         <>
@@ -62,7 +59,7 @@ export const FormRrhh = (props) => {
                                             &&
                                             <div className="col-12 col-lg-4 mb-3">
                                                 <label className="form-label" htmlFor="descripcion">Categoria: </label>
-                                                <Select onChange={value => onChangeSelectHandle({ value })} options={options} placeholder={"Selecciona..."} />
+                                                <Select onChange={value => onChangeSelectHandle({ value })} options={optionsCategory} defaultValue={[optionsCategory[0]]} placeholder={"Selecciona..."} />
                                             </div>
                                         }
                                         <div className="col-12 col-lg-8 mb-3">

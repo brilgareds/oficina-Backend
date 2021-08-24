@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/dist/sweetalert2.css';
+import Cookies from 'universal-cookie/es6';
 
 const getMainPath = () => window.location.protocol + '//' + window.location.host;
 
@@ -35,8 +36,6 @@ const postFetch = async ({
         return responseApi;
     } catch (error) {
         throw new Error(error);
-
-        // console.error(error);
     }
 
 }
@@ -67,6 +66,26 @@ const overlay = () => {
     });
 }
 
+const capitalizarPalabras = (val) => {
+
+    return val.toLowerCase()
+        .trim()
+        .split(' ')
+        .map(v => v[0].toUpperCase() + v.substr(1))
+        .join(' ');
+}
+
+const getFullNameUser = () => {
+
+    const cookies = new Cookies();
+    let nombreUsuario = '';
+
+    if (cookies.get('d_u')) {
+        nombreUsuario = `${cookies.get('d_u').nombres.trim()} ${cookies.get('d_u').apellidos.trim()}`;
+    }
+
+    return capitalizarPalabras(nombreUsuario);
+}
 
 export {
     getFetch,
@@ -74,4 +93,6 @@ export {
     getMainPath,
     postFetch,
     overlay,
+    capitalizarPalabras,
+    getFullNameUser
 }

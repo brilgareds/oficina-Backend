@@ -69,24 +69,27 @@ export const useLogin = (formInitialState = {}) => {
                     })
                         .then((getUserInfoResponse) => {
 
+                            console.log("getUserInfoResponse", getUserInfoResponse);
+
                             cookies.set('a_t', access_token, { path: '/' });     //access_token
                             cookies.set('r_t', refresh_token, { path: '/' });     //refresh_token
                             cookies.set('d_u', {
-                                'nombres': getUserInfoResponse.Nombres.trim(),
-                                'apellidos': getUserInfoResponse.Apellidos.trim(),
-                                'cedula': getUserInfoResponse.Cedula.trim(),
-                                'genero': getUserInfoResponse.Genero.trim(),
-                                'mail': getUserInfoResponse.Mail.trim(),
-                                'num_contrato': getUserInfoResponse.NUMERO_CONTRATO.trim(),
-                                'cargo': getUserInfoResponse.Cargo.trim(),
-                                'area': getUserInfoResponse.Area.trim(),
-                                'fecha_ingreso': getUserInfoResponse.FECHA_INGRESO.trim(),
-                                'fecha_vencimiento': getUserInfoResponse.FECHA_VENCIMIENTO.trim(),
+                                'nombres': getUserInfoResponse.Nombres,
+                                'apellidos': getUserInfoResponse.Apellidos,
+                                'cedula': getUserInfoResponse.Cedula,
+                                'genero': getUserInfoResponse.Genero,
+                                'mail': getUserInfoResponse.Mail,
+                                'numContrato': getUserInfoResponse.NUMERO_CONTRATO,
+                                'cargo': getUserInfoResponse.Cargo,
+                                'area': getUserInfoResponse.Area,
+                                'fechaIngreso': getUserInfoResponse.FECHA_INGRESO,
+                                'fechaVencimiento': getUserInfoResponse.FECHA_VENCIMIENTO,
                                 'ccostos': getUserInfoResponse.C_COSTOS,
-                                'estado': getUserInfoResponse.ESTADO.trim(),
-                                'empresa': getUserInfoResponse.Empresa.trim(),
-                                'entidad': getUserInfoResponse.Entidad.trim(),
-                                'jefe': getUserInfoResponse.Jefe.trim(),
+                                'estado': getUserInfoResponse.ESTADO,
+                                'empresa': getUserInfoResponse.Empresa,
+                                'entidad': getUserInfoResponse.Entidad,
+                                'jefe': getUserInfoResponse.Jefe,
+                                'numeroCelular': getUserInfoResponse.Numero,
                             }, { path: '/' });     //data_user
 
                             window.location.href = routes.home.url;

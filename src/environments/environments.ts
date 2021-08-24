@@ -26,6 +26,9 @@ const api = {
     getUserInfoPath: `${backendPath}/auth/me`,
     getDocumentTypes: `${backendPath}/documentType/get`,
     getAllEps: `${backendPath}/eps/get`,
+    getForYouCategory: `${backendPath}/rrhh/for_you_categories`,
+    getresourceRequestCategory: `${backendPath}/rrhh/resource_request_categories`,
+    postSaveFormRRHH: `${backendPath}/rrhh/saveFormRRHH`,
 };
 
 export {

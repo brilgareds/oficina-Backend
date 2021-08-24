@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import './estilos-vum-office.css';
 import './dashboard.css';
 import { CardsOficina } from '../../components/cards-oficina/CardsOficina';
+import { getFullNameUser } from '../../generalHelpers';
+
 export const Dashboard = () => {
 
     useEffect(() => {
@@ -28,7 +30,6 @@ export const Dashboard = () => {
 
     elementModalRedireccion.addEventListener('show.bs.modal', abriendoModalRedireccion);
 
-
     return (
         <div className="card-body">
             <div className="tab-content">
@@ -41,7 +42,7 @@ export const Dashboard = () => {
 
                         <div className="col-md-12 text-center mb-5">
                             <h3 className="tituloComoTePodemosAyudar">¿Como te podemos ayudar?</h3>
-                            <span className="spanNombreUsuario">Jose Carlos Avila Perea</span>
+                            <span className="spanNombreUsuario">{getFullNameUser()}</span>
                         </div>
 
                         <CardsOficina />
