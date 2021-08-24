@@ -6,8 +6,8 @@ import './bienestar.css';
 export const Bienestar = () => {
 
     useEffect(() => {
-        document.getElementById('top').className = 'main dashboard bienestar';
-    }, [])
+        document.getElementById('root').className = 'bienestar';
+    }, []);
 
 
     return (
@@ -35,19 +35,19 @@ export const Bienestar = () => {
                         Novedades empresariales
                     </button>
                 </Link>
-                <Link to={{ pathname: '' }}>
+                <Link to={{ pathname: '' }} data-bs-toggle="modal" data-bs-target='#modalImagenRedireccion' img-url='img/otros_beneficios.png' img-redireccion="https://www.losolivos.co/">
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <i className="fas fa-handshake imgbtnRrhh" alt="icono-aliados"></i>
                         Aliados
                     </button> <br />
                 </Link>
-                <Link to={{ pathname: '' }}>
+                <Link to={{ pathname: 'mi_billetera' }}>
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <i className="fas fa-wallet imgbtnRrhh" alt="icono-mi-billetera" />
                         Mi billetera
                     </button>
                 </Link>
-                <Link to={{ pathname: '' }}>
+                <Link to={{ pathname: 'https://listos.cmymasesores.com.co/course/29/about' }} target="_blank">
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <i className="fas fa-comments imgbtnRrhh" alt="icono-onboarding" />
                         Onboarding

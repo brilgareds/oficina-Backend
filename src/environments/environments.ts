@@ -1,8 +1,10 @@
-import { Bienestar } from "../pages/Bienestar/bienestar.js";
 import { Dashboard } from "../pages/Dashboard/Dashboard.js";
+import { Bienestar } from "../pages/Bienestar/bienestar.js";
+import { MiBilletera } from "../pages/Bienestar/MiBilletera/MiBilletera.js";
 import { Login } from "../pages/Login/Login.js";
 import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
+import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
 
 const frontendPath = window.location.protocol+'//'+window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';
@@ -12,7 +14,9 @@ const routes = {
     login: { url: '/login', componente: Login },
     rrhh: routesRrhh,
     sst: { url: '/sst', componente: Sst },
-    bienestar: { url: '/bienestar', componente: Bienestar }
+    encuestaRiesgoCovid: { url: '/encuestaRiesgoCovid', componente: EncuestaRiesgoCovid },
+    bienestar: { url: '/bienestar', componente: Bienestar },
+    miBilletera: { url: '/mi_billetera', componente: MiBilletera }
 };
 
 const files = {
@@ -20,13 +24,14 @@ const files = {
 };
 
 const api = {
-    path: backendPath,
     getAllMenu: `${backendPath}/navigator/`
 };
 
 export {
     routes,
     api,
-    files
+    files,
+    frontendPath,
+    backendPath
 }
 

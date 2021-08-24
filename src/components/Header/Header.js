@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export const Header = ({ menu }) => {
 
     return (
-        <nav className="navbar navbar-light navbar-glass navbar-top navbar-expand headerMobile">
+        <nav className="navbar navbar-light navbar-glass navbar-top navbar-expand headerMobile" style={{ marginLeft: '0rem', marginRight: '0rem' }}>
             <button className="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
             <Link to={{ pathname: routes.home.url }}>
 

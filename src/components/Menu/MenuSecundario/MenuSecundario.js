@@ -3,10 +3,9 @@ import { MenuSecundarioHeader } from '../MenuSecundarioHeader/MenuSecundarioHead
 import { MenuSecundarioFooter } from '../MenuSecundarioFooter/MenuSecundarioFooter';
 import { MenuSecundarioBody } from '../MenuSecundarioBody/MenuSecundarioBody';
 
-export const MenuSecundario = ({ menu, k }) => (
+export const MenuSecundario = ({ menu, k }) => {
 
-    (menu && menu.subMenus) ?
-
+    return (
         <div className="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser" data-bs-popper="none">
             <div className="bg-white dark__bg-1000 rounded-2 py-2">
                 <MenuSecundarioHeader />
@@ -16,6 +15,5 @@ export const MenuSecundario = ({ menu, k }) => (
                 <MenuSecundarioFooter />
             </div>
         </div>
-        :
-        <></>
-);
+    );
+};

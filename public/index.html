@@ -72,7 +72,27 @@
         </div>
     </div>
 
+    <script>
+        let elementModalRedireccion = document.querySelector('#modalImagenRedireccion');
+        let elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
+        let elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
 
+
+        const abriendoModalRedireccion = (e) => {
+
+            const button = e.relatedTarget;
+            const imgUrl = button.getAttribute('img-url');
+            const urlRedireccion = button.getAttribute('img-redireccion') ?? '';
+            const target = (urlRedireccion && urlRedireccion !== '#') ? '_blank' : '';
+
+            elementModalImgImagenRedireccion.src = (imgUrl) ? `./assets/${imgUrl}` : '';
+            elementModalUrlRedireccion.href = urlRedireccion;
+            elementModalUrlRedireccion.target = target;
+        };
+
+
+        elementModalRedireccion.addEventListener('show.bs.modal', abriendoModalRedireccion);
+    </script>
     <script src="./assets/js/config.js"></script>
     <script src="./assets/vendors/overlayscrollbars/OverlayScrollbars.min.js"></script>
     <script src="./assets/js/implement.js"></script>

@@ -1,5 +1,32 @@
+a {
+    text-decoration: none !important;
+}
+
+.nav-link {
+    text-align: center;
+}
+
 .paddingContainer {
-    padding: 0% 1.03% 0% 0%;
+    padding: 0;
+}
+
+.container-2 {
+    min-height: 69vh;
+    max-width: 100%;
+    padding: 3rem 2rem;
+}
+
+#container-questions {
+    
+}
+
+.container-cards {
+    display: grid;
+    gap: 2rem;
+    grid-auto-rows: auto;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(auto-fill, minmax(max(20%, 13rem), 1fr));
+    padding: 0;
 }
 
 .navbarMobile {
@@ -23,13 +50,82 @@
     margin-right: 2.5rem;
 }
 
-main.main {
-    /* background-image: url("../../assets/img/vumOfficeImgs/background-home.png"); */
+#root {
+    background-size: cover !important;
     background-repeat: no-repeat;
-    /* background-size: 100% 100%; */
     background-position: center center;
-    background-attachment: fixed;
-    background-size: cover;
+    
+
+    background-position-x: 100%;
+    background-position-y: 0%;
+    background-origin: padding-box;
+    background-clip: padding-box;
+    background-repeat-x: no-repeat;
+    background-repeat-y: no-repeat;
+    background-color: transparent;
+}
+
+.div-pregunta {
+    font-weight: bolder;
+    display: grid;
+    gap: 0.4rem;
+    grid-template-columns: minmax(3rem, 3rem) minmax(8rem, 93%);
+    padding: 0;
+}
+
+.div-pregunta .numeracion-pregunta {
+    background: #1780e8;
+    color: white;
+    border-radius: 10rem;
+    padding: 0.2rem 1rem;
+    height: max-content;
+}
+
+.div-pregunta .descripcion-pregunta {
+    display: flex;
+    align-items: center;
+    /* padding-top: 0.1rem; */
+    /* padding-left: 0.3rem; */
+}
+
+.footer {
+    position: relative;
+    margin-top: 6rem;
+}
+
+.content {
+    padding-bottom: 0;
+}
+
+.div-form-check {
+    margin: 0.5rem 0 1.5rem 0;
+    /* background: #d5e1ec; */
+    padding-left: 3rem;
+    padding-right: 3rem;
+    border-radius: 10px;
+    min-width: 30%;
+}
+
+.div-form-check .form-check{
+    margin-bottom: 0;
+}
+
+.form-check label {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+#formularioEncuesta {
+    padding: 0.7rem 2rem;
+}
+
+#formularioEncuesta .labelRadio {
+    margin-left: 1rem;
+    font-size: 14px;
+}
+
+#formularioEncuesta .labelRadio input {
+    margin-right: 0.4rem;
 }
 
 .navbar-vertical.navbar-expand-xl+.content .navbar-top {
@@ -57,6 +153,10 @@ main.main {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
+}
+
+.navbar-vertical-divider {
+    min-width: 3rem;
 }
 
 .sombraNavbarInhabilitada {
@@ -96,6 +196,14 @@ main.main {
     color: #1780E8;
 }
 
+@media (max-width: 535px) {
+    .container-cards {
+        grid-template-rows: none;
+    }
+}
+
+
+
 @media (min-width: 1200px) {
     .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-collapse {
         width: 100% !important;
@@ -106,16 +214,57 @@ main.main {
         transition: transform .1s;
     }
     .navbar-vertical.navbar-expand-xl+.content {
-        margin-left: 13.6rem;
+        margin-left: 12.6rem;
     }
     .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-vertical-content {
-        padding-left: 0.5rem;
+        padding-left: 0.7rem;
+    }
+}
+
+
+@media only screen and (min-width: 1200px) {
+    .navbar-vertical.navbar-expand-xl .navbar-vertical-content {
+        padding-left: 0.7rem;
+    }
+
+}
+
+
+@media only screen and (max-width: 1199px) {
+    #root {
+        background-image: url(../../assets/img/vumOfficeImgs/background-home.png);
+        background-position-x: 30%;
+    }
+    #formularioEncuesta {
+        padding: 0;
+    }
+
+    .div-form-check {
+        padding-left: 2rem;
+    }
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
+    #root {
+        background-size: auto !important;
+        background-image: url(../../assets/img/vumOfficeImgs/background-home.png);
+    }
+    .container-2 {
+        padding: 0.7rem 0rem;
     }
 }
 
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
+    #root {
+        background-size: auto !important;
+        background-image: url(../../assets/img/vumOfficeImgs/background-home.png);
+    }
+    .container-2 {
+        padding: 0.7rem 0rem;
+    }
     .paddingContainer {
-        padding: 0px 20px 20px 20px;
+        padding: 0px;
     }
     .headerMobile {
         display: flex !important;
@@ -144,7 +293,7 @@ main.main {
 
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
     .paddingContainer {
-        padding: 0px 20px 20px 20px;
+        padding: 0;
     }
     .headerMobile {
         display: flex !important;

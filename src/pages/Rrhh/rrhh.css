@@ -2,6 +2,11 @@
     background-image: url("../../assets/img/vumOfficeImgs/background-rrhh.png");
 }
 
+.extra-padding {
+    max-width: 80%;
+    padding-left: 100px;
+}
+
 .tituloBienvenidoRrhh{
     color: white;
 }
@@ -11,7 +16,6 @@
 }
 
 .paddingRRHH{
-    padding-left: 100px;
     padding-top: 70px;
 }
 

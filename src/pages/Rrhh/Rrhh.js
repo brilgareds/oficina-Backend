@@ -6,7 +6,7 @@ import { routes } from '../../environments/environments.ts';
 export const Rrhh = () => {
 
     useEffect(() => {
-        document.getElementById('top').className = 'main dashboard rrhh';
+        document.getElementById('root').className = 'rrhh';
     }, [])
 
 

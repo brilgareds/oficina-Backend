@@ -33,24 +33,24 @@ export const CardsOficina = () => {
     ];
 
     return (
-
-        oficinas.map(({ imgUrl, nombre, copy, redirecTo }, idx) => {
-            return (
-                <div key={idx} className='col-sm-12 col-lg-3 mb-4 zoom' >
-                    <Link to={{ pathname: redirecTo }}>
-                        <div className='card sombraCards'>
-                            <div>
-                                <img className='img-fluid imgHeaderCard' src={imgUrl} alt={nombre} />
+        <div className="container-cards">{
+            oficinas.map(({ imgUrl, nombre, copy, redirecTo }, idx) => {
+                return (
+                    <div key={idx} style={{ with: '100%' }} className='zoom' >
+                        <Link to={{ pathname: redirecTo }}>
+                            <div className='card sombraCards' style={{ height: '100%' }}>
+                                <div style={{  }}>
+                                    <img className='img-fluid imgHeaderCard' style={{  }} src={imgUrl} alt={nombre} />
+                                </div>
+                                <div className='card-body oficinaBotomCopy' style={{ height: '100%', maxHeight: '100%' }}>
+                                    <span className='card-title tittleCardOficina'>{nombre}</span> <br />
+                                    <span className='card-text bodyCardOficina'>{copy}</span>
+                                </div>
                             </div>
-                            <div className='card-body oficinaBotomCopy'>
-                                <span className='card-title tittleCardOficina'>{nombre}</span> <br />
-                                <span className='card-text bodyCardOficina'>{copy}</span>
-                            </div>
-                        </div>
-                    </Link>
-                </div >
-            );
-        })
-
+                        </Link>
+                    </div >
+                );
+            })}
+        </div>
     )
 }
