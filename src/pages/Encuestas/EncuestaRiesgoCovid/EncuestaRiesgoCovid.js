@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Preguntas } from '../../../components/Preguntas/Preguntas';
 import { getPreguntasRiesgoCovid } from '../../../repositories/Encuestas/Encuentas';
+import './encuestaRiesgoCovid.css';
 
 
 export const EncuestaRiesgoCovid = () => {
 
     const [preguntasRiesgoCovid, setPreguntasRiesgoCovid] = useState({});
     const [formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid] = useState({});
+
+    useEffect(() => {
+        document.getElementById('root').className = 'encuestaRiesgoCovid';
+    }, []);
 
     useEffect(() => {
 

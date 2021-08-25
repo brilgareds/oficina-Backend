@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { routes } from '../../environments/environments';
 import './sst.css';
 
 export const Sst = () => {
+
+    useEffect(() => {
+        document.getElementById('root').className = 'sst';
+    }, []);
 
     return (
         <>

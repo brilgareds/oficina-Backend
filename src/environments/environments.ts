@@ -5,6 +5,7 @@ import { Login } from "../pages/Login/Login.js";
 import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
 import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
+import { Navbar } from "../components/Navbar/Navbar.js";
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';

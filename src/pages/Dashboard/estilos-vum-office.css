@@ -51,6 +51,7 @@ a {
 }
 
 #root {
+    /*
     background-size: cover !important;
     background-repeat: no-repeat;
     background-position: center center;
@@ -63,6 +64,12 @@ a {
     background-repeat-x: no-repeat;
     background-repeat-y: no-repeat;
     background-color: transparent;
+    */
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 .div-pregunta {
@@ -232,8 +239,7 @@ a {
 
 @media only screen and (max-width: 1199px) {
     #root {
-        background-image: url(../../assets/img/vumOfficeImgs/background-home.png);
-        background-position-x: 30%;
+        background-image: url(../../assets/img/vumOfficeImgs/background-form-1.png);
     }
     #formularioEncuesta {
         padding: 0;
@@ -248,7 +254,7 @@ a {
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
     #root {
         background-size: auto !important;
-        background-image: url(../../assets/img/vumOfficeImgs/background-home.png);
+        background-image: url(../../assets/img/vumOfficeImgs/background-form-1.png);
     }
     .container-2 {
         padding: 0.7rem 0rem;
@@ -258,7 +264,7 @@ a {
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
     #root {
         background-size: auto !important;
-        background-image: url(../../assets/img/vumOfficeImgs/background-home.png);
+        background-image: url(../../assets/img/vumOfficeImgs/background-form-1.png);
     }
     .container-2 {
         padding: 0.7rem 0rem;

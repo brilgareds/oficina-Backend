@@ -15,7 +15,7 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //ty
     const [stateTitle, setStateTitle] = useState('Estamos para ti')
 
     useEffect(() => {
-        document.getElementById('top').className = 'main dashboard rrhhForm';
+        document.getElementById('root').className = 'rrhhForm';
 
         if (typeForm) {
             setStateTitle(validarTituloComponent(typeForm.typeForm));

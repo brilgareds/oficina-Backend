@@ -6,6 +6,7 @@ import Footer from '../components/shared/footer/Footer';
 import { routes } from '../environments/environments.ts';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Cookies from 'universal-cookie/es6';
+import { OtraApp } from '../components/OtraApp/OtraApp';
 
 export const DashboardRoutes = () => {
 
@@ -26,7 +27,11 @@ export const DashboardRoutes = () => {
                     :
                     <main className="main">
                         <div className="paddingContainer" data-layout="container">
-                            <Navbar menu={ menu[0] } />
+                            <Switch>
+                                <Route path='/otraApp/' render={() => <OtraApp /> }/>
+                                
+                                <Route render={() => <Navbar menu={menu[0]} /> } />
+                            </Switch>
                             <div className="content">
                                 <Header menu={menu[1]} />
                                 <div className="dashboard" id="root" style={{ minHeight: '94.7vh' }}>
@@ -47,7 +52,7 @@ export const DashboardRoutes = () => {
                                                     <Route exact path={routes.bienestar.url} component={routes.bienestar.componente} />
                                                     <Route exact path={routes.miBilletera.url} component={routes.miBilletera.componente} />
                                                     <Route exact path={routes.encuestaRiesgoCovid.url} component={routes.encuestaRiesgoCovid.componente} />
-                                                    <Redirect to={routes.home.url} />
+                                                    { /* <Redirect to={routes.home.url} /> */}
                                                 </>
                                         }
                                     </Switch>
