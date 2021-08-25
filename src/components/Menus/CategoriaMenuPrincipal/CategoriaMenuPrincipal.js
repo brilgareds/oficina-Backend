@@ -1,6 +1,6 @@
 import React from 'react';
-import { Loading } from '../Loading/Loading';
-import { SubMenuPrincipal } from '../Menu/SubMenuPrincipal/SubMenuPrincipal';
+import { Loading } from '../../Loading/Loading';
+import { SubMenuPrincipal } from '../SubMenuPrincipal/SubMenuPrincipal';
 
 export const CategoriaMenuPrincipal = ({ categoria, k }) => {
 

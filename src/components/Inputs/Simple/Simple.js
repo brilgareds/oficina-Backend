@@ -4,7 +4,7 @@ export const Simple = ({ prop, items, currentArray, agregarPregunta, setFormEncu
 
     const updateResponse = (e, currentArray, preguntaSiguiente, id) => {
 
-        console.log('\n\nProp: ', prop)
+        console.log('\nProp: ', prop)
         const finishId = id.substring(id.length-3).toLowerCase();
         const hasWordYes = (finishId === '_si');
 

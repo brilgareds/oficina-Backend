@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header/Header';
-import { Navbar } from '../components/Navbar/Navbar';
+import { Navbar } from '../components/Navbars/MainNavBar/Navbar';
 import { getAllMenu } from '../repositories/Menu/Menu';
 import Footer from '../components/shared/footer/Footer';
 import { routes } from '../environments/environments.ts';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Cookies from 'universal-cookie/es6';
-import { OtraApp } from '../components/OtraApp/OtraApp';
+import { MenuCV } from '../components/Menus/MenuCV/MenuCV';
 
 export const DashboardRoutes = () => {
 
@@ -17,46 +17,59 @@ export const DashboardRoutes = () => {
         getAllMenu(setMenu);
     }, []);
 
+    const obtenerRutas = (newRoutes, arrayRoutes=[], k='route') => {
+
+        if (!arrayRoutes.length && cookies.get('d_u').ingresoExterno) {
+            return (
+                <>
+                    <Route path="*" component={routes.sst.componente} />
+                    <Redirect to={routes.sst.url} /> 
+                </>
+            )
+        }
+
+        Object.keys(newRoutes).forEach(prop => {
+            const key = `${k}_${prop}`;
+            const { url, componente, subPages } = newRoutes[prop];
+
+            if (url && componente) arrayRoutes.push(<Route key={key} exact path={url} component={componente} />);
+
+            if (subPages) obtenerRutas(subPages, arrayRoutes, key);
+        });
+
+        // arrayRoutes.push(<Redirect to={routes.home.url} />);
+
+        return arrayRoutes;
+    };
+
+
 
     return (
         <>
             {
-    //Si no existen las cookies con la informacion del usuario d_u = data_user
+                //Si no existen las cookies con la informacion del usuario d_u = data_user
                 (!cookies.get('d_u')) ?
                     <Redirect to={routes.login.url} />
                     :
                     <main className="main">
                         <div className="paddingContainer" data-layout="container">
+                            
                             <Switch>
-                                <Route path='/otraApp/' render={() => <OtraApp /> }/>
-                                
-                                <Route render={() => <Navbar menu={menu[0]} /> } />
+                                <Route path='/cv'>
+                                    <MenuCV />
+                                </Route>
+                                <Route>
+                                    <Navbar menu={menu[0]} />
+                                </Route>
                             </Switch>
+                            
                             <div className="content">
                                 <Header menu={menu[1]} />
                                 <div className="dashboard" id="root" style={{ minHeight: '94.7vh' }}>
                                     <div className="container-2">
-                                    <Switch>
-                                        {
-                                            (cookies.get('d_u').ingresoExterno) ?
-                                                <>
-                                                    <Route path="*" component={routes.sst.componente} />
-                                                    <Redirect to={routes.sst.url} />
-                                                </>
-                                                :
-                                                <>
-                                                    <Route exact path={routes.home.url} component={routes.home.componente} />
-                                                    <Route exact path={routes.rrhh.url} component={routes.rrhh.componente} />
-                                                    <Route exact path={routes.rrhh.subPages.formRrhh.url} component={routes.rrhh.subPages.formRrhh.componente} />
-                                                    <Route exact path={routes.sst.url} component={routes.sst.componente} />
-                                                    <Route exact path={routes.bienestar.url} component={routes.bienestar.componente} />
-                                                    <Route exact path={routes.miBilletera.url} component={routes.miBilletera.componente} />
-                                                    <Route exact path={routes.encuestaRiesgoCovid.url} component={routes.encuestaRiesgoCovid.componente} />
-                                                    <Route exact path={routes.ayuda.url} component={routes.ayuda.componente} />
-                                                    { /* <Redirect to={routes.home.url} /> */}
-                                                </>
-                                        }
-                                    </Switch>
+                                        <Switch>
+                                            { obtenerRutas(routes) }
+                                        </Switch>
                                     </div>
                                     <Footer />
                                 </div>

@@ -7,7 +7,7 @@ import './encuestaRiesgoCovid.css';
 export const EncuestaRiesgoCovid = () => {
 
     const [preguntasRiesgoCovid, setPreguntasRiesgoCovid] = useState({});
-    const [formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid] = useState({});
+    const [, setFormEncuestaRiesgoCovid] = useState({});
 
     useEffect(() => {
         document.getElementById('root').className = 'encuestaRiesgoCovid';
