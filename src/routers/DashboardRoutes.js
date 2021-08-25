@@ -52,6 +52,7 @@ export const DashboardRoutes = () => {
                                                     <Route exact path={routes.bienestar.url} component={routes.bienestar.componente} />
                                                     <Route exact path={routes.miBilletera.url} component={routes.miBilletera.componente} />
                                                     <Route exact path={routes.encuestaRiesgoCovid.url} component={routes.encuestaRiesgoCovid.componente} />
+                                                    <Route exact path={routes.ayuda.url} component={routes.ayuda.componente} />
                                                     { /* <Redirect to={routes.home.url} /> */}
                                                 </>
                                         }

@@ -9,7 +9,7 @@ export const CardsOficina = () => {
         {
             imgUrl: './assets/img/rrhh.jpg',
             nombre: 'RRHH',
-            copy: 'Aquí encontraras acompañamiento en lo que necesites para tu bienestar integral como ser humano.',
+            copy: 'Aquí encontrarás acompañamiento en lo que necesites para tu bienestar integral como ser humano.',
             redirecTo: routes.rrhh.url,
         },
         {

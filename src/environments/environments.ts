@@ -5,7 +5,7 @@ import { Login } from "../pages/Login/Login.js";
 import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
 import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
-import { Navbar } from "../components/Navbar/Navbar.js";
+import { routesAyuda } from "../pages/Ayuda/routes.js";
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';
@@ -17,7 +17,8 @@ const routes = {
     sst: { url: '/sst', componente: Sst },
     encuestaRiesgoCovid: { url: '/encuestaRiesgoCovid', componente: EncuestaRiesgoCovid },
     bienestar: { url: '/bienestar', componente: Bienestar },
-    miBilletera: { url: '/mi_billetera', componente: MiBilletera }
+    miBilletera: { url: '/mi_billetera', componente: MiBilletera },
+    ayuda: routesAyuda,
 };
 
 const files = {
