@@ -27,6 +27,6 @@ export const Multiple = ({ prop, items, setFormEncuestaRiesgoCovid }) => {
     }
 
     return <>
-        <Select isMulti value={ valueSelect } onChange={ updateSelect } options={options} placeholder={'Selecciona...'} />
+        <Select isMulti value={ valueSelect } onChange={ updateSelect } options={options} placeholder={'Selección múltiple'} />
     </>
 }
