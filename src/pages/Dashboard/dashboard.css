@@ -1,4 +1,6 @@
 .dashboard {
+    background-position-y: 25%;
+    background-attachment: fixed;
     background-image: url("../../assets/img/vumOfficeImgs/background-home.png");
 }
 
@@ -37,6 +39,8 @@
 
 .copyFooter{
     color: white;
+    margin-bottom: 0;
+    padding-bottom: 1rem;
 }
 
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
@@ -48,7 +52,10 @@
         width: 70%;
     }
     #root{
-        padding: 10px !important;
+        padding: 3rem 20px 10px 20px !important;
+    }
+    .paddingRRHH {
+        padding-left: 0 !important;
     }
 }
 
@@ -61,6 +68,6 @@
         width: 70%;
     }
     #root{
-        padding: 10px !important;
+        padding: 3rem 1rem !important;
     }
 }

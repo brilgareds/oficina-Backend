@@ -2,32 +2,14 @@ import React, { useEffect } from 'react';
 import './estilos-vum-office.css';
 import './dashboard.css';
 import { CardsOficina } from '../../components/cards-oficina/CardsOficina';
+import { ImportanBottons } from '../../components/ImportantBottons/ImportanBottons';
+import { getFullNameUser } from '../../generalHelpers';
+
 export const Dashboard = () => {
 
     useEffect(() => {
-        document.getElementById('top').className = 'main dashboard dashboard' ?? '';
+        document.getElementById('root').className = 'dashboard';
     }, [])
-
-    let elementModalRedireccion = document.querySelector('#modalImagenRedireccion');
-    let elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
-    let elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
-
-
-    const abriendoModalRedireccion = (e) => {
-
-        const button = e.relatedTarget;
-        const imgUrl = button.getAttribute('img-url');
-        const urlRedireccion = button.getAttribute('img-redireccion');
-        const target = (urlRedireccion && urlRedireccion !== '#') ? '_blank' : '_self';
-
-        elementModalImgImagenRedireccion.src = (imgUrl) ? `./assets/${imgUrl}` : '';
-        elementModalUrlRedireccion.href = urlRedireccion;
-        elementModalUrlRedireccion.target = target;
-    };
-
-
-    elementModalRedireccion.addEventListener('show.bs.modal', abriendoModalRedireccion);
-
 
     return (
         <div className="card-body">
@@ -41,20 +23,12 @@ export const Dashboard = () => {
 
                         <div className="col-md-12 text-center mb-5">
                             <h3 className="tituloComoTePodemosAyudar">¿Como te podemos ayudar?</h3>
-                            <span className="spanNombreUsuario">Jose Carlos Avila Perea</span>
+                            <span className="spanNombreUsuario">{getFullNameUser()}</span>
                         </div>
 
                         <CardsOficina />
 
-                        <div className="col-md-12 text-center">
-                            <button className="btn btnVumOffice d-block w-100 mt-3 fontBtnVumOffice" type="submit" name="submit">
-                                <img className="imgControlIngresoYSalida" src="./assets/img/icono-control-ingreso-salida.svg" alt="icono-control-ingreso-salida" />
-                                Control de ingreso y salida
-                            </button>
-                            <button className="btn btnVumOffice d-block w-100 mt-3 fontBtnVumOffice" type="submit" name="submit">
-                                Califícanos y comunícate
-                            </button>
-                        </div>
+                        <ImportanBottons />
                     </div>
                 </div>
             </div>

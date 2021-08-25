@@ -1,19 +1,19 @@
 import React from 'react';
-import { environment } from '../../environments/environments';
-import { MenuPrincipal } from '../MenuPrincipal/MenuPrincipal';
+import { routes } from '../../environments/environments';
+import { MenuPrincipal } from '../Menu/MenuPrincipal/MenuPrincipal';
 import { Link } from 'react-router-dom';
+import { useLogin } from '../../pages/Login/hooks/useLogin.js';
+
 export const Navbar = ({ menu }) => {
 
-    const { path } = environment;
-
     return (
-        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile">
+        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile" style={{ marginLeft: '0rem', marginRight: '0rem' }}>
 
             <div className="d-flex align-items-center" style={{ paddingLeft: "5%" }}>
                 <div className="toggle-icon-wrapper">
-                    <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Menú Principal"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
+                    <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left"><span className="navbar-toggle-icon"><span className="toggle-line"></span></span></button>
                 </div>
-                <Link to={{ pathname: path.home.url }}>
+                <Link to={{ pathname: routes.home.url }}>
 
                     <div className="navbar-brand">
                         <div className="d-flex align-items-center py-3">
@@ -25,7 +25,7 @@ export const Navbar = ({ menu }) => {
 
             <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
                 <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
-                    <MenuPrincipal menu={menu} k={'menu_1'} key={'menu_1'} />
+                    <MenuPrincipal k={'menu_1'} key={'menu_1'} menu={menu} />
                 </div>
                 <div className="divCerrarSesion text-center">
                     <div className="row">
@@ -33,7 +33,7 @@ export const Navbar = ({ menu }) => {
                             <img className="iconoCerrarSesion" src="./assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
                         </div>
                         <div className="col-md-12">
-                            <span className="spanCerrarSesion nav-link-text">Cerrar Sesion</span>
+                            <span onClick={useLogin.logOut} className="spanCerrarSesion nav-link-text">Cerrar sesion</span>
                         </div>
                     </div>
                 </div>

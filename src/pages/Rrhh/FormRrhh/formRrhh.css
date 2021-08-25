@@ -1,0 +1,25 @@
+.rrhhForm {
+    background-image: url("../../../assets/img/vumOfficeImgs/background-form-1.png");
+}
+
+.bg-image-vum{
+    background-image: url("../../../assets/img/vumOfficeImgs/background-rrhh-hastag.png");
+    background-size: 180px;
+}
+
+.inputRadioOtraRespuesta{
+    margin-right: 10px;
+}
+
+#divNumeroTelefonico{
+    display: none;
+}
+
+.btnEnviar{
+    background-color: #1783EE;
+    border: 1px solid #1783EE;
+}
+
+.divsModal{
+    text-align: left;
+}

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { useLogin } from '../../../pages/Login/hooks/useLogin.js';
 
 const NavbarDropdownUser = () => {
     return (
@@ -16,7 +17,7 @@ const NavbarDropdownUser = () => {
 
                     </div>
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" href="pages/authentication/card/logout.html">Cerrar Sesion</a>
+                    <div onClick={useLogin.logOut} className="dropdown-item">Cerrar sesion</div>
                 </div>
             </div>
         </li>
