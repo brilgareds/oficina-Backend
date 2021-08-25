@@ -22,7 +22,7 @@ export const Dashboard = () => {
                         </div>
 
                         <div className="col-md-12 text-center mb-5">
-                            <h3 className="tituloComoTePodemosAyudar">¿Como te podemos ayudar?</h3>
+                            <h3 className="tituloComoTePodemosAyudar">¿Cómo te podemos ayudar?</h3>
                             <span className="spanNombreUsuario">{getFullNameUser()}</span>
                         </div>
 
