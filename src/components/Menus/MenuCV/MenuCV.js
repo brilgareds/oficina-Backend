@@ -1,10 +1,8 @@
 import React from 'react';
-import { routes } from '../../environments/environments';
-import { MenuPrincipal } from '../Menu/MenuPrincipal/MenuPrincipal';
+import { routes } from '../../../environments/environments';
 import { Link } from 'react-router-dom';
-import { useLogin } from '../../pages/Login/hooks/useLogin.js';
 
-export const OtraApp = ({ menu }) => {
+export const MenuCV = () => {
 
     return (
         <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile" style={{ marginLeft: '0rem', marginRight: '0rem' }}>

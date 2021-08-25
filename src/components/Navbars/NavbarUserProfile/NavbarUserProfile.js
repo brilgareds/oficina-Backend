@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuSecundario } from '../Menu/MenuSecundario/MenuSecundario';
+import { MenuSecundario } from '../../Menus/MenuSecundario/MenuSecundario';
 
 export const NavbarUserProfile = ({ menu }) => {
 

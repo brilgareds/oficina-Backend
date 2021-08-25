@@ -1,8 +1,8 @@
 import React from 'react';
-import { routes } from '../../environments/environments';
-import { MenuPrincipal } from '../Menu/MenuPrincipal/MenuPrincipal';
+import { routes } from '../../../environments/environments';
+import { MenuPrincipal } from '../../Menus/MenuPrincipal/MenuPrincipal';
 import { Link } from 'react-router-dom';
-import { useLogin } from '../../pages/Login/hooks/useLogin.js';
+import { useLogin } from '../../../pages/Login/hooks/useLogin.js';
 
 export const Navbar = ({ menu }) => {
 
@@ -17,7 +17,7 @@ export const Navbar = ({ menu }) => {
 
                     <div className="navbar-brand">
                         <div className="d-flex align-items-center py-3">
-                            <img className="me-2" src="./assets/img/logo-vum-login.svg" alt="" width="80" />
+                            <img className="me-2" src="/assets/img/logo-vum-login.svg" alt="" width="80" />
                         </div>
                     </div>
                 </Link>
@@ -30,7 +30,7 @@ export const Navbar = ({ menu }) => {
                 <div className="divCerrarSesion text-center">
                     <div className="row">
                         <div className="col-md-12">
-                            <img className="iconoCerrarSesion" src="./assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
+                            <img className="iconoCerrarSesion" src="/assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
                         </div>
                         <div className="col-md-12">
                             <span onClick={useLogin.logOut} className="spanCerrarSesion nav-link-text">Cerrar sesion</span>

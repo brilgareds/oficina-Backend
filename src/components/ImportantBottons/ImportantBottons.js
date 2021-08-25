@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ImportanBottons = () => {
+export const ImportantBottons = () => {
     return (
         <div className="col-md-12 text-center" style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 47%), 1fr))', paddingRight: '0', paddingLeft: '0', marginTop: '2.5rem' }}>
             <div className="text-end">

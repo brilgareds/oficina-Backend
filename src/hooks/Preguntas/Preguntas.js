@@ -31,6 +31,7 @@ export const usePreguntas = ({ preguntasRiesgoCovid, setFormEncuestaRiesgoCovid,
             agregarPregunta({}, 'pre_1');
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [preguntasRiesgoCovid]);
 
     const obj = { preguntas, agregarPregunta };
