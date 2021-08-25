@@ -7,25 +7,25 @@ export const CardsOficina = () => {
 
     let oficinas = [
         {
-            imgUrl: './assets/img/rrhh.jpg',
+            imgUrl: '/assets/img/rrhh.jpg',
             nombre: 'RRHH',
             copy: 'Aquí encontraras acompañamiento en lo que necesites para tu bienestar integral como ser humano.',
             redirecTo: routes.rrhh.url,
         },
         {
-            imgUrl: './assets/img/desarrollo.jpg',
+            imgUrl: '/assets/img/desarrollo.jpg',
             nombre: 'Desarrollo',
             copy: 'Organiza y gestiona lo que necesitas para tu desarrollo como nuestro trabajador.',
             redirecTo: routes.rrhh.url,
         },
         {
-            imgUrl: './assets/img/sst.jpg',
+            imgUrl: '/assets/img/sst.jpg',
             nombre: 'SST',
             copy: 'Como nuestro trabajador entendemos que tienes objetivos que alcanzar, aquí te damos las herramientas para que los consigas.',
             redirecTo: routes.sst.url,
         },
         {
-            imgUrl: './assets/img/bienestar.jpg',
+            imgUrl: '/assets/img/bienestar.jpg',
             nombre: 'Bienestar',
             copy: 'La seguridad y salud en trabajo son de vital importancia para nosotros! ingresa y llena los reportes COVID.',
             redirecTo: routes.bienestar.url,

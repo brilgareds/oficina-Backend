@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './estilos-vum-office.css';
 import './dashboard.css';
 import { CardsOficina } from '../../components/cards-oficina/CardsOficina';
-import { ImportanBottons } from '../../components/ImportantBottons/ImportanBottons';
+import { ImportantBottons } from '../../components/ImportantBottons/ImportantBottons';
 import { getFullNameUser } from '../../generalHelpers';
 
 export const Dashboard = () => {
@@ -18,7 +18,7 @@ export const Dashboard = () => {
                     <div className="row light">
 
                         <div className="col-md-12 text-center mb-4">
-                            <img className="imgVumHeader" src="./assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
+                            <img className="imgVumHeader" src="/assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
                         </div>
 
                         <div className="col-md-12 text-center mb-5">
@@ -28,7 +28,7 @@ export const Dashboard = () => {
 
                         <CardsOficina />
 
-                        <ImportanBottons />
+                        <ImportantBottons />
                     </div>
                 </div>
             </div>

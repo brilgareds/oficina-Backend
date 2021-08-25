@@ -1,5 +1,5 @@
 import React from 'react';
-import { CategoriaMenuPrincipal } from '../../CategoriaMenuPrincipal/CategoriaMenuPrincipal';
+import { CategoriaMenuPrincipal } from '../CategoriaMenuPrincipal/CategoriaMenuPrincipal';
 import { Loading } from '../../Loading/Loading';
 
 export const MenuPrincipal = ({ menu, k }) => {
