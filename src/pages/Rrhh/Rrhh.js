@@ -8,6 +8,7 @@ export const Rrhh = () => {
 
     useEffect(() => {
         document.getElementById('root').className = 'rrhh';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [])
 
 

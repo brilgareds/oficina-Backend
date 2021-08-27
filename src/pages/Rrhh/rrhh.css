@@ -45,14 +45,15 @@
 }
 
 .btns-rrhh{
-    border: 1px solid #f9fafd;
+    background-color: #74E36B;
+    color: #0F4F80;
+    border: 1px solid #74E36B;
     border-radius: 25px;
     height: 50px;
     width: 300px;
     display: inline-block;
     font-weight: 500;
     line-height: 1.5;
-    color: white;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -60,7 +61,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: transparent;
     padding: .3125rem 1rem;
     margin-right: 30px;
     font-size: 1rem;

@@ -7,12 +7,12 @@ const getFetch = async ({ url, set }) => {
 
     try {
         const result = (await axios.get(url)).data;
-    
+
         if (typeof set === 'function') set(result);
 
         return result;
 
-    } catch(e) {
+    } catch (e) {
         console.log(e.toString());
     }
 
@@ -29,9 +29,9 @@ const definirPropiedadesLink = (menu, k, first) => {
         collapse: (tieneSubMenus) ? 'collapse' : '',
         target: (tipoAccion === 'R') ? '_blank' : '',
         dropDown: (tieneSubMenus) ? 'dropdown-indicator' : '',
-        href: (['R','M'].includes(tipoAccion)) ? redireccionar : `#${k}`,
+        href: (['R', 'M'].includes(tipoAccion)) ? redireccionar : `#${k}`,
         dataBsTarget: (tipoAccion === 'RI') ? '#modalImagenRedireccion' : '',
-        dataBsToggle: (tieneSubMenus) ? 'collapse' : ((tipoAccion === 'RI') ? 'modal':''),
+        dataBsToggle: (tieneSubMenus) ? 'collapse' : ((tipoAccion === 'RI') ? 'modal' : ''),
         titulo, recurso, tipoAccion, clasesIcono, descripcion, redireccionar, tieneSubMenus
     };
 
@@ -194,21 +194,21 @@ const fakeQuestions = {
     }
 
 
-    
+
 };
 
 
 
 
-const getFakePreguntasRiesgoCovid = async() => {
+const getFakePreguntasRiesgoCovid = async () => {
 
     try {
-        
+
         const response = fakeQuestions;
 
         return response;
 
-    } catch(e) {
+    } catch (e) {
         console.log(e.toString());
     }
 
@@ -263,6 +263,28 @@ const overlay = () => {
     });
 }
 
+const advertenciaFormularioVacio = () => {
+    Swal.fire({
+        title: 'Advertencia',
+        html: `
+            <div className="row">
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                    Revisa el formulario con las siguientes indicaciones:
+                </div>
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">
+                    ◉ Los campos no deben estar vacios <br/>
+                    ◉ No se permiten carácteres especiales Eje: !"#$%&/() <br/>
+                    ◉ Debes seleccionar almenos una opción de los campos seleccionables <br/>
+                </div>
+            </div>
+             <br/>
+            
+        `,
+        icon: 'warning',
+        confirmButtonText: 'Cerrar',
+    });
+}
+
 const capitalizarPalabras = (val) => {
 
     return val.toLowerCase()
@@ -284,6 +306,7 @@ const getFullNameUser = () => {
     return capitalizarPalabras(nombreUsuario);
 }
 
+
 export {
     getFetch,
     definirPropiedadesLink,
@@ -292,5 +315,6 @@ export {
     postFetch,
     overlay,
     capitalizarPalabras,
-    getFullNameUser
+    getFullNameUser,
+    advertenciaFormularioVacio
 }

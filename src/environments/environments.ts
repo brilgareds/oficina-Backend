@@ -55,6 +55,8 @@ const api = {
     getForYouCategory: `${backendPath}/rrhh/for_you_categories`,
     getresourceRequestCategory: `${backendPath}/rrhh/resource_request_categories`,
     postSaveFormRRHH: `${backendPath}/rrhh/saveFormRRHH`,
+    getRequestHelpCategories: `${backendPath}/help/requestsHelpCategory`,
+    postSaveFormHelp: `${backendPath}/help/saveFormHelp`,
 };
 
 export {

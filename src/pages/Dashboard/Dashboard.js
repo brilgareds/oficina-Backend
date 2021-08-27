@@ -9,6 +9,7 @@ export const Dashboard = () => {
 
     useEffect(() => {
         document.getElementById('root').className = 'dashboard';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [])
 
     return (

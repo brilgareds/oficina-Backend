@@ -4,7 +4,6 @@ import { useFormRrhh } from './hooks/useForm.js';
 import { routes } from '../../../environments/environments.ts';
 import Select from 'react-select';
 import Cookies from 'universal-cookie/es6';
-
 import './formRrhh.css';
 
 
