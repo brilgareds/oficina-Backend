@@ -58,7 +58,7 @@ export const FormRrhh = (props) => {
                                             (stateTitle !== 'Talk to us')
                                             &&
                                             <div className="col-12 col-lg-4 mb-3">
-                                                <label className="form-label" htmlFor="descripcion">Categoria: </label>
+                                                <label className="form-label" htmlFor="descripcion">Categoría: </label>
                                                 <Select onChange={value => onChangeSelectHandle({ value })} options={optionsCategory} defaultValue={[optionsCategory[0]]} placeholder={"Selecciona..."} />
                                             </div>
                                         }
