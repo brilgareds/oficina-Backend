@@ -8,6 +8,7 @@ export const Rrhh = () => {
 
     useEffect(() => {
         document.getElementById('root').className = 'rrhh';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [])
 
 
@@ -24,7 +25,7 @@ export const Rrhh = () => {
             <div className="col-md-12 paddingRRHH divTitulosRRHH">
                 <h3 className="tituloModulo">RRHH</h3>
                 <span className="spanNameUserRRHH">{getFullNameUser()}</span>
-                <p className="copyPage mt-4">Aquí encontraras acompañamiento en lo que necesites para tu bienestar integral como ser humano.</p>
+                <p className="copyPage mt-4">Aquí encontrarás acompañamiento en lo que necesites para tu bienestar integral como ser humano.</p>
             </div>
 
             <div className="col-md-12 paddingRRHH text-left mb-3">

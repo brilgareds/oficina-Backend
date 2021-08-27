@@ -1,5 +1,10 @@
-.rrhh {
-    background-image: url("../../assets/img/vumOfficeImgs/background-rrhh.png");
+.ayuda {
+    background-image: url("../../assets/img/vumOfficeImgs/background-form-1.png");
+}
+
+.imgbtnAyuda {
+    width: 8%;
+    margin-right: 10px;
 }
 
 .extra-padding {
@@ -7,44 +12,44 @@
     padding-left: 100px;
 }
 
-.tituloBienvenidoRrhh{
+.tituloBienvenidoAyuda{
     color: white;
+    font-weight: 800;
 }
 
 .logoVumBienvenido{
     width: 90px;
 }
 
-.paddingRRHH{
-    padding-top: 70px;
+.paddingAyuda{
+    padding-top: 50px;
 }
 
-.cabeceraRRhh{
-    text-align: left;
+.cabeceraAyuda{
+    text-align: center;
 }
 
-.imgbtnRrhh{
+.imgbtnAyuda{
     width: 8%;
     margin-right: 10px;
 }
 
-.tituloModulo{
+.tituloModuloAyuda{
     color: white;
     font-weight: 800;
 }
 
-.spanNameUserRRHH{
+.spanNameUserAyuda{
     font-size: 21px;
     font-weight: 500;
     color: white;
 }
 
-.copyPage{
+.copyPageAyuda{
     color: white;
-    max-width: 750px;
 }
 
-.btns-rrhh{
+.btns-ayuda{
     background-color: #74E36B;
     color: #0F4F80;
     border: 1px solid #74E36B;
@@ -82,42 +87,46 @@
     transition: transform .3s;
 }
 
+.divTitulosAyuda{
+    text-align: center;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
-    .cabeceraRRhh{
+    .cabeceraAyuda{
         text-align: center;
     }
-    .btns-rrhh{
+    .btns-ayuda{
         width: 100%;
     }
-    .paddingRRHH{
+    .paddingAyuda{
         padding-left: 15px;
         padding-top: unset;
     }
-    .copyPage {
+    .copyPageAyuda {
         max-width: unset;
         text-align: center;
     }
-    .divTitulosRRHH{
+    .divTitulosAyuda{
         text-align: center;
     }
 }
 
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
-    .cabeceraRRhh{
+    .cabeceraAyuda{
         text-align: center;
     }
-    .btns-rrhh{
+    .btns-ayuda{
         width: 100%;
     }
-    .paddingRRHH{
+    .paddingAyuda{
         padding-left: 15px;
         padding-top: unset;
     }
-    .copyPage {
+    .copyPageAyuda {
         max-width: unset;
         text-align: center;
     }
-    .divTitulosRRHH{
+    .divTitulosAyuda{
         text-align: center;
     }
 }
