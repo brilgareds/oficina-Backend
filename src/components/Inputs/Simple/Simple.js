@@ -1,27 +1,19 @@
 import React from 'react';
 
-export const Simple = ({ prop, items, currentArray, agregarPregunta, setFormEncuestaRiesgoCovid }) => {
+export const Simple = ({ prop, items, currentArray, agregarPregunta, formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid, tabIndex }) => {
 
-    const updateResponse = (e, currentArray, preguntaSiguiente, id) => {
+    const updateResponse = (prop, currentArray, preguntaSiguiente, respuesta) => {
 
-        console.log('\nProp: ', prop)
-        const finishId = id.substring(id.length-3).toLowerCase();
-        const hasWordYes = (finishId === '_si');
+        setFormEncuestaRiesgoCovid(old_value => {
 
-        setFormEncuestaRiesgoCovid(old_value => ({ ...old_value, [prop]: hasWordYes }))
+            old_value[prop] = { cod: respuesta.cod, value: null };
 
-        console.log('FinishId is: ', finishId);
+            console.log('\nNewForm isss: ', old_value)
 
-        /*
+            return old_value;
+        });
 
-            setFormEncuestaRiesgoCovid(form => ({
-                ...form,
-                [id]: preguntasRiesgoCovid[id]
-            }));
-
-        */
-
-        agregarPregunta(currentArray, preguntaSiguiente, id);
+        agregarPregunta({ obj: currentArray, prop: preguntaSiguiente, tabIndex });
     };
     
 
@@ -29,12 +21,14 @@ export const Simple = ({ prop, items, currentArray, agregarPregunta, setFormEncu
         {
             items.map(respuesta => {
 
-                const { detalle, preguntaSiguiente } = respuesta;
-                const id = `${prop}_${ detalle.toLowerCase() }`;
+                const { detalle, preguntaSiguiente, cod } = respuesta;
+                const id = `${prop}_${cod}`;
+                const defaultValue = formEncuestaRiesgoCovid[prop]?.cod === cod;
+                console.log('tset: ', formEncuestaRiesgoCovid)
 
                 return (
                     <div className="form-check" key={ id } >
-                        <input className="form-check-input" type="radio" defaultChecked="" name={ prop } id={ id } onClick={ (e)=> updateResponse(e, currentArray, preguntaSiguiente, id) } />
+                        <input className="form-check-input" type="radio" defaultChecked={defaultValue} name={ prop } id={ id } onClick={ (e)=> updateResponse(prop, currentArray, preguntaSiguiente, respuesta) } required/>
                         <label className="form-check-label" htmlFor={ id }>
                             { detalle }
                         </label>

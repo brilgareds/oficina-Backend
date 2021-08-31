@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import Cookies from 'universal-cookie/es6';
 import { api } from '../../../../environments/environments';
 import { advertenciaFormularioVacio, getFetchWithHeader, overlay, postFetch } from '../../../../generalHelpers';
 
@@ -9,7 +8,6 @@ export const useAyuda = (formInitialState = {}, typeForm) => {
     const exprRegTelefono = /^[0-9+() -?]+$/;                                                //Expresion regular para validar el formato de un teléfono
     const exprRegEmail = /^([a-zA-Z0-9_.-]+)@([\da-zA-Z0-9.-]+)\.([a-z.]{2,6})$/;        //Expresion regular para validar los correos electronicos
     const exprRegTexto = /^([\w\s\d\nÑñáéíóúÁÉÍÓÚ.,\-_@?¿%<>]){1,990}$/;                      //Expresion regular para validar texto largos de 1000 caracteres
-    const cookies = new Cookies();
 
     const [stateTitle, setStateTitle] = useState('Felicitaciones');
     useEffect(() => {
@@ -115,7 +113,7 @@ export const useAyuda = (formInitialState = {}, typeForm) => {
             url: api.getRequestHelpCategories,
             headers: {
                 'accept': '*/*',
-                'Authorization': 'Bearer ' + cookies.get('a_t')
+                'Authorization': 'Bearer ' + localStorage.getItem('a_t')
             }
         })
             .then((responseGetFetchWithHeader) => {
@@ -199,13 +197,13 @@ export const useAyuda = (formInitialState = {}, typeForm) => {
                 tipoContacto: String(tipoContacto),
             },
             dataUser: {
-                apellidos: String(cookies.get('d_u').apellidos).trim(),
-                cedula: String(cookies.get('d_u').cedula).trim(),
-                cCostos: String(cookies.get('d_u').ccostos).trim(),
-                empresa: String(cookies.get('d_u').empresa).trim(),
-                estado: String(cookies.get('d_u').estado).trim(),
-                nombres: String(cookies.get('d_u').nombres).trim(),
-                numeroCelular: String(cookies.get('d_u').numeroCelular).trim(),
+                apellidos: String(JSON.parse(localStorage.getItem('d_u')).apellidos).trim(),
+                cedula: String(JSON.parse(localStorage.getItem('d_u')).cedula).trim(),
+                cCostos: String(JSON.parse(localStorage.getItem('d_u')).ccostos).trim(),
+                empresa: String(JSON.parse(localStorage.getItem('d_u')).empresa).trim(),
+                estado: String(JSON.parse(localStorage.getItem('d_u')).estado).trim(),
+                nombres: String(JSON.parse(localStorage.getItem('d_u')).nombres).trim(),
+                numeroCelular: String(JSON.parse(localStorage.getItem('d_u')).numeroCelular).trim(),
             }
 
         };

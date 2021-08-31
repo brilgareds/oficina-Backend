@@ -9,6 +9,7 @@ import { routesAyuda } from "../pages/Ayuda/routes.js";
 import { MainCV } from "../pages/MainCV/MainCV.js";
 import { MenuCV } from "../components/Menus/MenuCV/MenuCV.js";
 import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
+import { routesIncapacidad } from "../pages/Incapacidad/routes.js";
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';
@@ -33,6 +34,7 @@ const routes = {
     bienestar: { url: '/bienestar', componente: Bienestar },
     miBilletera: { url: '/mi_billetera', componente: MiBilletera },
     ayuda: routesAyuda,
+    incapacidad: routesIncapacidad,
     cv: {
         subPages: {
             main: { url: '/cv/main', componente: MainCV }

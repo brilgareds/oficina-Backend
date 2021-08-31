@@ -3,7 +3,6 @@ import { api, routes } from '../../../environments/environments';
 import { getFetchWithHeader, postFetch, overlay } from '../../../generalHelpers';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/dist/sweetalert2.css';
-import Cookies from 'universal-cookie/es6';
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
 
@@ -14,7 +13,6 @@ export const useLogin = (formInitialState = {}) => {
     const exprRegTelefono = /^[0-9+() -?]+$/;                                           //Expresion regular para validar el formato de un teléfono
     const exprRegEmail = /^([a-zA-Z0-9_.-]+)@([\da-zA-Z0-9.-]+)\.([a-z.]{2,6})$/;       //Expresion regular para validar los correos electronicos
     const exprRegSoloLetras = /^[a-zA-ZÑñáéíóúÁÉÍÓÚÄËÏÖÜäëïöü\s+]+$/;                   //Expresion regular para validar solo letras
-    const cookies = new Cookies();
     const [formValue, setStateForm] = useState(formInitialState);
     const [modalInformation, setModalInformation] = useState({ eps: null, documentTypes: null });
 
@@ -29,15 +27,8 @@ export const useLogin = (formInitialState = {}) => {
 
     const logOut = () => {
         overlay();
-        removeCookies();
-        window.location.reload();
-    }
-
-
-    const removeCookies = () => {
-        cookies.remove('a_t');     //access_token
-        cookies.remove('r_t');     //refresh_token
-        cookies.remove('d_u');     //data_user
+        localStorage.clear();
+        window.location.href = routes.login.url;
     }
 
 
@@ -48,7 +39,7 @@ export const useLogin = (formInitialState = {}) => {
         if (validarInputIdentificacion(formValue.identification)) {    //Si la informacion es solo tipo numero
 
             overlay();
-            removeCookies();
+            localStorage.clear();
 
             postFetch({     // Realizamos el consumo para obtener el refresh_token y el access_token mandando la cedula del usuario
                 url: api.getTokenPath,
@@ -71,9 +62,9 @@ export const useLogin = (formInitialState = {}) => {
 
                             console.log("getUserInfoResponse", getUserInfoResponse);
 
-                            cookies.set('a_t', access_token, { path: '/' });     //access_token
-                            cookies.set('r_t', refresh_token, { path: '/' });     //refresh_token
-                            cookies.set('d_u', {
+                            localStorage.setItem('a_t', access_token);  // access_token
+                            localStorage.setItem('r_t', refresh_token); // refresh_token
+                            localStorage.setItem('d_u', JSON.stringify({
                                 'nombres': getUserInfoResponse.Nombres,
                                 'apellidos': getUserInfoResponse.Apellidos,
                                 'cedula': getUserInfoResponse.Cedula,
@@ -90,7 +81,9 @@ export const useLogin = (formInitialState = {}) => {
                                 'entidad': getUserInfoResponse.Entidad,
                                 'jefe': getUserInfoResponse.Jefe,
                                 'numeroCelular': getUserInfoResponse.Numero,
-                            }, { path: '/' });     //data_user
+                            })); // data_user
+
+                            console.log('This is: ', localStorage.getItem('d_u'))
 
                             window.location.href = routes.home.url;
 
@@ -293,7 +286,7 @@ export const useLogin = (formInitialState = {}) => {
 
                         overlay();
 
-                        cookies.set('d_u', dataContratistas, { path: '/' });     //informacion de usuario contratista
+                        localStorage.setItem('d_u', JSON.stringify(dataContratistas)); //informacion de usuario contratista
 
                         window.location.href = routes.sst.url;
 

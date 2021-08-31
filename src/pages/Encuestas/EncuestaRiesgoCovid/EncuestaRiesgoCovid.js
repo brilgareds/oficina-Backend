@@ -1,66 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import { Preguntas } from '../../../components/Preguntas/Preguntas';
 import { getPreguntasRiesgoCovid } from '../../../repositories/Encuestas/Encuentas';
+import { Tabs, Tab, TabPanel, TabList } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import './encuestaRiesgoCovid.css';
+import { Preguntas } from '../../../components/Preguntas/Preguntas';
 
 
 export const EncuestaRiesgoCovid = () => {
 
-    const [preguntasRiesgoCovid, setPreguntasRiesgoCovid] = useState({});
-    const [, setFormEncuestaRiesgoCovid] = useState({});
+    const [tabIndex, setTabIndex] = useState(0);
+    const [encuestas, setEncuestas] = useState([]);
+    const [formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid] = useState({});
+    const [currentQuestions, setCurrentQuestions] = useState({});
 
     useEffect(() => {
+
         document.getElementById('root').className = 'encuestaRiesgoCovid';
-    }, []);
 
-    useEffect(() => {
-
-        const getPreguntas = () => {
-            return getPreguntasRiesgoCovid()
-                .then(a => {
-                    setPreguntasRiesgoCovid(a);
-                })
-        };
-
-        
-        getPreguntas();
+        getPreguntasRiesgoCovid().then(setEncuestas);
     }, []);
 
 
-    const submitEncuesta = (e) => {
-        e.preventDefault();
+    const nextTab = () => {
+        setTabIndex(currentIndex => {
+            const newIndex = currentIndex+1;
+            const existeTab = encuestas[newIndex];
 
+            if (existeTab) currentIndex = newIndex;
+            else {
+                console.log('No existe!')
+            }
+
+            return currentIndex;
+        });
     };
+
+
+    if (!encuestas || !encuestas.length) return <></>
     
 
     return (
-        <>
+        <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
             <div className="card mb-3">
-                <div className="card-body position-relative" style={{ paddingLeft: '3rem' }}>
-                    <div className="row">
-                        <div className="col-lg-8">
-                            <h3>Sintomatología</h3>
-                        </div>
+                <div className="card-header position-relative" style={{ paddingLeft: '3rem' }}>
+                    <div className="col-12">
+                        <h3>Encuesta Riesgo Covid</h3>
                     </div>
                 </div>
             </div>
 
             <div className="card mb-3">
                 <div className="card-body bg-light">
-                    <form id="formularioEncuesta" onSubmit={ submitEncuesta }>
+                    <div id="formularioEncuesta">
                         <div className="row">
                             <div className="col-12 mt-3 mb-3" id="container-questions">
-                                <Preguntas preguntasRiesgoCovid={ preguntasRiesgoCovid } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } />
-                                <div className="text-end" style={{ marginTop: '3rem' }}>
-                                    <button className="btn btn-primary">
-                                        Continuar
-                                    </button>
+                                <TabList style={{ borderBottom: '0px' }}>
+                                    { console.log('TEST') }
+                                    { encuestas.map(encuesta => <Tab key={encuesta.cod}>{encuesta.titulo}</Tab>) }
+                                </TabList>
+                                <div style={{ paddingTop: '4rem' }}>{
+                                    encuestas.map(encuesta => {
+                                        console.log('encuesta: ', encuesta);
+                            
+                                        return (
+                                            <TabPanel key={encuesta.cod}>
+                                                <Preguntas currentQuestions={currentQuestions} setCurrentQuestions={setCurrentQuestions} encuesta={ encuesta } tabIndex={tabIndex} nextTab={ nextTab } formEncuestaRiesgoCovid={ formEncuestaRiesgoCovid } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } />
+                                            </TabPanel>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </>
+        </Tabs>
     )
 }

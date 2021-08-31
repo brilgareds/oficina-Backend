@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import Cookies from 'universal-cookie/es6';
 import { Redirect } from 'react-router-dom';
 import { routes } from '../../../environments/environments.ts';
 import './formAyuda.css';
@@ -9,7 +8,6 @@ import { useAyuda } from './hooks/useAyuda';
 export const FormAyuda = (props) => {
 
 
-    const cookies = new Cookies();
     const typeForm = props.location.params;
 
     const {
@@ -24,7 +22,7 @@ export const FormAyuda = (props) => {
 
     } = useAyuda({
         descripcion: '',
-        correoEnvioRespuesta: cookies.get('d_u').mail,
+        correoEnvioRespuesta: JSON.parse(localStorage.getItem('d_u')).mail,
         numeroTelefonico: '',
     },
         typeForm,

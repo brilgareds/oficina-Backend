@@ -27,13 +27,13 @@ export const Navbar = ({ menu }) => {
                 <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
                     <MenuPrincipal k={'menu_1'} key={'menu_1'} menu={menu} />
                 </div>
-                <div className="divCerrarSesion text-center">
-                    <div className="row">
-                        <div className="col-md-12">
+                <div className="divCerrarSesion text-center" onClick={useLogin.logOut}>
+                    <div className="row" onClick={useLogin.logOut}>
+                        <div className="col-md-12" onClick={useLogin.logOut}>
                             <img className="iconoCerrarSesion" src="/assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
                         </div>
-                        <div className="col-md-12">
-                            <span onClick={useLogin.logOut} className="spanCerrarSesion nav-link-text">Cerrar sesion</span>
+                        <div className="col-md-12" onClick={useLogin.logOut}>
+                            <span className="spanCerrarSesion nav-link-text" onClick={useLogin.logOut}>Cerrar sesion</span>
                         </div>
                     </div>
                 </div>

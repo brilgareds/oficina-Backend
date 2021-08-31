@@ -1,7 +1,6 @@
 import React from 'react';
 import './login.css';
 import { useLogin } from './hooks/useLogin.js';
-import Cookies from 'universal-cookie/es6';
 import { routes } from '../../environments/environments';
 import { Redirect } from 'react-router-dom';
 
@@ -12,13 +11,11 @@ export const Login = () => {
         identification: ''
     });
 
-    const cookies = new Cookies();
-
     return (
         <>
             {
                 //Si existen las cookies con la informacion del usuario d_u = data_user
-                (cookies.get('d_u')) ?
+                (localStorage.getItem('d_u')) ?
                     <Redirect to={routes.home.url} />
                     :
                     <main className="main login" id="top">
