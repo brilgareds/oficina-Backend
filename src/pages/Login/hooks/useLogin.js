@@ -28,7 +28,7 @@ export const useLogin = (formInitialState = {}) => {
     const logOut = () => {
         overlay();
         localStorage.clear();
-        window.location.reload();
+        window.location.href = routes.login.url;
     }
 
 

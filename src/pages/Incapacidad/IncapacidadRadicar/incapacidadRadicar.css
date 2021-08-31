@@ -1,0 +1,15 @@
+.incapacidadRadicar{
+    background-image: url("../../../assets/img/vumOfficeImgs/background-form-1.png");
+}
+
+.form-check-input {
+    /* width: 2em;
+    height: 2em; */
+    height: 36px;
+    width: 36px;
+}
+
+
+.labelSinMargin{
+    margin-bottom: 4px;;
+}

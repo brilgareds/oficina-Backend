@@ -1,0 +1,20 @@
+.ayudaForm {
+    background-image: url("../../../assets/img/vumOfficeImgs/background-form-1.png");
+}
+
+.inputRadioOtraRespuestaAyuda{
+    margin-right: 10px;
+}
+
+#divNumeroTelefonicoAyuda{
+    display: none;
+}
+
+.btnEnviarAyuda{
+    background-color: #1783EE;
+    border: 1px solid #1783EE;
+}
+
+.divsModalAyuda{
+    text-align: left;
+}
