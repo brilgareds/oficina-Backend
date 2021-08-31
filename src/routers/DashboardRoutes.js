@@ -10,20 +10,22 @@ import { MenuCV } from '../components/Menus/MenuCV/MenuCV';
 
 export const DashboardRoutes = () => {
 
-    const [menu, setMenu] = useState([{},{}]);
+    const [menu, setMenu] = useState([{}, {}]);
     const cookies = new Cookies();
+    const abortCont = new AbortController();
 
     useEffect(() => {
         getAllMenu(setMenu);
+        return () => abortCont.abort();
     }, []);
 
-    const obtenerRutas = (newRoutes, arrayRoutes=[], k='route') => {
+    const obtenerRutas = (newRoutes, arrayRoutes = [], k = 'route') => {
 
         if (!arrayRoutes.length && cookies.get('d_u').ingresoExterno) {
             return (
                 <>
                     <Route path="*" component={routes.sst.componente} />
-                    <Redirect to={routes.sst.url} /> 
+                    <Redirect to={routes.sst.url} />
                 </>
             )
         }
@@ -53,7 +55,7 @@ export const DashboardRoutes = () => {
                     :
                     <main className="main">
                         <div className="paddingContainer" data-layout="container">
-                            
+
                             <Switch>
                                 <Route path='/cv'>
                                     <MenuCV />
@@ -62,13 +64,13 @@ export const DashboardRoutes = () => {
                                     <Navbar menu={menu[0]} />
                                 </Route>
                             </Switch>
-                            
+
                             <div className="content">
                                 <Header menu={menu[1]} />
                                 <div className="dashboard" id="root" style={{ minHeight: '94.7vh' }}>
                                     <div className="container-2">
                                         <Switch>
-                                            { obtenerRutas(routes) }
+                                            {obtenerRutas(routes)}
                                         </Switch>
                                     </div>
                                     <Footer />
