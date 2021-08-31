@@ -72,8 +72,11 @@ a {
     background-size: cover;
 }
 
+#formularioEncuesta label {
+    font-weight: 400 !important;
+}
+
 .div-pregunta {
-    font-weight: bolder;
     display: grid;
     gap: 0.4rem;
     grid-template-columns: minmax(3rem, 3rem) minmax(8rem, 93%);
@@ -93,6 +96,26 @@ a {
     align-items: center;
     /* padding-top: 0.1rem; */
     /* padding-left: 0.3rem; */
+}
+
+.react-tabs__tab--selected {
+    background: #1780e8 !important;
+    color: white !important;
+}
+
+.react-tabs__tab {
+    bottom: 0 !important;
+}
+
+.react-tabs__tab {
+    border: 0 !important;
+    background: #619dd891;
+    border-radius: 0.2rem;
+    color: white;
+}
+
+.react-tabs__tab-list {
+    margin: 0 !important;
 }
 
 .footer {
@@ -176,8 +199,11 @@ a {
 }
 
 .divCerrarSesion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #74E36B;
-    height: auto;
+    height: 4.2rem;
     padding: 5px;
     font-weight: 600;
     cursor: pointer;

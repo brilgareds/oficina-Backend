@@ -3,14 +3,12 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/dist/sweetalert2.css';
 import { getFetchWithHeader, overlay, postFetch } from '../../../../generalHelpers';
 import { api } from '../../../../environments/environments';
-import Cookies from 'universal-cookie/es6';
 
 export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //typeForm = es el tipo de formulario que llega desde el dashboard de RRHH: (estamosParaTi, talkToUs, SolicitudesRRHH)
 
     const exprRegTelefono = /^[0-9+() -?]+$/;                                                //Expresion regular para validar el formato de un teléfono
     const exprRegEmail = /^([a-zA-Z0-9_.-]+)@([\da-zA-Z0-9.-]+)\.([a-z.]{2,6})$/;        //Expresion regular para validar los correos electronicos
     const exprRegTexto = /^([\w\s\d\nÑñáéíóúÁÉÍÓÚ.,\-_@?¿%<>]){1,990}$/;                      //Expresion regular para validar texto largos de 1000 caracteres
-    const cookies = new Cookies();
 
     const [stateTitle, setStateTitle] = useState('Estamos para ti')
 
@@ -164,12 +162,12 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //ty
                 tipoContacto: String(tipoContacto),
             },
             dataUser: {
-                cedula: String(cookies.get('d_u').cedula).trim(),
-                nombres: String(cookies.get('d_u').nombres).trim(),
-                apellidos: String(cookies.get('d_u').apellidos).trim(),
-                empresa: String(cookies.get('d_u').empresa).trim(),
-                cCostos: String(cookies.get('d_u').ccostos).trim(),
-                numeroCelular: String(cookies.get('d_u').numeroCelular).trim(),
+                cedula: String(JSON.parse(localStorage.getItem('d_u')).cedula).trim(),
+                nombres: String(JSON.parse(localStorage.getItem('d_u')).nombres).trim(),
+                apellidos: String(JSON.parse(localStorage.getItem('d_u')).apellidos).trim(),
+                empresa: String(JSON.parse(localStorage.getItem('d_u')).empresa).trim(),
+                cCostos: String(JSON.parse(localStorage.getItem('d_u')).ccostos).trim(),
+                numeroCelular: String(JSON.parse(localStorage.getItem('d_u')).numeroCelular).trim(),
             }
 
         };
@@ -228,16 +226,19 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //ty
                 url: urlApi,
                 headers: {
                     'accept': '*/*',
-                    'Authorization': 'Bearer ' + cookies.get('a_t')
+                    'Authorization': 'Bearer ' + localStorage.getItem('a_t')
                 }
             })
                 .then((responseGetFetchWithHeader) => {
 
                     let optionsCategory = [{ value: null, label: "SELECCIONE..." }];
 
-                    responseGetFetchWithHeader.data.forEach(element => {
-                        optionsCategory.push({ value: element.codigo, label: element.nombre.toUpperCase() })
-                    });
+                    if (responseGetFetchWithHeader && responseGetFetchWithHeader.data) {
+
+                        responseGetFetchWithHeader.data.forEach(element => {
+                            optionsCategory.push({ value: element.codigo, label: element.nombre.toUpperCase() })
+                        });
+                    }
 
                     setOptionsCategory(optionsCategory);
 

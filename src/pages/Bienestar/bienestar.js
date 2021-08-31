@@ -35,7 +35,7 @@ export const Bienestar = () => {
                         Novedades empresariales
                     </button>
                 </Link>
-                <Link to={{ pathname: '' }} data-bs-toggle="modal" data-bs-target='#modalImagenRedireccion' img-url='img/otros_beneficios.png' img-redireccion="https://www.losolivos.co/">
+                <Link to={{ pathname: '' }} data-bs-toggle="modal" data-bs-target='#modalImagenRedireccion' img-url='img/otros_beneficios.jpg' img-redireccion="https://www.losolivos.co/">
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <i className="fas fa-handshake imgbtnRrhh" alt="icono-aliados"></i>
                         Aliados

@@ -3,14 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { useFormRrhh } from './hooks/useForm.js';
 import { routes } from '../../../environments/environments.ts';
 import Select from 'react-select';
-import Cookies from 'universal-cookie/es6';
-
 import './formRrhh.css';
 
 
 export const FormRrhh = (props) => {
 
-    const cookies = new Cookies();
     const typeForm = props.location.params;
 
     const {
@@ -25,7 +22,7 @@ export const FormRrhh = (props) => {
 
     } = useFormRrhh({
         descripcion: '',
-        correoEnvioRespuesta: cookies.get('d_u').mail,
+        correoEnvioRespuesta: JSON.parse(localStorage.getItem('d_u')).mail,
         numeroTelefonico: '',
     },
         typeForm,

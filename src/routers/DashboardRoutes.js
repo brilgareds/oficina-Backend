@@ -5,13 +5,11 @@ import { getAllMenu } from '../repositories/Menu/Menu';
 import Footer from '../components/shared/footer/Footer';
 import { routes } from '../environments/environments.ts';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import Cookies from 'universal-cookie/es6';
 import { MenuCV } from '../components/Menus/MenuCV/MenuCV';
 
 export const DashboardRoutes = () => {
 
     const [menu, setMenu] = useState([{},{}]);
-    const cookies = new Cookies();
 
     useEffect(() => {
         getAllMenu(setMenu);
@@ -19,14 +17,7 @@ export const DashboardRoutes = () => {
 
     const obtenerRutas = (newRoutes, arrayRoutes=[], k='route') => {
 
-        if (!arrayRoutes.length && cookies.get('d_u').ingresoExterno) {
-            return (
-                <>
-                    <Route path="*" component={routes.sst.componente} />
-                    <Redirect to={routes.sst.url} /> 
-                </>
-            )
-        }
+       
 
         Object.keys(newRoutes).forEach(prop => {
             const key = `${k}_${prop}`;
@@ -48,7 +39,7 @@ export const DashboardRoutes = () => {
         <>
             {
                 //Si no existen las cookies con la informacion del usuario d_u = data_user
-                (!cookies.get('d_u')) ?
+                (!localStorage.getItem('d_u')) ?
                     <Redirect to={routes.login.url} />
                     :
                     <main className="main">
