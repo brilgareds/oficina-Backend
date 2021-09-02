@@ -2,6 +2,7 @@ import { Dashboard } from "../pages/Dashboard/Dashboard.js";
 import { Login } from "../pages/Login/Login.js";
 import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
+import  CV  from "../pages/CurriculumVitae/CV.js";
 
 export const environment = {
     path: {
@@ -9,6 +10,8 @@ export const environment = {
         login: { url: '/login', componente: Login },
         rrhh: routesRrhh,
         sst: { url: '/sst', componente: Sst },
+        cv : {url: '/hoja_de_vida', componente: CV }
+
     }
 }
 
