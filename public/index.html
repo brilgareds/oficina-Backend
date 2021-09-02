@@ -11,14 +11,13 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>VumOffice</title>
 
-    <link rel="icon" href="./favicon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
-    <link href="./assets/vendors/overlayscrollbars/OverlayScrollbars.min.css" rel="stylesheet">
-    <link href="./assets/css/theme-rtl.min.css" rel="stylesheet" id="style-rtl">
-    <link href="./assets/css/theme.min.css" rel="stylesheet" id="style-default">
-    <link href="./assets/css/user-rtl.min.css" rel="stylesheet" id="user-style-rtl">
-    <link href="./assets/css/user.min.css" rel="stylesheet" id="user-style-default">
+    <link href="/assets/vendors/overlayscrollbars/OverlayScrollbars.min.css" rel="stylesheet">
+    <link href="/assets/css/theme-rtl.min.css" rel="stylesheet" id="style-rtl">
+    <link href="/assets/css/theme.min.css" rel="stylesheet" id="style-default">
+    <link href="/assets/css/user-rtl.min.css" rel="stylesheet" id="user-style-rtl">
+    <link href="/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 
@@ -37,8 +36,8 @@
     <!-- ===============================================-->
 
     <div class="modal fade" id="modalImagenRedireccion" aria-hidden="true" aria-labelledby="modalLabelImagenRedireccion" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-          <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-xl d-flex justify-content-center">
+          <div class="modal-content" style='width: auto'>
             
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -46,11 +45,9 @@
             
             <div class="modal-body" style="padding: 0;">
                 <a href="#" id="modalUrlImagenRedireccion">
-                    <img id="modalImgImagenRedireccion" style="width: 100%;">
+                    <img id="modalImgImagenRedireccion" style="width: auto; max-width: 100%;">
                 </a>
             </div>
-            
-                <div class="modal-footer" style="height: 35px;"></div>
             
           </div>
         </div>
@@ -72,21 +69,41 @@
         </div>
     </div>
 
+    <script>
+        let elementModalRedireccion = document.querySelector('#modalImagenRedireccion');
+        let elementModalUrlRedireccion = document.querySelector('#modalUrlImagenRedireccion');
+        let elementModalImgImagenRedireccion = document.querySelector('#modalImgImagenRedireccion');
 
-    <script src="./assets/js/config.js"></script>
-    <script src="./assets/vendors/overlayscrollbars/OverlayScrollbars.min.js"></script>
-    <script src="./assets/js/implement.js"></script>
-    <script src="./assets/vendors/popper/popper.min.js"></script>
-    <script src="./assets/vendors/bootstrap/bootstrap.min.js"></script>
-    <script src="./assets/vendors/anchorjs/anchor.min.js"></script>
-    <script src="./assets/vendors/is/is.min.js"></script>
-    <script src="./assets/vendors/echarts/echarts.min.js"></script>
-    <script src="./assets/vendors/progressbar/progressbar.min.js"></script>
-    <script src="./assets/vendors/fontawesome/all.min.js"></script>
-    <script src="./assets/vendors/lodash/lodash.min.js"></script>
+
+        const abriendoModalRedireccion = (e) => {
+
+            const button = e.relatedTarget;
+            const imgUrl = button.getAttribute('img-url');
+            const urlRedireccion = button.getAttribute('img-redireccion') ?? '';
+            const target = (urlRedireccion && urlRedireccion !== '#') ? '_blank' : '';
+
+            elementModalImgImagenRedireccion.src = (imgUrl) ? `/assets/${imgUrl}` : '';
+            elementModalUrlRedireccion.href = urlRedireccion;
+            elementModalUrlRedireccion.target = target;
+        };
+
+
+        elementModalRedireccion.addEventListener('show.bs.modal', abriendoModalRedireccion);
+    </script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/vendors/overlayscrollbars/OverlayScrollbars.min.js"></script>
+    <script src="/assets/js/implement.js"></script>
+    <script src="/assets/vendors/popper/popper.min.js"></script>
+    <script src="/assets/vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/vendors/anchorjs/anchor.min.js"></script>
+    <script src="/assets/vendors/is/is.min.js"></script>
+    <script src="/assets/vendors/echarts/echarts.min.js"></script>
+    <script src="/assets/vendors/progressbar/progressbar.min.js"></script>
+    <script src="/assets/vendors/fontawesome/all.min.js"></script>
+    <script src="/assets/vendors/lodash/lodash.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
-    <script src="./assets/vendors/list.js/list.min.js"></script>
-    <script src="./assets/js/theme.js"></script>
+    <script src="/assets/vendors/list.js/list.min.js"></script>
+    <script src="/assets/js/theme.js"></script>
 </body>
 
 </html>

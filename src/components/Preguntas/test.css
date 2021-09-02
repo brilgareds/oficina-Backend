@@ -1,0 +1,42 @@
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+
+/* The animation code */
+@keyframes question-animation {
+  from { padding-left: min(20rem, 100vh);  opacity: 0;  }
+  to   { padding-left: 0%;    opacity: 1;  }
+}
+
+/* The element to apply the animation to */
+.question {
+  animation-name: question-animation;
+  animation-duration: 0.3s;
+  z-index: 0;
+}
+
+
+/* The animation code */
+@keyframes question-container-animation {
+  0% { overflow: hidden; }
+  99% { overflow: hidden; }
+  100% { overflow: initial; }
+}
+
+/* The element to apply the animation to */
+.question-container {
+  animation-name: question-container-animation;
+  animation-duration: 0.3s;
+}

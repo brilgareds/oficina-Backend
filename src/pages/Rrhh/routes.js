@@ -5,7 +5,7 @@ export const routesRrhh = {
     url: '/rrhh',
     componente: Rrhh,
     subPages: {
-        formRrhh: { url: '/formRrhh', componente: FormRrhh },
+        formRrhh: { url: '/rrhh/form-rrhh', componente: FormRrhh },
     }
 }
 

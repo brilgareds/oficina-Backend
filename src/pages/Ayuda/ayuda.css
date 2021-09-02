@@ -1,0 +1,132 @@
+.ayuda {
+    background-image: url("../../assets/img/vumOfficeImgs/background-form-1.png");
+}
+
+.imgbtnAyuda {
+    width: 8%;
+    margin-right: 10px;
+}
+
+.extra-padding {
+    max-width: 80%;
+    padding-left: 100px;
+}
+
+.tituloBienvenidoAyuda{
+    color: white;
+    font-weight: 800;
+}
+
+.logoVumBienvenido{
+    width: 90px;
+}
+
+.paddingAyuda{
+    padding-top: 50px;
+}
+
+.cabeceraAyuda{
+    text-align: center;
+}
+
+.imgbtnAyuda{
+    width: 8%;
+    margin-right: 10px;
+}
+
+.tituloModuloAyuda{
+    color: white;
+    font-weight: 800;
+}
+
+.spanNameUserAyuda{
+    font-size: 21px;
+    font-weight: 500;
+    color: white;
+}
+
+.copyPageAyuda{
+    color: white;
+}
+
+.btns-ayuda{
+    background-color: #74E36B;
+    color: #0F4F80;
+    border: 1px solid #74E36B;
+    border-radius: 25px;
+    height: 50px;
+    width: 300px;
+    display: inline-block;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: .3125rem 1rem;
+    margin-right: 30px;
+    font-size: 1rem;
+    -webkit-transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    -o-transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+
+.zoomBtn {
+    transition: transform .3s;
+}
+
+.zoomBtn:hover {
+    -ms-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+    transition: transform .3s;
+}
+
+.divTitulosAyuda{
+    text-align: center;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
+    .cabeceraAyuda{
+        text-align: center;
+    }
+    .btns-ayuda{
+        width: 100%;
+    }
+    .paddingAyuda{
+        padding-left: 15px;
+        padding-top: unset;
+    }
+    .copyPageAyuda {
+        max-width: unset;
+        text-align: center;
+    }
+    .divTitulosAyuda{
+        text-align: center;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
+    .cabeceraAyuda{
+        text-align: center;
+    }
+    .btns-ayuda{
+        width: 100%;
+    }
+    .paddingAyuda{
+        padding-left: 15px;
+        padding-top: unset;
+    }
+    .copyPageAyuda {
+        max-width: unset;
+        text-align: center;
+    }
+    .divTitulosAyuda{
+        text-align: center;
+    }
+}
