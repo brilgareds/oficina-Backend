@@ -154,7 +154,7 @@ class LivingPlace extends Component{
         getData(urlServices).then(result =>{
             let option = result.map((value,x) => {
             return  <div  key={x} className="form-check">
-                    <input onChange={(e) => this.changeState(e.target)  }   checked={this.state.SERVICIOS.indexOf(value["TIP_NOMBRE"]) != -1 ? true:false  }  className="form-check-input checkServices"  type="checkbox" id={`check${value["TIP_NOMBRE"]}`}  value={value["TIP_NOMBRE"]} />
+                    <input onChange={(e) => this.changeState(e.target)  }   checked={this.state.SERVICIOS.indexOf(value["TIP_NOMBRE"]) > -1 ? true:false  }  className="form-check-input checkServices"  type="checkbox" id={`check${value["TIP_NOMBRE"]}`}  value={value["TIP_NOMBRE"]} />
                     <label className="form-check-label" htmlFor={`check${value["TIP_NOMBRE"]}`}>{value["TIP_NOMBRE"]}</label>
                 </div>
                 
