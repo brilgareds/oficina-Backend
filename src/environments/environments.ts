@@ -75,6 +75,11 @@ const api = {
     postSaveFormRRHH: `${backendPath}/rrhh/saveFormRRHH`,
     getRequestHelpCategories: `${backendPath}/help/requestsHelpCategory`,
     postSaveFormHelp: `${backendPath}/help/saveFormHelp`,
+    getEpsIncapacidad: `${backendPath}/incapacity/getEpsIncapacidad`,
+    getTypesIncapacity: `${backendPath}/incapacity/getTypesIncapacity`,
+    getDocumentsIncapacity: `${backendPath}/incapacity/getDocumentsIncapacity`,
+    postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`,
+
 };
 
 export {

@@ -10,11 +10,9 @@ import { MenuCV } from '../components/Menus/MenuCV/MenuCV';
 export const DashboardRoutes = () => {
 
     const [menu, setMenu] = useState([{},{}]);
-    const abortCont = new AbortController();
 
     useEffect(() => {
         getAllMenu(setMenu);
-        return () => abortCont.abort();
     }, []);
 
     const obtenerRutas = (newRoutes, arrayRoutes = [], k = 'route') => {

@@ -91,7 +91,7 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //ty
 
     const onSubmitFormHandle = (e) => {
         e.preventDefault();
-        overlay();
+        overlay(true);
 
         if (validarCampos()) {
             enviarFormulario();

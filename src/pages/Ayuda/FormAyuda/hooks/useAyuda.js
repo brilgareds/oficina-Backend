@@ -133,7 +133,7 @@ export const useAyuda = (formInitialState = {}, typeForm) => {
 
     const onSubmitFormHandle = (e) => {
         e.preventDefault();
-        overlay();
+        overlay(true);
 
         if (validarCampos()) {
             enviarFormulario();
