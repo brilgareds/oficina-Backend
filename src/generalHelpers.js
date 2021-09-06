@@ -178,7 +178,7 @@ const fakeQuestions = [
                         preguntaSiguiente: ''
                     },
 
-                    
+
                 ]
             },
             tab1_pre_5: {
@@ -191,13 +191,13 @@ const fakeQuestions = [
             },
 
 
-            
 
 
 
 
 
-            
+
+
 
         }
     },
@@ -223,7 +223,7 @@ const fakeQuestions = [
                     }
                 ]
             },
-        
+
             tab2_pre_2: {
                 cod: '',
                 pregunta: 'En las últimas 72 horas, ¿Has presentado fiebre?',
@@ -241,7 +241,7 @@ const fakeQuestions = [
                     }
                 ]
             },
-        
+
             tab2_pre_3: {
                 cod: '',
                 pregunta: 'Temperatura',
@@ -259,7 +259,7 @@ const fakeQuestions = [
                     }
                 ]
             },
-        
+
             tab2_pre_4: {
                 pregunta: 'En las últimas 48 horas, ¿Has presentado tos?',
                 tipoRespuesta: 'S',
@@ -277,7 +277,7 @@ const fakeQuestions = [
                     }
                 ],
             },
-        
+
             tab2_pre_5: {
                 cod: '',
                 pregunta: 'En las últimas 48 horas, ¿Has presentado dificultad para respirar?',
@@ -449,13 +449,17 @@ const getFetchWithHeader = async ({
 
 }
 
-const overlay = () => {
-    Swal.fire({
-        title: "<h3>Cargando...</h3>",
-        html: "<div class='spinner-border text-primary' style='width: 3rem; height: 3rem; margin: 10px; margin-top: unset;' role='status'><span class='sr-only'>Loading...</span></div>",
-        showCancelButton: false,
-        showConfirmButton: false
-    });
+const overlay = (show = false) => {
+    if (show === true) {
+        Swal.fire({
+            title: "<h3>Cargando...</h3>",
+            html: "<div class='spinner-border text-primary' style='width: 3rem; height: 3rem; margin: 10px; margin-top: unset;' role='status'><span class='sr-only'>Loading...</span></div>",
+            showCancelButton: false,
+            showConfirmButton: false
+        });
+    } else if (show === false) {
+        Swal.close();
+    }
 }
 
 const advertenciaFormularioVacio = () => {
@@ -512,6 +516,18 @@ const getFullNameUser = () => {
     return capitalizarPalabras(nombreUsuario);
 }
 
+const getDateToday = () => {
+
+    let dateFormat = new Date();
+    let day = ("0" + dateFormat.getDate()).slice(-2);
+    let month = ("0" + (dateFormat.getMonth() + 1)).slice(-2);
+    let year = dateFormat.getFullYear();
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
 
 export {
     getFetch,
@@ -523,5 +539,6 @@ export {
     capitalizarPalabras,
     getFullNameUser,
     getDocumentId,
-    advertenciaFormularioVacio
+    advertenciaFormularioVacio,
+    getDateToday
 }

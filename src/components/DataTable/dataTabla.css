@@ -1,0 +1,43 @@
+.MuiPaper-elevation2{
+    box-shadow: unset !important;
+}
+
+.MuiToolbar-gutters {
+    padding-left: unset !important;
+}
+
+.MTableToolbar-title-9{
+    display: unset;   
+}
+
+.MuiTableCell-head {
+    font-weight: bold !important;
+    line-height: 1.5rem !important;
+    /* background-color: #EDF2F9 !important; */
+    /* color: #344050 !important; */
+    border-bottom: 1px solid #344050 !important;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
+    
+    .MTableToolbar-title-9, .MTableToolbar-spacer-7{
+        display: none;   
+    }
+
+    div>.MuiFormControl-root{
+        width: 100%;
+    }
+    
+}
+
+@media only screen and (min-width: 320px) and (max-width: 736px) {
+    
+    .MTableToolbar-title-9, .MTableToolbar-spacer-7{
+        display: none;   
+    }
+
+    div>.MuiFormControl-root{
+        width: 100%;
+    }
+    
+}

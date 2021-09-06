@@ -21,10 +21,10 @@ export const Login = () => {
                     <main className="main login" id="top">
                         <div className="container" data-layout="container">
 
-                            <div className="row flex-center min-vh-100">
+                            <div className="row flex-center text-center min-vh-100">
+                                <img className="me-2 mt-5 mb-3" src="assets/img/logo-vum-login.svg" alt="logo-vum-login" style={{ width: '200px' }} />
+                                <span className="font-sans-serif fontBienvenido fs-5 d-inline-block tituloBienvenido">¡Bienvenido a tu oficina virtual!</span>
                                 <div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4 text-center">
-                                    <img className="me-2 mb-3" src="assets/img/logo-vum-login.svg" alt="" width="158" />
-                                    <span className="font-sans-serif fontBienvenido fs-5 d-inline-block tituloBienvenido">¡Bienvenido a tu oficina virtual!</span>
                                     <div>
                                         <div className="card-body p-4 p-sm-5 mt-2">
                                             <form onSubmit={onSubmitForm}>
