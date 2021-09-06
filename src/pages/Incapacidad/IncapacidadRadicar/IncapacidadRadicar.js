@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
-import { useIncapacidadRadicar } from './hooks/useIncapacidadRadicar';
+// import { useIncapacidadRadicar } from './hooks/useIncapacidadRadicar';
 import './incapacidadRadicar.css';
 
 export const IncapacidadRadicar = () => {
