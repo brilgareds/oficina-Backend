@@ -4,16 +4,57 @@ import { MiBilletera } from "../pages/Bienestar/MiBilletera/MiBilletera.js";
 import { Login } from "../pages/Login/Login.js";
 import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
-import  CV  from "../pages/CurriculumVitae/CV.js";
+import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
+import { routesAyuda } from "../pages/Ayuda/routes.js";
+import { MenuCV } from "../components/Menus/MenuCV/MenuCV.js";
+import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
+import { routesIncapacidad } from "../pages/Incapacidad/routes.js";
+import { Desarrollo } from "../pages/Desarrollo/Desarrollo.js";
+import CV from "../pages/CurriculumVitae/CV";
+import Education from "../pages/Education/Education";
+import Family from "../pages/Family/Family.js";
+import DataAdditional from "../pages/DataAdditional/Data.js";
+import Salud from "../pages/Salud/Salud.js";
+import LivingPlace from "../pages/LivingPlace/LivingPlave.js";
+import { baseUrl } from "../config/config.js";
 
-export const environment = {
-    path: {
-        home: { url: '/home', componente: Dashboard },
-        login: { url: '/login', componente: Login },
-        rrhh: routesRrhh,
-        sst: { url: '/sst', componente: Sst },
-        cv : {url: '/hoja_de_vida', componente: CV }
 
+const frontendPath = window.location.protocol + '//' + window.location.host;
+const backendPath = `${baseUrl}/v1`;
+
+const menus = {
+    MenuCV: {
+        url: '/cv',
+        component: MenuCV
+    },
+    Navbar: {
+        url: '',
+        component: Navbar
+    }
+};
+
+const routes = {
+    home: { url: '/home', componente: Dashboard },
+    login: { url: '/login', componente: Login },
+    desarrollo: { url: '/desarrollo', componente: Desarrollo },
+    rrhh: routesRrhh,
+    sst: { url: '/sst', componente: Sst },
+    encuestaRiesgoCovid: { url: '/encuestaRiesgoCovid', componente: EncuestaRiesgoCovid },
+    bienestar: { url: '/bienestar', componente: Bienestar },
+    miBilletera: { url: '/mi_billetera', componente: MiBilletera },
+    ayuda: routesAyuda,
+    incapacidad: routesIncapacidad,
+    cv: {
+        subPages: {
+            hojaVida: { url: '/cv/datos_basicos', componente: CV },
+            datosBasicos: { url: '/cv/hoja_de_vida', componente: CV },
+            education:{url:'/cv/educacion_formal', componente:Education},
+            family:{url:'/cv/mis_familiares',componente:Family},
+            dataAdditional:{url:'/cv/datos_adicionales',componente:DataAdditional},
+            salud:{url:'/cv/salud',componente:Salud},
+            livingPlace:{url:'/cv/vivienda',componente:LivingPlace}
+            
+        }
     }
 
 };
