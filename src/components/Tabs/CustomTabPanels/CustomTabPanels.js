@@ -2,7 +2,7 @@ import React from 'react';
 import { Preguntas } from '../../../components/Preguntas/Preguntas';
 import { TabPanel } from 'react-tabs';
 
-export const CustomTabPanels = ({encuestas, nextTab, setFormEncuestaRiesgoCovid}) => {
+export const CustomTabPanels = ({encuestas, nextTab, setFormEncuesta}) => {
 
     if (!encuestas || !encuestas.length) return <></>;
 
@@ -13,7 +13,7 @@ export const CustomTabPanels = ({encuestas, nextTab, setFormEncuestaRiesgoCovid}
 
                     return (
                         <TabPanel key={encuesta.cod}>
-                            <Preguntas encuesta={ encuesta } nextTab={ nextTab } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } />
+                            <Preguntas encuesta={ encuesta } nextTab={ nextTab } setFormEncuesta={ setFormEncuesta } />
                         </TabPanel>
                     );
                 })

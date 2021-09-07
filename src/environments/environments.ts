@@ -10,6 +10,12 @@ import { MainCV } from "../pages/MainCV/MainCV.js";
 import { MenuCV } from "../components/Menus/MenuCV/MenuCV.js";
 import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
 import { routesIncapacidad } from "../pages/Incapacidad/routes.js";
+import { Desarrollo } from "../pages/Desarrollo/Desarrollo.js";
+import { Report } from "../pages/Report/Report.js";
+import { CartaPresentacion } from "../pages/Certificados/CartaPresentacion/CartaPresentacion.js";
+import { Ingreso } from "../pages/Ingreso/Ingreso.js";
+import { CercoEpidemeologico } from "../pages/Encuestas/CercoEpidemeologico/CercoEpidemeologico.js";
+import { CasosCovid } from "../pages/Encuestas/CasosCovid/CasosCovid.js";
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
 const backendPath = 'http://localhost:3001/api/v1';
@@ -26,11 +32,15 @@ const menus = {
 };
 
 const routes = {
+    root: { url: '/', componente: Dashboard },
     home: { url: '/home', componente: Dashboard },
     login: { url: '/login', componente: Login },
+    desarrollo: { url: '/desarrollo', componente: Desarrollo },
     rrhh: routesRrhh,
     sst: { url: '/sst', componente: Sst },
+    encuestaCasosCovid: { url: '/encuestaCasosCovid', componente: CasosCovid },
     encuestaRiesgoCovid: { url: '/encuestaRiesgoCovid', componente: EncuestaRiesgoCovid },
+    encuestaCerco: { url: '/encuestaCercoEpidemeologico', componente: CercoEpidemeologico },
     bienestar: { url: '/bienestar', componente: Bienestar },
     miBilletera: { url: '/mi_billetera', componente: MiBilletera },
     ayuda: routesAyuda,
@@ -39,8 +49,20 @@ const routes = {
         subPages: {
             main: { url: '/cv/main', componente: MainCV }
         }
+    },
+    certificados: {
+        subPages: {
+            cartaPresentacion: {
+                url: '/certificados/carta_presentacion',
+                componente: CartaPresentacion
+            }
+        }
+    },
+    ingreso: { url: '/ingreso', componente: Ingreso },
+    report: {
+        url: '/report',
+        componente: Report
     }
-
 };
 
 const files = {
@@ -50,6 +72,9 @@ const files = {
 const api = {
     path: backendPath,
     getAllMenu: `${backendPath}/navigator/`,
+    getSurveysCovid: `${backendPath}/surveys/covid`,
+    getSurveysFence: `${backendPath}/surveys/epidemiologicalFence`,
+    getSurveysHealthCondition: `${backendPath}/surveys/healthCondition`,
     getTokenPath: `${backendPath}/auth/login`,
     getUserInfoPath: `${backendPath}/auth/me`,
     getDocumentTypes: `${backendPath}/documentType/get`,
@@ -58,7 +83,7 @@ const api = {
     getresourceRequestCategory: `${backendPath}/rrhh/resource_request_categories`,
     postSaveFormRRHH: `${backendPath}/rrhh/saveFormRRHH`,
     getRequestHelpCategories: `${backendPath}/help/requestsHelpCategory`,
-    postSaveFormHelp: `${backendPath}/help/saveFormHelp`,
+    postSaveFormHelp: `${backendPath}/help/saveFormHelp`
 };
 
 export {
@@ -69,4 +94,3 @@ export {
     frontendPath,
     backendPath
 }
-

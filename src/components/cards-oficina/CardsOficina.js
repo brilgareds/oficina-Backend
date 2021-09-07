@@ -16,7 +16,7 @@ export const CardsOficina = () => {
             imgUrl: '/assets/img/desarrollo.jpg',
             nombre: 'Desarrollo',
             copy: 'Organiza y gestiona lo que necesitas para tu desarrollo como nuestro trabajador.',
-            redirecTo: routes.rrhh.url,
+            redirecTo: routes.desarrollo.url,
         },
         {
             imgUrl: '/assets/img/sst.jpg',

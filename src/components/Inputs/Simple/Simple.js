@@ -1,36 +1,30 @@
 import React from 'react';
 
-export const Simple = ({ prop, items, currentArray, agregarPregunta, formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid, tabIndex }) => {
+export const Simple = ({ prop, items, currentArray, agregarPregunta, formEncuesta, setFormEncuesta, tabIndex }) => {
 
-    const updateResponse = (prop, currentArray, preguntaSiguiente, respuesta) => {
+    const updateResponse = ({prop, currentArray, PREGUNTA_SIGUIENTE_ID, respuesta}) => {
 
-        setFormEncuestaRiesgoCovid(old_value => {
-
-            old_value[prop] = { cod: respuesta.cod, value: null };
-
-            console.log('\nNewForm isss: ', old_value)
+        setFormEncuesta(old_value => {
+            old_value[tabIndex][prop] = { COD_ER: respuesta.COD_ER, value: null };
 
             return old_value;
         });
 
-        agregarPregunta({ obj: currentArray, prop: preguntaSiguiente, tabIndex });
+        agregarPregunta({ obj: currentArray, prop: PREGUNTA_SIGUIENTE_ID, tabIndex });
     };
-    
 
     return <>
         {
             items.map(respuesta => {
 
-                const { detalle, preguntaSiguiente, cod } = respuesta;
-                const id = `${prop}_${cod}`;
-                const defaultValue = formEncuestaRiesgoCovid[prop]?.cod === cod;
-                console.log('tset: ', formEncuestaRiesgoCovid)
+                const { RESPUESTA, PREGUNTA_SIGUIENTE_ID, COD_ER } = respuesta;
+                const id = `${prop}_${COD_ER}`;
 
                 return (
                     <div className="form-check" key={ id } >
-                        <input className="form-check-input" type="radio" defaultChecked={defaultValue} name={ prop } id={ id } onClick={ (e)=> updateResponse(prop, currentArray, preguntaSiguiente, respuesta) } required/>
+                        <input className="form-check-input" type="radio" defaultChecked={formEncuesta[tabIndex][prop]?.COD_ER === COD_ER} name={ prop } id={ id } onClick={ (e)=> updateResponse({prop, currentArray, PREGUNTA_SIGUIENTE_ID, respuesta}) } required />
                         <label className="form-check-label" htmlFor={ id }>
-                            { detalle }
+                            { RESPUESTA }
                         </label>
                     </div>
                 );

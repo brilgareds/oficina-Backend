@@ -4,26 +4,22 @@
         {
             "name": "Launch React App",
             "request": "launch",
+            "type": "pwa-node",
+            "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run-script",
                 "start"
             ],
-            "runtimeExecutable": "npm",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "pwa-node"
+            "skipFiles": [ "<node_internals>/**" ]
         },
         {
-            "type": "pwa-chrome",
-            "request": "launch",
             "name": "Launch Chrome",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "userDataDir": false,
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}",
-            "userDataDir": false,
-            "runtimeArgs": [
-                "--profile-directory=Default"
-            ]
+            "runtimeArgs": [ "--profile-directory=Default" ]
         }
     ]
 }

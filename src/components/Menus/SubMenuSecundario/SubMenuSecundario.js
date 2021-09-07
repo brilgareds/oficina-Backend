@@ -7,15 +7,15 @@ export const SubMenuSecundario = ({ subMenu, k }) => {
 
     if (!subMenu) return <Loading/>;
 
+    subMenu.subMenus = [];
+
     const {
         target, href, dataBsTarget, descripcion,
         titulo, redireccionar, recurso, dataBsToggle
     } = definirPropiedadesLink(subMenu, k);
-
-    console.log('href: ', href)
     
     return (
-        <Link className={ `dropdown-item` } to={{ pathname: `${href}` }} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle }  aria-controls={ href } target={ target } title={ descripcion }>
+        <Link className={ `dropdown-item` } to={{ pathname: `${href}` }} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle } aria-controls={ href } target={ target } title={ descripcion }>
             {titulo}
         </Link>
     );

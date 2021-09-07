@@ -50,9 +50,7 @@ const definirPropiedadesLink = (menu, k, first) => {
     NUM  ???
 
 
-    detalle: 'TXT',
-*/
-
+    detalle: 'TXT'
 
 const fakeQuestions = [
     // tab
@@ -60,9 +58,9 @@ const fakeQuestions = [
         cod: 'tab1',
         titulo: 'Preexistencia o Comorbilidades',
         primeraPregunta: 'tab1_pre_1',
-        preguntas: {
-            tab1_pre_1: {
-                cod: '',
+        preguntas: [
+            {
+                cod: 'tab1_pre_1',
                 pregunta: 'Número de identificación',
                 tipoRespuesta: 'N',
                 respuestas: [
@@ -73,8 +71,8 @@ const fakeQuestions = [
                     }
                 ]
             },
-            tab1_pre_2: {
-                cod: '',
+            {
+                cod: 'tab1_pre_2',
                 pregunta: '¿Has viajado a algún lugar del territorio nacional en los últimos 30 días?',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -90,8 +88,8 @@ const fakeQuestions = [
                     }
                 ]
             },
-            tab1_pre_3: {
-                cod: '',
+            {
+                cod: 'tab1_pre_3',
                 pregunta: 'Selecciona la región en la qué estuviste de viaje',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -117,8 +115,8 @@ const fakeQuestions = [
                     },
                 ]
             },
-            tab1_pre_4: {
-                cod: '',
+            {
+                cod: 'tab1_pre_4',
                 pregunta: '¿Tienes alguna de las siguientes enfermedades o condiciones de salud de base?',
                 tipoRespuesta: 'M',
                 respuestas: [
@@ -181,33 +179,23 @@ const fakeQuestions = [
                     
                 ]
             },
-            tab1_pre_5: {
-                cod: '',
+            {
+                cod: 'tab1_pre_5',
                 pregunta: 'direccion de su domicilio',
                 tipoRespuesta: 'A',
                 respuestas: [
 
                 ]
-            },
-
-
-            
-
-
-
-
-
-            
-
-        }
+            }
+        ]
     },
     {
         cod: 'tab2',
         titulo: 'Sintomatología',
         primeraPregunta: 'tab2_pre_1',
-        preguntas: {
-            tab2_pre_1: {
-                cod: '',
+        preguntas: [
+            {
+                cod: 'tab2_pre_1',
                 pregunta: 'En los últimos 7 días, ¿Has presentado sensación de perdida del olfato y del gusto en las comidas ó bebidas?',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -223,9 +211,8 @@ const fakeQuestions = [
                     }
                 ]
             },
-        
-            tab2_pre_2: {
-                cod: '',
+            {
+                cod: 'tab2_pre_2',
                 pregunta: 'En las últimas 72 horas, ¿Has presentado fiebre?',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -242,8 +229,8 @@ const fakeQuestions = [
                 ]
             },
         
-            tab2_pre_3: {
-                cod: '',
+            {
+                cod: 'tab2_pre_3',
                 pregunta: 'Temperatura',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -260,10 +247,10 @@ const fakeQuestions = [
                 ]
             },
         
-            tab2_pre_4: {
+            {
                 pregunta: 'En las últimas 48 horas, ¿Has presentado tos?',
                 tipoRespuesta: 'S',
-                cod: '',
+                cod: 'tab2_pre_4',
                 respuestas: [
                     {
                         cod: 7,
@@ -278,8 +265,8 @@ const fakeQuestions = [
                 ],
             },
         
-            tab2_pre_5: {
-                cod: '',
+            {
+                cod: 'tab2_pre_5',
                 pregunta: 'En las últimas 48 horas, ¿Has presentado dificultad para respirar?',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -295,8 +282,8 @@ const fakeQuestions = [
                     }
                 ],
             },
-            tab2_pre_6: {
-                cod: '',
+            {
+                cod: 'tab2_pre_6',
                 pregunta: 'En las últimas 24 horas, ¿Te has sentido muy débil sin posibilidad de moverte?',
                 tipoRespuesta: 'S',
                 respuestas: [
@@ -312,8 +299,8 @@ const fakeQuestions = [
                     }
                 ],
             },
-            tab2_pre_7: {
-                cod: '',
+            {
+                cod: 'tab2_pre_7',
                 pregunta: 'En las últimas 6 horas, ¿Has presentado algún cambio en tu condición de estado físico que tenga como referencia alguno de estos síntomas?',
                 tipoRespuesta: 'M',
                 respuestas: [
@@ -364,51 +351,95 @@ const fakeQuestions = [
                     }
                 ]
             }
-        }
+        ]
     },
     {
         cod: 'tab3',
         titulo: 'Convivencia',
         primeraPregunta: '',
-        preguntas: {
-
-        }
+        preguntas: []
     },
     {
         cod: 'tab4',
         titulo: 'Evaluación actos ocupacionales',
         primeraPregunta: '',
-        preguntas: {
-
-        }
+        preguntas: []
     },
     {
         cod: 'tab5',
         titulo: 'Actualizacion datos personales',
         primeraPregunta: '',
-        preguntas: {
-
-        }
+        preguntas: []
     }
 ];
 
+*/
+
+const getDotOrCommaPosition = (value) => {
+    const dotPosition   = value.indexOf('.');
+    const commaPosition = value.indexOf(',');
+
+    const response = (
+        (dotPosition   >= 0) ? dotPosition   :
+        (commaPosition >= 0) ? commaPosition : -1
+    );
+
+    return response;
+};
 
 
+const removeNotNumber = text => text.replaceAll(/[^0-9.,]+/gm, '');
 
-const getFakePreguntasRiesgoCovid = async () => {
+const changeCommaToDot = text => text.replaceAll(',', '.').replaceAll(/[.]+/gm, '.');
 
-    try {
+const formatDecimals = text => changeCommaToDot(removeNotNumber(text));
 
-        const response = fakeQuestions;
 
-        return response;
+const specificDecimals = (value=0, quantityDecimals) => {
 
-    } catch (e) {
-        console.log(e.toString());
+    if (quantityDecimals) quantityDecimals++;
+
+    const dotOrCommaPosition = getDotOrCommaPosition(value);
+
+    if (dotOrCommaPosition === 0) {
+        value = (quantityDecimals) ? `0${value}` : value.substring(1);
     }
 
+    const maxQuantityCharacters = (dotOrCommaPosition && value[dotOrCommaPosition]) ? parseFloat(dotOrCommaPosition)+quantityDecimals : value.length;
+    value = formatDecimals(value.substring(0, maxQuantityCharacters)); // value[value.length-1]).toString();
 
+    return value;
 };
+
+
+const getTwoLastCharacters = text => text.substring(text.length-2);
+
+
+const currentDate = (obj={}) => {
+
+    const { format='spanish', withTime=true } = obj;
+
+    const dateNow = new Date();
+    const year    = dateNow.getFullYear();
+    const month   = getTwoLastCharacters(`0${dateNow.getMonth()+1}`);
+    const day     = getTwoLastCharacters(`0${dateNow.getDate()}`);
+    const hour    = getTwoLastCharacters(`0${dateNow.getHours()}`);
+    const minutes = getTwoLastCharacters(`0${dateNow.getMinutes()}`);
+    const seconds = getTwoLastCharacters(`0${dateNow.getSeconds()}`);
+    const time    = `${hour}:${minutes}:${seconds}`;
+
+    const englishDate = `${year}-${month}-${day}`;
+    const spanishDate = `${day}/${month}/${year}`;
+
+    const date = (
+        (format === 'english') ? englishDate :
+        (format === 'spanish') ? spanishDate : ''
+    );
+
+    const fullDate = `${date} ${ (withTime) ? ` ${time}` : '' }`;
+
+    return fullDate;
+}
 
 
 const postFetch = async ({
@@ -489,39 +520,41 @@ const capitalizarPalabras = (val) => {
         .join(' ');
 }
 
+const getFullUser = () => {
+    let user = {};
 
-const getDocumentId = () => {
-
-    let documentId = '';
-
-    if (localStorage.getItem('d_u') && JSON.parse(localStorage.getItem('d_u')) && JSON.parse(localStorage.getItem('d_u')).cedula) {
-        documentId = JSON.parse(localStorage.getItem('d_u')).cedula;
+    if (localStorage.getItem('d_u') && JSON.parse(localStorage.getItem('d_u'))) {
+        user = JSON.parse(localStorage.getItem('d_u'));
     }
 
-    return documentId;
+    return user;
 };
 
-const getFullNameUser = () => {
-
-    let nombreUsuario = '';
-
-    if (localStorage.getItem('d_u')) {
-        nombreUsuario = `${JSON.parse(localStorage.getItem('d_u')).nombres.trim()} ${JSON.parse(localStorage.getItem('d_u')).apellidos.trim()}`;
-    }
-
-    return capitalizarPalabras(nombreUsuario);
-}
+const getEmailUser      = () => ( getFullUser().mail || '');
+const getGenderUser     = () => ( getFullUser().genero || '');
+const getStatusUser     = () => ( getFullUser().estado || '');
+const getDocumentIdUser = () => ( getFullUser().cedula || '');
+const getNameUser       = () => ( getFullUser().nombres || '').trim();
+const getLastNameUser   = () => ( getFullUser().apellidos || '').trim();
+const getPhoneUser      = () => ( getFullUser().numeroCelular || '' ).trim();
+const getFullNameUser   = () => ( capitalizarPalabras(`${getNameUser()} ${getLastNameUser()}`) );
 
 
 export {
     getFetch,
     definirPropiedadesLink,
-    getFakePreguntasRiesgoCovid,
     getFetchWithHeader,
     postFetch,
     overlay,
     capitalizarPalabras,
     getFullNameUser,
-    getDocumentId,
-    advertenciaFormularioVacio
+    getDocumentIdUser,
+    advertenciaFormularioVacio,
+    currentDate,
+    getFullUser,
+    getGenderUser,
+    getPhoneUser,
+    getEmailUser,
+    getStatusUser,
+    specificDecimals
 }

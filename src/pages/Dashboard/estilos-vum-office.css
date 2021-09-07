@@ -99,7 +99,7 @@ a {
 }
 
 .react-tabs__tab--selected {
-    background: #1780e8 !important;
+    background: #816DDD !important;
     color: white !important;
 }
 
@@ -109,9 +109,7 @@ a {
 
 .react-tabs__tab {
     border: 0 !important;
-    background: #619dd891;
     border-radius: 0.2rem;
-    color: white;
 }
 
 .react-tabs__tab-list {

@@ -1,33 +1,17 @@
-import React, { useState } from 'react';
-import { getDocumentId } from '../../../generalHelpers';
+import React from 'react';
+import { useOpenField } from '../useOpenField';
 
-export const Numeric = ({ formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid, prop, item }) => {
+export const Numeric = (props) => {
 
-    console.log('formEncuestaRiesgoCovid: ', formEncuestaRiesgoCovid);
+    const { inputValue, handleNumericChange } = useOpenField({ ...props });
 
-    const [inputNumber, setInputNumber] = useState(formEncuestaRiesgoCovid[prop]?.value ?? getDocumentId());
-    
-    const handleChange = (e) => {
-        const newValue = e.target.value;
+    if (!props.item) return <></>;
 
-        setInputNumber(newValue);
-        
-        setFormEncuestaRiesgoCovid(old_value => {
-            
-            old_value[prop] = { cod: item.cod, value: newValue };
-            
-            console.log('\nNewForm isss: ', old_value)
-            
-            return old_value;
-        });
-    };
-    
-    if (!item) return <></>;
-    // const defaultValue = (formEncuestaRiesgoCovid[prop].value ?? '');
+    // const defaultValue = (formEncuesta[prop].value ?? '');
 
     return (
         <div className='col-12 col-md-5'>
-            <input type='number' className='form-control' min='1' value={inputNumber} onChange={handleChange} required />
+            <input type='text' pattern="^\d*[,.]?\d+$" className='form-control' value={inputValue} onChange={handleNumericChange} required />
         </div>
     )
 }
