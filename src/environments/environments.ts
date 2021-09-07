@@ -6,7 +6,6 @@ import { routesRrhh } from "../pages/Rrhh/routes.js";
 import { Sst } from "../pages/Sst/Sst.js";
 import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
 import { routesAyuda } from "../pages/Ayuda/routes.js";
-import { MainCV } from "../pages/MainCV/MainCV.js";
 import { MenuCV } from "../components/Menus/MenuCV/MenuCV.js";
 import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
 import { routesIncapacidad } from "../pages/Incapacidad/routes.js";
@@ -16,9 +15,17 @@ import { CartaPresentacion } from "../pages/Certificados/CartaPresentacion/Carta
 import { Ingreso } from "../pages/Ingreso/Ingreso.js";
 import { CercoEpidemeologico } from "../pages/Encuestas/CercoEpidemeologico/CercoEpidemeologico.js";
 import { CasosCovid } from "../pages/Encuestas/CasosCovid/CasosCovid.js";
+import CV from "../pages/CurriculumVitae/CV";
+import Education from "../pages/Education/Education";
+import Family from "../pages/Family/Family.js";
+import DataAdditional from "../pages/DataAdditional/Data.js";
+import Salud from "../pages/Salud/Salud.js";
+import LivingPlace from "../pages/LivingPlace/LivingPlave.js";
+import { baseUrl } from "../config/config.js";
+
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
-const backendPath = 'http://localhost:3001/api/v1';
+const backendPath = `${baseUrl}/v1`;
 
 const menus = {
     MenuCV: {
@@ -47,7 +54,14 @@ const routes = {
     incapacidad: routesIncapacidad,
     cv: {
         subPages: {
-            main: { url: '/cv/main', componente: MainCV }
+            hojaVida: { url: '/cv/datos_basicos', componente: CV },
+            datosBasicos: { url: '/cv/hoja_de_vida', componente: CV },
+            education:{url:'/cv/educacion_formal', componente:Education},
+            family:{url:'/cv/mis_familiares',componente:Family},
+            dataAdditional:{url:'/cv/datos_adicionales',componente:DataAdditional},
+            salud:{url:'/cv/salud',componente:Salud},
+            livingPlace:{url:'/cv/vivienda',componente:LivingPlace}
+            
         }
     },
     certificados: {
@@ -83,7 +97,11 @@ const api = {
     getresourceRequestCategory: `${backendPath}/rrhh/resource_request_categories`,
     postSaveFormRRHH: `${backendPath}/rrhh/saveFormRRHH`,
     getRequestHelpCategories: `${backendPath}/help/requestsHelpCategory`,
-    postSaveFormHelp: `${backendPath}/help/saveFormHelp`
+    postSaveFormHelp: `${backendPath}/help/saveFormHelp`,
+    getEpsIncapacidad: `${backendPath}/incapacity/getEpsIncapacidad`,
+    getTypesIncapacity: `${backendPath}/incapacity/getTypesIncapacity`,
+    getDocumentsIncapacity: `${backendPath}/incapacity/getDocumentsIncapacity`,
+    postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`
 };
 
 export {

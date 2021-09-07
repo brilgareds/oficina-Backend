@@ -6,6 +6,6 @@ export const MenuSecundarioFooter = () => {
     const { logOut } = useLogin({ identification: '' });
 
     return (
-        <div onClick={logOut} className="dropdown-item">Cerrar sesion</div>
+        <div style={{ cursor: 'pointer' }} onClick={logOut} className="dropdown-item">Cerrar sesion</div>
     )
 }

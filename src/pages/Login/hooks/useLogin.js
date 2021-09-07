@@ -26,7 +26,7 @@ export const useLogin = (formInitialState = {}) => {
 
 
     const logOut = () => {
-        overlay();
+        overlay(true);
         localStorage.clear();
         window.location.href = routes.login.url;
     }
@@ -38,7 +38,7 @@ export const useLogin = (formInitialState = {}) => {
 
         if (validarInputIdentificacion(formValue.identification)) {    //Si la informacion es solo tipo numero
 
-            overlay();
+            overlay(true);
             localStorage.clear();
 
             postFetch({     // Realizamos el consumo para obtener el refresh_token y el access_token mandando la cedula del usuario
@@ -148,7 +148,7 @@ export const useLogin = (formInitialState = {}) => {
 
     const onClickContratistasHandle = () => {
 
-        overlay();
+        overlay(true);
 
         getFetchWithHeader({
             url: api.getDocumentTypes,
@@ -284,7 +284,7 @@ export const useLogin = (formInitialState = {}) => {
 
                     if (validarInfoContratista(dataContratistas)) {
 
-                        overlay();
+                        overlay(true);
 
                         localStorage.setItem('d_u', JSON.stringify(dataContratistas)); //informacion de usuario contratista
 

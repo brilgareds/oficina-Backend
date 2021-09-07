@@ -1,0 +1,71 @@
+
+.cv{
+    background-image: none !important;
+    background-color: #ffffff;
+  }
+
+  .cv .card{
+    background-color: #F9FAFD;
+  }
+
+  .navbarPaddingCV {
+    background-color: #F9FAFD;
+
+  }
+
+ .cv .nav-link.active{
+    background-color: #816DDD;
+  }
+
+  .backGreen{
+    background-color: #74E36B;
+    color:#ffffff;
+   }
+
+   .input-hidden {
+    position: absolute;
+    left: -9999px;
+    
+  }
+
+  .removeBorder{
+    border:none;
+  }
+
+  .cv input[type="file"] {
+    display: none;
+}
+
+  .custom-file-upload {
+    border: 1px solid var(--falcon-input-border-color);
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+
+  .cv .card-header{
+    color: #373737;
+    font-size: 35px;
+  }
+
+
+  .text-primaryNavbar{
+    color: #1783EE;
+  }
+
+  /* .navbar-vertical.navbar-expand-xl+.content .navbar-top{
+    background: transparent linear-gradient(272deg, #1783EE 0%, #816DDD 100%) 0% 0% no-repeat padding-box;
+    opacity: 1;   
+  } */
+
+
+  .cv .table{
+    border-color: #D8E2EF;
+  }
+
+
+  .cv label.btn-outline-primary{
+    width: 11vmax;
+  }

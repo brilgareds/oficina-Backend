@@ -6,6 +6,9 @@ import { useLogin } from '../../../pages/Login/hooks/useLogin.js';
 
 export const Navbar = ({ menu }) => {
 
+    const { logOut } = useLogin({ identification: '' });
+
+
     return (
         <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbarMobile" style={{ marginLeft: '0rem', marginRight: '0rem' }}>
 
@@ -27,13 +30,13 @@ export const Navbar = ({ menu }) => {
                 <div className="navbar-vertical-content scrollbar navbarPadding mb-2">
                     <MenuPrincipal k={'menu_1'} key={'menu_1'} menu={menu} />
                 </div>
-                <div className="divCerrarSesion text-center" onClick={useLogin.logOut}>
-                    <div className="row" onClick={useLogin.logOut}>
-                        <div className="col-md-12" onClick={useLogin.logOut}>
+                <div className="divCerrarSesion text-center" onClick={logOut}>
+                    <div className="row">
+                        <div className="col-md-12">
                             <img className="iconoCerrarSesion" src="/assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" />
                         </div>
-                        <div className="col-md-12" onClick={useLogin.logOut}>
-                            <span className="spanCerrarSesion nav-link-text" onClick={useLogin.logOut}>Cerrar sesion</span>
+                        <div className="col-md-12">
+                            <span className="spanCerrarSesion nav-link-text">Cerrar sesion</span>
                         </div>
                     </div>
                 </div>

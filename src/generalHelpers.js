@@ -38,343 +38,6 @@ const definirPropiedadesLink = (menu, k, first) => {
 };
 
 
-
-/*
-    tipoRespuesta
-    'M' = Multiple,
-    'U' = Simple,
-    'A' = Abierta
-    'F' = fecha
-    SED  ???
-    0.0  ???
-    NUM  ???
-
-
-    detalle: 'TXT'
-
-const fakeQuestions = [
-    // tab
-    {
-        cod: 'tab1',
-        titulo: 'Preexistencia o Comorbilidades',
-        primeraPregunta: 'tab1_pre_1',
-        preguntas: [
-            {
-                cod: 'tab1_pre_1',
-                pregunta: 'Número de identificación',
-                tipoRespuesta: 'N',
-                respuestas: [
-                    {
-                        cod: 100,
-                        detalle: '',
-                        preguntaSiguiente: 'tab1_pre_2'
-                    }
-                ]
-            },
-            {
-                cod: 'tab1_pre_2',
-                pregunta: '¿Has viajado a algún lugar del territorio nacional en los últimos 30 días?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 101,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab1_pre_3'
-                    },
-                    {
-                        cod: 102,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    }
-                ]
-            },
-            {
-                cod: 'tab1_pre_3',
-                pregunta: 'Selecciona la región en la qué estuviste de viaje',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 103,
-                        detalle: 'Bogota',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                    {
-                        cod: 104,
-                        detalle: 'Valle',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                    {
-                        cod: 105,
-                        detalle: 'Antioquia',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                    {
-                        cod: 106,
-                        detalle: 'Otras',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                ]
-            },
-            {
-                cod: 'tab1_pre_4',
-                pregunta: '¿Tienes alguna de las siguientes enfermedades o condiciones de salud de base?',
-                tipoRespuesta: 'M',
-                respuestas: [
-                    {
-                        cod: 107,
-                        detalle: 'Artritis reumatoidea',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Asma moderada grave',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Diabetes mellitus',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Esta en embarazo',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Estado de inmunosupresión',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Hipertensión arterial',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Consume esteroides',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'obesidad',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Sida',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Tratamiento contra el cáncer',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'NINGUNA DE LAS ANTERIORES',
-                        preguntaSiguiente: ''
-                    },
-
-                    
-                ]
-            },
-            {
-                cod: 'tab1_pre_5',
-                pregunta: 'direccion de su domicilio',
-                tipoRespuesta: 'A',
-                respuestas: [
-
-                ]
-            }
-        ]
-    },
-    {
-        cod: 'tab2',
-        titulo: 'Sintomatología',
-        primeraPregunta: 'tab2_pre_1',
-        preguntas: [
-            {
-                cod: 'tab2_pre_1',
-                pregunta: 'En los últimos 7 días, ¿Has presentado sensación de perdida del olfato y del gusto en las comidas ó bebidas?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 1,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_2'
-                    },
-                    {
-                        cod: 2,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_2'
-                    }
-                ]
-            },
-            {
-                cod: 'tab2_pre_2',
-                pregunta: 'En las últimas 72 horas, ¿Has presentado fiebre?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 3,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_3'
-                    },
-                    {
-                        cod: 4,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_4'
-                    }
-                ]
-            },
-        
-            {
-                cod: 'tab2_pre_3',
-                pregunta: 'Temperatura',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 5,
-                        detalle: 'De 37,5 a 38',
-                        preguntaSiguiente: 'tab2_pre_4'
-                    },
-                    {
-                        cod: 6,
-                        detalle: 'Mayor a 38',
-                        preguntaSiguiente: 'tab2_pre_4'
-                    }
-                ]
-            },
-        
-            {
-                pregunta: 'En las últimas 48 horas, ¿Has presentado tos?',
-                tipoRespuesta: 'S',
-                cod: 'tab2_pre_4',
-                respuestas: [
-                    {
-                        cod: 7,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_5'
-                    },
-                    {
-                        cod: 8,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_5'
-                    }
-                ],
-            },
-        
-            {
-                cod: 'tab2_pre_5',
-                pregunta: 'En las últimas 48 horas, ¿Has presentado dificultad para respirar?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 9,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_6'
-                    },
-                    {
-                        cod: 10,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_6'
-                    }
-                ],
-            },
-            {
-                cod: 'tab2_pre_6',
-                pregunta: 'En las últimas 24 horas, ¿Te has sentido muy débil sin posibilidad de moverte?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 11,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_7'
-                    },
-                    {
-                        cod: 12,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_7'
-                    }
-                ],
-            },
-            {
-                cod: 'tab2_pre_7',
-                pregunta: 'En las últimas 6 horas, ¿Has presentado algún cambio en tu condición de estado físico que tenga como referencia alguno de estos síntomas?',
-                tipoRespuesta: 'M',
-                respuestas: [
-                    {
-                        cod: 13,
-                        detalle: 'Congestión nasal',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 14,
-                        detalle: 'Dolor de cabeza',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 15,
-                        detalle: 'Dolor de garganta',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 16,
-                        detalle: 'Dolor o presión en el pecho',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 17,
-                        detalle: 'Dolores musculares',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 18,
-                        detalle: 'Fatiga',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 19,
-                        detalle: 'Mareos',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 20,
-                        detalle: 'Ojos llorosos',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 315,
-                        detalle: 'Ninguna de las anteriores',
-                        preguntaSiguiente: ''
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        cod: 'tab3',
-        titulo: 'Convivencia',
-        primeraPregunta: '',
-        preguntas: []
-    },
-    {
-        cod: 'tab4',
-        titulo: 'Evaluación actos ocupacionales',
-        primeraPregunta: '',
-        preguntas: []
-    },
-    {
-        cod: 'tab5',
-        titulo: 'Actualizacion datos personales',
-        primeraPregunta: '',
-        preguntas: []
-    }
-];
-
-*/
-
 const getDotOrCommaPosition = (value) => {
     const dotPosition   = value.indexOf('.');
     const commaPosition = value.indexOf(',');
@@ -480,13 +143,17 @@ const getFetchWithHeader = async ({
 
 }
 
-const overlay = () => {
-    Swal.fire({
-        title: "<h3>Cargando...</h3>",
-        html: "<div class='spinner-border text-primary' style='width: 3rem; height: 3rem; margin: 10px; margin-top: unset;' role='status'><span class='sr-only'>Loading...</span></div>",
-        showCancelButton: false,
-        showConfirmButton: false
-    });
+const overlay = (show = false) => {
+    if (show === true) {
+        Swal.fire({
+            title: "<h3>Cargando...</h3>",
+            html: "<div class='spinner-border text-primary' style='width: 3rem; height: 3rem; margin: 10px; margin-top: unset;' role='status'><span class='sr-only'>Loading...</span></div>",
+            showCancelButton: false,
+            showConfirmButton: false
+        });
+    } else if (show === false) {
+        Swal.close();
+    }
 }
 
 const advertenciaFormularioVacio = () => {
@@ -539,6 +206,17 @@ const getLastNameUser   = () => ( getFullUser().apellidos || '').trim();
 const getPhoneUser      = () => ( getFullUser().numeroCelular || '' ).trim();
 const getFullNameUser   = () => ( capitalizarPalabras(`${getNameUser()} ${getLastNameUser()}`) );
 
+const getDateToday = () => {
+
+    let dateFormat = new Date();
+    let day = ("0" + dateFormat.getDate()).slice(-2);
+    let month = ("0" + (dateFormat.getMonth() + 1)).slice(-2);
+    let year = dateFormat.getFullYear();
+
+    return `${year}-${month}-${day}`;
+
+}
+
 
 export {
     getFetch,
@@ -556,5 +234,6 @@ export {
     getPhoneUser,
     getEmailUser,
     getStatusUser,
-    specificDecimals
+    specificDecimals,
+    getDateToday
 }

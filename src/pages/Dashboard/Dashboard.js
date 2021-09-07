@@ -19,8 +19,8 @@ export const Dashboard = () => {
                     <div className="row light">
 
                         <div className="col-md-12 text-center mb-4">
-                            <img className="imgVumHeader" src="/assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
-                        </div>
+                            <img className="imgVumHeader" src="./assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
+                        </div> 
 
                         <div className="col-md-12 text-center mb-5">
                             <h3 className="tituloComoTePodemosAyudar">¿Cómo te podemos ayudar?</h3>
