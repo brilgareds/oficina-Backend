@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 import { api } from '../../../../environments/environments';
@@ -14,8 +15,10 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         loadTipoIncapacidad();
         loadOtherEntenty();
+        setFilesState({ files: [] });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
 
     const [formValue, setStateForm] = useState(formInitialState);
@@ -27,6 +30,9 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
     }
 
     const onChangeSelectHandle = ({ nameSelect, value }) => {
+
+        // console.log();
+
         setStateForm({
             ...formValue,
             [nameSelect]: value
@@ -38,7 +44,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         setStateOtraEntidadCheck(!stateOtraEntidadCheck)
         setStateForm({
             ...formValue,
-            otraEntidad: null
+            otraEntidad: stateOtraEntidadCheck
         });
     }
 
@@ -105,9 +111,19 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
         overlay(true);
 
+        // setStateForm({
+        //     ...formValue,
+        //     files: formValue.files.splice(0, formValue.files.length)
+        // });
+
         setStateForm({
             ...formValue,
-            files: formValue.files.splice(0, formValue.files.length)
+            tipoIncapacidad: value
+        });
+
+        setFilesState({
+            ...filesState,
+            files: filesState.files.splice(0, filesState.files.length)
         });
 
         postFetch({
@@ -118,26 +134,33 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 actualizarRowsTable(resGetDocumentsIncapacity);
             });
 
+
+
     }
 
-
-    const onChangeInputFileHandle = ({ target }) => {
-        // const onChangeInputFileHandle = ({ numero, documento, target }) => {
+    const [filesState, setFilesState] = useState();
+    const onChangeInputFileHandle = ({ numero, documento, target }) => {
 
         // formValue.files.push({
         //     fileInfo: target.target.files[0],
         //     tipoDocumento: documento
         // });
 
+        filesState.files.push({
+            fileInfo: target.target.files[0],
+            tipoDocumento: documento
+        });
+
         // setStateForm({
         //     ...formValue,
         //     files: formValue.files
         // });
 
-        setStateForm({
-            ...formValue,
-            archivo_de_prueba: target.target.files[0]
+        setFilesState({
+            ...filesState,
+            files: filesState.files
         });
+
 
 
 
@@ -153,7 +176,15 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
             rowsDTable.push({
                 numero: numberRow,
                 documento: (element.TIP_NOMBRE).toUpperCase(),
-                archivo: <input onChange={values => { onChangeInputFileHandle({ numero: numberRow, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }} key={key} id={`file_${numberRow}`} name={`file_${numberRow}`} className="form-control" type="file" />
+                archivo:
+                    <input
+                        onChange={values => { onChangeInputFileHandle({ numero: numberRow, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
+                        key={key}
+                        id={`file_${numberRow}`} name={`file_${numberRow}`}
+                        className="form-control"
+                        type="file"
+                        accept=".pdf"
+                    />
             });
         });
 
@@ -166,6 +197,8 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         e.preventDefault();
         overlay(true);
 
+
+
         const allData = {
             dataUser: {
                 cedula: formValue.cedula,
@@ -173,9 +206,9 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 correoElectronico: formValue.correoElectronico,
                 eps: formValue.eps,
                 telefono: formValue.telefono,
+                empresa: dataUser.empresa.trim(),
             },
             dataForm: {
-                files: formValue?.archivo_de_prueba || "null",
                 tipoIncapacidad: formValue?.tipoIncapacidad?.value || "null",
                 prorroga: formValue?.prorroga || false,
                 otraEntidad: {
@@ -189,15 +222,20 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
             },
         };
 
-        const data = new FormData();
-        data.append("allData", allData);
-        data.append("files", formValue.files);
+        console.log("json axio == > ", allData);
+        console.log("filesState axio == > ", filesState);
 
-        console.log("allData - --- ", allData);
+        const dataForm = new FormData();
+        dataForm.append("allData", JSON.stringify(allData));
+
+        filesState.files.forEach(file => {
+            dataForm.append("file", file.fileInfo);
+            dataForm.append("filesNames", file.tipoDocumento);
+        });
 
         postFetch({
-            url: "https://httpbin.org/anything",
-            params: { data }
+            url: api.postSaveDisabilityFiling,
+            params: dataForm
         })
             .then(() => {
                 Swal.fire({
@@ -205,7 +243,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                     title: 'Datos guardados correctamente.',
                     confirmButtonText: 'Ok',
                 }).then((result) => {
-                    // window.location.reload();
+                    window.location.reload();
                 })
             })
             .catch(() => {
@@ -217,9 +255,10 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 });
             });
 
-        console.log("state ===> ", formValue);
-        console.log("formulario ===> ", allData);
+
+
     }
+
 
 
     return ({
@@ -234,7 +273,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         onSubmitFormIncapacidad,
         onChangeSelectHandle,
         onCheckedInputCheck,
-        onChangeInputFileHandle,
     });
 
 

@@ -24,7 +24,6 @@ export const IncapacidadRadicar = () => {
         onSubmitFormIncapacidad,
         onChangeSelectHandle,
         onCheckedInputCheck,
-        onChangeInputFileHandle,
     } = useIncapacidadRadicar(
         {
             cedula: dataUser.cedula.trim(),
@@ -40,7 +39,7 @@ export const IncapacidadRadicar = () => {
                 { title: 'ARCHIVO', field: 'archivo', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
-            files: []
+            files: [],
         },
         dataUser
     );
@@ -66,7 +65,7 @@ export const IncapacidadRadicar = () => {
             <div className="card mb-3">
 
                 <div className="card-body bg-light">
-                    <form id="formIncapacidad" onSubmit={onSubmitFormIncapacidad}>
+                    <form id="formIncapacidad" onSubmit={onSubmitFormIncapacidad} encType="multipart/form-data">
                         <div className="row">
                             <div className="card-header">
                                 <h5 className="card-title">Datos del colaborador</h5>
@@ -98,13 +97,8 @@ export const IncapacidadRadicar = () => {
                             </div>
                             <div className="col-12 col-lg-3 mb-5">
                                 <label className="form-label" htmlFor="descripcion">Otra Entidad: </label>
-                                <Select onChange={value => onChangeSelectHandle({ nameSelect: 'otraEntidad', value })} options={optionsOtherEntity} defaultValue={[optionsOtherEntity[0]]} placeholder={'Seleccione...'} isDisabled={stateOtraEntidadCheck} styles={customStyles} />
+                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'otraEntidad', value: valueSe })} options={optionsOtherEntity} defaultValue={[optionsOtherEntity[0]]} placeholder={'Seleccione...'} isDisabled={stateOtraEntidadCheck} styles={customStyles} />
                             </div>
-                            <div className="col-12 col-lg-3 mb-5">
-                                <label className="form-label" htmlFor="descripcion">prueba de archivo: </label>
-                                <input onChange={values => { onChangeInputFileHandle({ target: values, }) }} name="archivo_de_prueba" className="form-control" type="file" />
-                            </div>
-
                             <div className="card-header">
                                 <h5 className="card-title">Datos de la incapacidad</h5>
                             </div>
@@ -128,10 +122,10 @@ export const IncapacidadRadicar = () => {
                             </div>
 
                             <div className="card-header" id="tituloDataTableDesktop">
-                                <h5 className="card-title">Sube tus archivos aquí</h5>
+                                <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5>
                             </div>
 
-                            <DataTabla title={<h5 className="card-title">Sube tus archivos aquí</h5>} columns={columnsDataTable} data={rowsTable} />
+                            <DataTabla title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={columnsDataTable} data={rowsTable} />
 
                             <div className="col-12 col-lg-12 mt-4 mb-3">
                                 <div className="row">
