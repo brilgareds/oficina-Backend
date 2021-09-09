@@ -14,6 +14,12 @@
     z-index: 99999999999;
 }
 
+
+.spanTituloDataTableDesktop{
+    font-style: italic; 
+    font-size: 14px;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
     #tituloDataTableDesktop{
         display: unset;
