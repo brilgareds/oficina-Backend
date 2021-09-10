@@ -1,7 +1,7 @@
 import {Component} from 'react';
 import {React} from 'react-dom';
 import Swal from 'sweetalert2';
-import { getData, postData } from '../../components/general/General';
+import { getData, postData, validateInputSelect, validateRadioButtons } from '../../components/general/General';
 import { baseUrl } from '../../config/config';
 
 class LivingPlace extends Component{
@@ -39,13 +39,13 @@ class LivingPlace extends Component{
             let option = result.map((value,x) => <option  key={x} value={value["TIP_ATRIBUTO1"]}>{value["TIP_NOMBRE"]}</option>);
             this.setState({dataTypeLivinPlace:option});             
         });
-        // consultar  tipo vivienda
+        // consultar  tipo perimtro
         const urlPerimeter = `${baseUrl}/v1/vivienda/consultarDatosPerimetro`;
         getData(urlPerimeter).then(result =>{
             let option = result.map((value,x) => <option  key={x} value={value["TIP_ATRIBUTO1"]}>{value["TIP_NOMBRE"]}</option>);
             this.setState({dataPerimeter:option});             
         });
-        // consultar  tipo vivienda
+        // consultar  tipo estrato
         const urlStratum = `${baseUrl}/v1/vivienda/consultarDatosEstrato`;
         getData(urlStratum).then(result =>{
             let option = result.map((value,x) => <option  key={x} value={value["TIP_NOMBRE"]}>{value["TIP_NOMBRE"]}</option>);
@@ -58,55 +58,65 @@ class LivingPlace extends Component{
 
 
     saveLivingPlace = () =>{
+        const valida =  this.validatInputRequired();
 
-        const dataUser = JSON.parse( localStorage.getItem("d_u"));
-        const cedula = parseInt(dataUser['cedula']);
-        const empresa = parseInt(dataUser['empresa']);
+        if(!valida){
+            Swal.fire({
+                title: '',
+                text: "Validar campos obligatorios",
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#2c7be5',
+                confirmButtonText: 'Cerrar'
+            })
+        }else{
 
-        var els = document.getElementsByClassName("checkServices");
-        let stringServi = ''; 
-        for(var i = 0; i < els.length; i++)
-        {
-            if (els[i].checked)
+            const dataUser = JSON.parse( localStorage.getItem("d_u"));
+            const cedula = parseInt(dataUser['cedula']);
+            const empresa = parseInt(dataUser['empresa']);
+
+            var els = document.getElementsByClassName("checkServices");
+            let stringServi = ''; 
+            for(var i = 0; i < els.length; i++)
             {
-                stringServi += els[i].value +' '
+                if (els[i].checked)
+                {
+                    stringServi += els[i].value +' '
+                }
             }
+            
+            const datos = {
+                NRO_DOCUMENTO: cedula,
+                TIPO_VIVIENDA: this.state.TIPO_VIVIENDA,
+                PERIMETRO: this.campo2.value,
+                ESTRATO: parseInt(this.state.ESTRATO),
+                BENEFICIARIO_CREDITO_VIVIENDA: this.state.BENEFICIARIO_CREDITO_VIVIENDA === 'S'?'S':'N',
+                CREDITO_VIVIENDA_VIGENTE: this.state.CREDITO_VIVIENDA_VIGENTE === 'S'?'S':'N',
+                SERVICIOS: stringServi.trim(),
+                HABITANTES_VIVIENDA: parseInt(this.state.HABITANTES_VIVIENDA),
+                CODIGO_EMPRESA: empresa
+            };
+
+            const urlSave =  `${baseUrl}/v1/vivienda/crearRegistroVivienda`;
+
+            postData(urlSave,datos).then(result =>{
+
+                if(result.ok){
+                    Swal.fire({
+                        title: '',
+                        text: "Se registro con éxito",
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#2c7be5',
+                        confirmButtonText: 'Cerrar'
+                    })
+                    this.loadDataPrincipal();
+                }else{
+                    console.log('trusky',result[0]);
+                }
+            })
+
         }
-        
-        const datos = {
-            NRO_DOCUMENTO: cedula,
-            TIPO_VIVIENDA: this.campo1.value,
-            PERIMETRO: this.campo2.value,
-            ESTRATO: parseInt(this.campo3.value),
-            BENEFICIARIO_CREDITO_VIVIENDA: this.state.BENEFICIARIO_CREDITO_VIVIENDA === 'SI'?'S':'N',
-            CREDITO_VIVIENDA_VIGENTE: this.state.CREDITO_VIVIENDA_VIGENTE === 'SI'?'S':'N',
-            SERVICIOS: stringServi.trim(),
-            HABITANTES_VIVIENDA: parseInt(this.campo6.value),
-            CODIGO_EMPRESA: empresa
-          };
-
-          const urlSave =  `${baseUrl}/v1/vivienda/crearRegistroVivienda`;
-
-          postData(urlSave,datos).then(result =>{
-            console.log(result);
-
-            if(result.status === 'ok'){
-                console.log('se inserto ok');
-                Swal.fire({
-                    title: '',
-                    text: "Se registro con éxito",
-                    icon: 'success',
-                    showCancelButton: false,
-                    confirmButtonColor: '#2c7be5',
-                    confirmButtonText: 'Cerrar'
-                  })
-                this.loadDataPrincipal();
-            }else{
-                console.log('trusky',result[0]);
-            }
-        })
-
-
     }
 
     loadDataPrincipal = () =>{
@@ -117,15 +127,14 @@ class LivingPlace extends Component{
         const url = `${baseUrl}/v1/vivienda/consultarDatosVivienda`;
         postData(url,datos).then(result =>{
             const dataNew = result[0];
-            console.log(dataNew);
             this.setState({
-                TIPO_VIVIENDA: dataNew.TIPO_VIVIENDA,
-                PERIMETRO: dataNew.PERIMETRO,
-                ESTRATO: dataNew.ESTRATO,
-                BENEFICIARIO_CREDITO_VIVIENDA: dataNew.BENEFICIARIO_CREDITO_VIVIENDA,
-                CREDITO_VIVIENDA_VIGENTE: dataNew.CREDITO_VIVIENDA_VIGENTE,
-                SERVICIOS: dataNew.SERVICIOS,
-                HABITANTES_VIVIENDA: dataNew.HABITANTES_VIVIENDA
+                TIPO_VIVIENDA: dataNew.TIPO_VIVIENDA?dataNew.TIPO_VIVIENDA:'',
+                PERIMETRO: dataNew.PERIMETRO?dataNew.PERIMETRO:'',
+                ESTRATO: dataNew.ESTRATO? dataNew.ESTRATO:'',
+                BENEFICIARIO_CREDITO_VIVIENDA: dataNew.BENEFICIARIO_CREDITO_VIVIENDA?dataNew.BENEFICIARIO_CREDITO_VIVIENDA:'',
+                CREDITO_VIVIENDA_VIGENTE: dataNew.CREDITO_VIVIENDA_VIGENTE?dataNew.CREDITO_VIVIENDA_VIGENTE:'',
+                SERVICIOS: dataNew.SERVICIOS?dataNew.SERVICIOS:'',
+                HABITANTES_VIVIENDA: dataNew.HABITANTES_VIVIENDA?dataNew.HABITANTES_VIVIENDA:''
             })
                 this.checkbosValidatecheck()
         })
@@ -144,7 +153,6 @@ class LivingPlace extends Component{
         }
         this.setState({SERVICIOS:stringServi.trim()})
         this.checkbosValidatecheck()
-
     }
 
 
@@ -152,9 +160,13 @@ class LivingPlace extends Component{
         // consultar  tipo aervicios
         const urlServices = `${baseUrl}/v1/vivienda/consultarDatosServicios`;
         getData(urlServices).then(result =>{
-            let option = result.map((value,x) => {
+            let option = result.map((value,x) => {   
+            let valSer = false
+            if(this.state.SERVICIOS){
+                valSer = this.state.SERVICIOS.indexOf(value["TIP_NOMBRE"]) > -1 ? true:false
+            }
             return  <div  key={x} className="form-check">
-                    <input onChange={(e) => this.changeState(e.target)  }   checked={this.state.SERVICIOS.indexOf(value["TIP_NOMBRE"]) > -1 ? true:false  }  className="form-check-input checkServices"  type="checkbox" id={`check${value["TIP_NOMBRE"]}`}  value={value["TIP_NOMBRE"]} />
+                    <input onChange={(e) => this.changeState(e.target)  }   checked={valSer}  className="form-check-input checkServices"  type="checkbox" id={`check${value["TIP_NOMBRE"]}`}  value={value["TIP_NOMBRE"]} />
                     <label className="form-check-label" htmlFor={`check${value["TIP_NOMBRE"]}`}>{value["TIP_NOMBRE"]}</label>
                 </div>
                 
@@ -165,10 +177,23 @@ class LivingPlace extends Component{
     }
 
 
+    validatInputRequired = () =>{
+        let stringServi = validateRadioButtons("credit");
+        let stringServi3 = validateRadioButtons("creditActual");
+        // let checks = validateCheckButtons('checkServices')
+        let stringServi2 = validateInputSelect("inputRequiredForm"); 
+        if(stringServi2 > 0 || stringServi === 0  || stringServi3 === 0 ){
+            return false
+        }else{
+            return true
+        }
+    }
+
+
+
     render(){
         const {dataTypeLivinPlace,dataPerimeter,dataStratum,TIPO_VIVIENDA,PERIMETRO,ESTRATO,BENEFICIARIO_CREDITO_VIVIENDA,CREDITO_VIVIENDA_VIGENTE,HABITANTES_VIVIENDA,dataServices} = this.state;
 
-        
         return <>
             <div className="card">
                 <div  className="card-header">Vivienda</div>
@@ -178,60 +203,48 @@ class LivingPlace extends Component{
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>Tipo de vivienda:</label>
+                            <label>Tipo de vivienda:<span className="text-danger">*</span></label>
                             <select value={TIPO_VIVIENDA} onChange={e => this.setState({TIPO_VIVIENDA:e.target.value})} ref={el => this.campo1 = el} className="form-select inputRequiredForm" name="typeLyving"  id="typeLyving" >
                                 <option value=""></option>
                                 {dataTypeLivinPlace}
                             </select>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>Per&iacute;metro:</label>
+                            <label>Per&iacute;metro:<span className="text-danger">*</span></label>
                             <select value={PERIMETRO} onChange={e => this.setState({PERIMETRO:e.target.value})} ref={el => this.campo2 = el} className="form-select inputRequiredForm" name="typePerimeter"  id="typePerimeter" >
                                 <option value=""></option>
                                 {dataPerimeter}
                             </select>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>Estrato:</label>
+                            <label>Estrato:<span className="text-danger">*</span></label>
                             <select value={ESTRATO} onChange={e => this.setState({ESTRATO:e.target.value})} ref={el => this.campo3 = el} className="form-select inputRequiredForm" name="typeStratum"  id="typeStratum" >
                                 <option value=""></option>
                                 {dataStratum}
                             </select>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4 ">
-                            <label>&#191;Es beneficiario de cr&eacute;dito de vivienda&#63;</label>
-                        <div className="input-group d-flex justify-content-around">
-                                <div className="row ">
-                                    <div className="col">
+                            <label>&#191;Es beneficiario de cr&eacute;dito de vivienda&#63;<span className="text-danger">*</span></label>
+                        <div className=" d-flex justify-content-around">
                                         <input type="radio" name="credit" value="S" checked={BENEFICIARIO_CREDITO_VIVIENDA === 'S'?true:false}  ref={el => this.campo4 = el} onChange={e => this.setState({BENEFICIARIO_CREDITO_VIVIENDA:e.target.value})} className="form-check btn-check inputRequiredFormRadio" id="radiocredit" autoComplete="off"></input>
-                                        <label className="btn btn-outline-primary" htmlFor="radiocredit">SI</label>
-                                    </div>
-                                    <div className="col">
+                                        <label className="btn btn-outline-primary" htmlFor="radiocredit">SI</label>&nbsp;
                                         <input type="radio" name="credit"  value="N" checked={BENEFICIARIO_CREDITO_VIVIENDA === 'N'?true:false}  ref={el => this.campo4 = el} onChange={e => this.setState({BENEFICIARIO_CREDITO_VIVIENDA:e.target.value})}  className="form-check btn-check inputRequiredFormRadio" id="radiocredit2" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="radiocredit2">No</label>
-                                    </div>
-                                </div> 
                             </div>                                      
                         </div>
 
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>&#191;Tienes alg&uacute; cr&eacute;dito de vivienda vigente&#63;</label>
-                            <div className="input-group d-flex justify-content-around ">
-                                <div className="row">
-                                    <div className="col">
+                            <label>&#191;Alg&uacute;n cr&eacute;dito de vivienda vigente&#63;<span className="text-danger">*</span></label>
+                            <div className=" d-flex justify-content-around ">
                                         <input type="radio" name="creditActual" checked={CREDITO_VIVIENDA_VIGENTE === 'S'?true:false}  value="S" ref={el => this.campo5 = el} onChange={e => this.setState({CREDITO_VIVIENDA_VIGENTE:e.target.value})} className="btn-check inputRequiredFormRadio" id="radiocreditActual" autoComplete="off"></input>
-                                        <label className="btn btn-outline-primary" htmlFor="radiocreditActual">SI</label>
-                                    </div>
-                                    <div className="col ">
+                                        <label className="btn btn-outline-primary" htmlFor="radiocreditActual">SI</label>&nbsp;
                                         <input type="radio" name="creditActual" checked={CREDITO_VIVIENDA_VIGENTE === 'N'?true:false}  value="N" ref={el => this.campo5 = el} onChange={e => this.setState({CREDITO_VIVIENDA_VIGENTE:e.target.value})} className="btn-check inputRequiredFormRadio" id="radiocreditActual2" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="radiocreditActual2">NO</label>
-                                    </div>
-                                </div>                                       
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>&#191;Cu&aacute;ntas personas habitan la vivienda&#63;</label>
-                            <input value={HABITANTES_VIVIENDA} onChange={e => this.setState({HABITANTES_VIVIENDA:e.target.value}) } type="text" className="form-control inputRequiredForm" ref={el => this.campo6 = el} id="peopleinHome" name="peopleinHome"></input>
+                            <label>&#191;Cu&aacute;ntas personas habitan la vivienda&#63;<span className="text-danger">*</span></label>
+                            <input value={HABITANTES_VIVIENDA} onChange={e => this.setState({HABITANTES_VIVIENDA:e.target.value}) } type="number" className="form-control inputRequiredForm" ref={el => this.campo6 = el} id="peopleinHome" name="peopleinHome"></input>
                         </div>
 
                         <div className="col-sm-12 col-md-4 pb-4">

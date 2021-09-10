@@ -67,6 +67,7 @@ export const useLogin = (formInitialState = {}) => {
                             localStorage.setItem('d_u', JSON.stringify({
                                 'nombres': getUserInfoResponse.Nombres,
                                 'apellidos': getUserInfoResponse.Apellidos,
+                                'direccion': getUserInfoResponse.dire,
                                 'cedula': getUserInfoResponse.Cedula,
                                 'genero': getUserInfoResponse.Genero,
                                 'mail': getUserInfoResponse.Mail,
