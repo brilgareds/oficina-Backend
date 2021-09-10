@@ -1,6 +1,6 @@
 import {Component} from 'react';
 import { baseUrl } from '../../config/config';
-import { postData,getData } from '../../components/general/General';
+import { postData,getData, validateInputSelect } from '../../components/general/General';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 
@@ -20,7 +20,8 @@ class Education extends Component{
             valDpto:'',
             dataModalidad:'',
             dataPrincipal:'',
-            tbody:''
+            tbody:'',
+            setHidden:'hidden'
         }
     }
 
@@ -68,7 +69,12 @@ class Education extends Component{
         const urlDpto = `${baseUrl}/v1/informacionBasica/consultaDepartamentos`;
         postData(urlDpto,datos).then(result =>{
             let option = result.map((value,x) => <option  key={x} value={value["cod_dpto"]}>{value["nom_mpio"]}</option>);
-            this.setState({dpto:option});             
+            this.setState({dpto:option}); 
+            this.selectDpto.removeAttribute('disabled')  
+            this.selectCity.value  = ''
+            this.setState({valCity:'',valDpto:''})
+            this.selectCity.setAttribute('disabled','disabled')
+
          });
     }
 
@@ -83,60 +89,64 @@ class Education extends Component{
         postData(url,datos).then(result => {
             let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
             this.setState({city:option});
+            this.selectCity.removeAttribute('disabled')
+
         })
 
     }  
 
     saveEducation = () =>{
 
-        console.log(this.filePdf.value );
-        const dataUser = JSON.parse( localStorage.getItem("d_u"));
-        const cedula = parseInt(dataUser['cedula'])
+        const validateData = validateInputSelect('educationRequerid')
+        if(validateData > 0){
+            Swal.fire({
+                title: '',
+                text: "Validar campos obligatorios",
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#2c7be5',
+                confirmButtonText: 'Cerrar'
+            })
+        }else{
+            const dataUser = JSON.parse( localStorage.getItem("d_u"));
+            const cedula = parseInt(dataUser['cedula'])
 
-        const datos = {
-                "MENU_CODIGO": 2,
-                "INFORMACION_BASICA_CODIGO": cedula,
-                "NIVEL_ESTUDIO": parseInt(this.campo1.value),
-                "TITULO": this.campo2.value,
-                "INSTITUCION": this.campo4.value,
-                "CIUDAD": parseInt(this.selectCity.value) ,
-                "ESTADO_ESTUDIO": this.campo3.value,
-                "FECHA_INICIO": this.campo5.value,
-                "FECHA_FINALIZACION": this.campo6.value,
-                "FECHA_GRADO_TENTATIVO": this.campo7.value,
-                "MODALIDAD_ESTUDIO": parseInt(this.campo8.value),
-                "PROMEDIO": this.campo9.value
-          }
-
-          const urlSave =  `${baseUrl}/v1/educacion/crearRegistro`;
-          postData(urlSave,datos).then(result => {
-            if(result.status === 'ok'){
-                console.log('se inserto ok');
-                Swal.fire({
-                    title: '',
-                    text: "Se registro con éxito",
-                    icon: 'success',
-                    showCancelButton: false,
-                    confirmButtonColor: '#2c7be5',
-                    confirmButtonText: 'Cerrar'
-                  })
-                this.loadDataPrincipal();
+            const datos = {
+                    "MENU_CODIGO": 2,
+                    "INFORMACION_BASICA_CODIGO": cedula,
+                    "NIVEL_ESTUDIO": parseInt(this.campo1.value),
+                    "TITULO": this.campo2.value,
+                    "INSTITUCION": this.campo4.value,
+                    "CIUDAD": parseInt(this.selectCity.value) ,
+                    "ESTADO_ESTUDIO": this.campo3.value,
+                    "FECHA_INICIO": this.campo5.value,
+                    "FECHA_FINALIZACION": this.campo6.value,
+                    "FECHA_GRADO_TENTATIVO": this.campo7.value,
+                    "MODALIDAD_ESTUDIO": parseInt(this.campo8.value),
+                    "PROMEDIO": this.campo9.value
             }
-          })
+
+            const urlSave =  `${baseUrl}/v1/educacion/crearRegistro`;
+            postData(urlSave,datos).then(result => {
+                if(result.ok){
+                    Swal.fire({
+                        title: '',
+                        text: "Se registro con éxito",
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#2c7be5',
+                        confirmButtonText: 'Cerrar'
+                    })
+                    this.loadDataPrincipal();
+                }
+            })
+        }
 
     }
 
     updateLoadPrincipal = (data,accion) =>{
 
-        this.campo1.value = ''
-        this.campo2.value = ''
-        this.campo3.value = ''
-        this.campo4.value = ''
-        this.campo5.value = ''
-        this.campo6.value = ''
-        this.campo7.value = ''
-        this.campo8.value = ''
-        this.campo9.value = ''
+        this.cleanInputs()
 
 
         if(accion === 1){
@@ -149,6 +159,20 @@ class Education extends Component{
             this.campo7.value = moment(data.FECHA_GRADO_TENTATIVO).format('yyyy-MM-DD')
             this.campo8.value = data.MODALIDAD_ESTUDIO
             this.campo9.value = data.PROMEDIO
+            this.selectCity.removeAttribute('disabled')
+            this.selectDpto.removeAttribute('disabled')
+            document.getElementById('saveButton').style = 'display:none';
+            this.setState({setHidden:''})
+
+            let container = document.querySelector(".inputHiddenEdit");
+            container.innerHTML = ''
+            let input = document.createElement("input");
+            input.setAttribute("type","hidden");
+            input.setAttribute("id","idDocument");
+            input.setAttribute("value",data.EDUCACION_CODIGO);
+            container.appendChild(input); 
+            
+
         }else if(accion === 2){
             Swal.fire({
                 title: '',
@@ -160,14 +184,25 @@ class Education extends Component{
                 confirmButtonText: 'Eliminar!'
               }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire({
-                        title: '',
-                        text: "Eliminado con éxito",
-                        icon: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
-                        confirmButtonText: 'Cerrar'
-                      })
+                    const datos = {EDUCACION_CODIGO:data.EDUCACION_CODIGO}
+
+                    const urlSave =  `${baseUrl}/v1/educacion/eliminarRegistro`;
+                    postData(urlSave,datos).then(result => {
+                        if(result.ok){
+                            Swal.fire({
+                                title: '',
+                                text: "Se elimino con éxito",
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#2c7be5',
+                                confirmButtonText: 'Cerrar'
+                            })
+                            this.loadDataPrincipal();
+                            document.getElementById('saveButton').style = 'display:block';
+                            this.setState({setHidden:'hidden'})
+                            document.querySelector(".inputHiddenEdit").innerHTML = '';
+                        }
+                    })
                 }
               })
 
@@ -178,15 +213,66 @@ class Education extends Component{
 
     }
 
+    updateData = () => {
+        const validateData = validateInputSelect('educationRequerid')
+        if(validateData > 0){
+            Swal.fire({
+                title: '',
+                text: "Validar campos obligatorios",
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#2c7be5',
+                confirmButtonText: 'Cerrar'
+            })
+        }else{
+            const datos = {
+                    "EDUCACION_CODIGO": document.getElementById('idDocument').value,
+                    "NIVEL_ESTUDIO": parseInt(this.campo1.value),
+                    "TITULO": this.campo2.value,
+                    "INSTITUCION": this.campo4.value,
+                    "CIUDAD": parseInt(this.selectCity.value) ,
+                    "ESTADO_ESTUDIO": parseInt(this.campo3.value),
+                    "FECHA_INICIO": this.campo5.value,
+                    "FECHA_FINALIZACION": this.campo6.value,
+                    "FECHA_GRADO_TENTATIVO": this.campo7.value,
+                    "MODALIDAD_ESTUDIO": parseInt(this.campo8.value),
+                    "PROMEDIO": this.campo9.value
+            }
+
+            const urlSave =  `${baseUrl}/v1/educacion/actualizarRegistro`;
+            postData(urlSave,datos).then(result => {
+
+                if(result.ok){
+                    document.getElementById('saveButton').style = 'display:block';
+                    this.setState({setHidden:'hidden'})
+                    document.querySelector(".inputHiddenEdit").innerHTML = '';
+        
+                    Swal.fire({
+                        title: '',
+                        text: "Se actualizó con éxito",
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#2c7be5',
+                        confirmButtonText: 'Cerrar'
+                    })
+                    this.loadDataPrincipal();
+                }
+            })
+        }
+
+
+    }
+
     loadDataPrincipal = () =>{
         const dataUser = JSON.parse( localStorage.getItem("d_u"));
         const cedula = parseInt(dataUser['cedula'])
         const data = {cedula : cedula}
         const urlSave =  `${baseUrl}/v1/educacion/consultarDatosEstudio`;
+        this.cleanInputs()
 
         postData(urlSave,data).then(result => {
         
-            if(result.length >= 1){
+            if(!result.error){
                 const tbodyData = result.map((value,x) =>{
                     return  <tr key={x} >
                                 <td className="text-nowrap">{value.TITULO}</td>
@@ -203,16 +289,57 @@ class Education extends Component{
                                 </td>
                             </tr>
                 })
-                this.setState({tbody:tbodyData})
+
+                let tabla = <table className="table table-hover table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">T&iacute;tulo obtenido</th>
+                                    <th scope="col">Instituci&oacute;n</th>
+                                    <th scope="col">Nivel</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Fecha de inicio y finalizaci&oacute;n</th>
+                                    <th className="text-center" >Certificado</th>
+                                    <th className="text-center" scope="col">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {tbodyData}
+                                </tbody>
+    
+                            </table>
+                this.setState({tbody:tabla})
+            }else{
+                this.setState({tbody:result.error})
             }
 
         })
+        
+    }
+
+    cleanInputs = () => {
+        this.campo1.value = ''
+        this.campo2.value = ''
+        this.campo3.value = ''
+        this.campo4.value = ''
+        this.campo5.value = ''
+        this.campo6.value = ''
+        this.campo7.value = ''
+        this.campo8.value = ''
+        this.campo9.value = ''
+        this.setState({valCity:'',valDpto:''})
+
+        this.selectCity.selectedIndex = ''
+        this.selectCity.setAttribute('disabled','disabled')
+        this.selectDpto.selectedIndex = ''
+        this.selectDpto.setAttribute('disabled','disabled')
+        this.selectCountry.selectedIndex  = ''
     }
 
 
 
+
 render(){  
-    const {dataStudy,dataStateStudy,valDpto,dpto,valCity,city,dataCountry,dataModalidad,tbody} = this.state;
+    const {dataStudy,dataStateStudy,valDpto,dpto,valCity,city,dataCountry,dataModalidad,tbody,setHidden} = this.state;
 
 
   return  <>
@@ -226,50 +353,46 @@ render(){
                         <div className="tab-pane fade show active" id="educativos" role="tabpanel" aria-labelledby="educativos-tab">
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="">Nivel de estudio:</label>
-                                    <select ref={input => this.campo1 = input} className="form-select" id="edu-study" name="edu-study">
+                                    <label htmlFor="">Nivel de estudio:<span className="text-danger">*</span></label>
+                                    <select ref={input => this.campo1 = input} className="form-select educationRequerid" id="edu-study" name="edu-study">
                                         <option value=""></option>
                                         {dataStudy}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">T&iacute;tulo otorgado:</label>
-                                    <input ref={input => this.campo2 = input}  type="text" className="form-control" id="edu-title" name="edu-title"></input>
+                                    <label htmlFor="gene-numdocu">T&iacute;tulo otorgado:<span className="text-danger">*</span></label>
+                                    <input ref={input => this.campo2 = input}  type="text" className="form-control educationRequerid" id="edu-title" name="edu-title"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="">Estado:</label>
-                                    <select  ref={input => this.campo3 = input}  className="form-select" id="edu-state" name="edu-state">
+                                    <label htmlFor="">Estado:<span className="text-danger">*</span></label>
+                                    <select  ref={input => this.campo3 = input}  className="form-select educationRequerid" id="edu-state" name="edu-state">
                                         <option value=""></option>
                                         {dataStateStudy}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Instituci&oacute;n:</label>
-                                    <input type="text" ref={input => this.campo4 = input}  className="form-control" id="edu-institute" name="edu-institute"></input>
+                                    <label htmlFor="gene-numdocu">Instituci&oacute;n:<span className="text-danger">*</span></label>
+                                    <input type="text" ref={input => this.campo4 = input}  className="form-control educationRequerid" id="edu-institute" name="edu-institute"></input>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="country">Pa&iacute;s:</label>
-                                    <select  ref={inputElement  => this.selectCountry = inputElement} name="country" id="country" className="form-select" onChange={() => this.loadDpto()  } >
+                                    <label htmlFor="country">Pa&iacute;s:<span className="text-danger">*</span></label>
+                                    <select  ref={inputElement  => this.selectCountry = inputElement} name="country" id="country" className="form-select educationRequerid" onChange={() => this.loadDpto()  } >
                                         <option value=""></option>
                                         {dataCountry}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="resi-dpto">Departamento:</label>
-                                    {/* <select defaultValue={valDpto} value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select" onChange={() => this.validateDpto()}>
-                                        <option value=""></option>
-                                        {dpto}
-                                    </select> */}
-                                    <select value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select" onChange={() => this.validateDpto()}>
+                                    <label htmlFor="resi-dpto">Departamento:<span className="text-danger">*</span></label>
+                                    <select value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select educationRequerid" onChange={() => this.validateDpto()}>
                                         <option value=""></option>
                                         {dpto}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="resi-city">Ciudad:</label>
-                                    <select value={valCity} ref={input => this.selectCity = input} onChange={() => this.validateCity()} name="resi-city" id="resi-city" className="form-select">
+                                    <label htmlFor="resi-city">Ciudad:<span className="text-danger">*</span></label>
+                                    <select value={valCity} ref={input => this.selectCity = input} onChange={() => this.validateCity()} name="resi-city" id="resi-city" className="form-select educationRequerid">
                                         <option value=""></option>
                                         {city}
                                     </select>
@@ -278,27 +401,27 @@ render(){
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Fecha de inicio:</label>
-                                    <input ref={input => this.campo5 = input}  type="date" className="form-control datefli" id="edu-dateini"  name="edu-dateini"></input>
+                                    <label htmlFor="gene-numdocu">Fecha de inicio:<span className="text-danger">*</span></label>
+                                    <input ref={input => this.campo5 = input}  type="date" className="form-control datefli educationRequerid" id="edu-dateini"  name="edu-dateini"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Fecha de finalizaci&oacute;n:</label>
-                                    <input type="date" ref={input => this.campo6 = input}  className="form-control datefli" id="edu-datefin" name="edu-datefin"></input>
+                                    <label htmlFor="gene-numdocu">Fecha de finalizaci&oacute;n:<span className="text-danger">*</span></label>
+                                    <input type="date" ref={input => this.campo6 = input}  className="form-control datefli educationRequerid" id="edu-datefin" name="edu-datefin"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Fecha de grado:</label>
-                                    <input type="date" ref={input => this.campo7 = input}  className="form-control datefli" id="edu-grade" name="edu-grade"></input>
+                                    <label htmlFor="gene-numdocu">Fecha de grado:<span className="text-danger">*</span></label>
+                                    <input type="date" ref={input => this.campo7 = input}  className="form-control datefli educationRequerid" id="edu-grade" name="edu-grade"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="">Modalidad de estudio:</label>
-                                    <select className="form-select" ref={input => this.campo8 = input}  id="edu-modal" name="edu-modal">
+                                    <label htmlFor="">Modalidad de estudio:<span className="text-danger">*</span></label>
+                                    <select className="form-select educationRequerid" ref={input => this.campo8 = input}  id="edu-modal" name="edu-modal">
                                         <option value=""></option>
                                         {dataModalidad}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Promedio:</label>
-                                    <input type="text" className="form-control" ref={input => this.campo9 = input}  id="edu-average" name="edu-average"></input>
+                                    <label htmlFor="gene-numdocu">Promedio:<span className="text-danger">*</span></label>
+                                    <input type="text" className="form-control educationRequerid" ref={input => this.campo9 = input}  id="edu-average" name="edu-average"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="gene-numdocu">Certificado de estudio (PDF):</label>
@@ -312,29 +435,16 @@ render(){
                             <div className="row pb-4">
                                 <p></p>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.saveEducation()} className="btn btn-primary">Guardar</button>
+                                    <button onClick={() => this.saveEducation()} id="saveButton" className="btn btn-primary saveButton">Guardar</button>
+                                    <button hidden={setHidden} onClick={() => this.updateData()} id="upButton" className="btn btn-primary upButton">Actualizar</button>
+                                    <div className="inputHiddenEdit"></div>
                                 </div>
                             </div>
                             <p></p>
                             <div className="">
                                 <div className="">
-                                <div className="table-responsive scrollbar">
-                                        <table className="table table-hover table-striped table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">T&iacute;tulo obtenido</th>
-                                                <th scope="col">Instituci&oacute;n</th>
-                                                <th scope="col">Nivel</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Fecha de inicio y finalizaci&oacute;n</th>
-                                                <th className="text-center" >Certificado</th>
-                                                <th className="text-center" scope="col">Acciones</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                {tbody}
-                                            </tbody>
-                                        </table>
+                                    <div className="table-responsive scrollbar">
+                                        {tbody}
                                     </div>
                                 </div>
                             </div>

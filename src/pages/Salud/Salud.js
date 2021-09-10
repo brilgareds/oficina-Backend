@@ -1,7 +1,9 @@
-import {Component} from 'react';
-import { getData, simulateClick } from '../../components/general/General';
+import {Component,Fragment} from 'react';
+import { getData, postData, simulateClick, validateInputSelect, validateRadioButtons } from '../../components/general/General';
 import fotoW from '../../assets/img/cv/reporte-embarazo.jpg';
 import { baseUrl } from '../../config/config';
+import Swal from 'sweetalert2';
+import moment from 'moment';
 
 class Salud extends Component{
     constructor(props){
@@ -11,21 +13,26 @@ class Salud extends Component{
             dataGroupBlood:'',
             dataFactor:'',
             dataEtnia:'',
-            dataPlanSalud:''
+            dataPlanSalud:'',
+            estadonav:'disabled',
+            sexo:''
         }
     }
 
     componentDidMount(){
         document.getElementById('root').className = 'cv';
 
+
+
         // consultar grupo sanquineo
         const urlGroup = `${baseUrl}/v1/salud/buscarDatosGrupoSanguineo`;
         getData(urlGroup).then(result =>{
             let option = result.map((value,x) =>{
-            return  <>
-                        <input type="radio" className="btn-check" name="gruposanguineo" value={value.TIP_NOMBRE} id={`#btn-check${x}`} autoCompleteomplete="off"></input>
+            let required = x === 0 ? 'btn-check inputRequired':'btn-check'
+            return  <Fragment key={x}>
+                        <input type="radio" className={required}    name="gruposanguineo" value={value.TIP_NOMBRE} id={`#btn-check${x}`} autoComplete="off"></input>
                         <label className="btn btn-outline-primary" htmlFor={`#btn-check${x}`}>{value.TIP_NOMBRE}</label>&nbsp;
-                        </>
+                        </Fragment>
             });
             this.setState({dataGroupBlood:option});             
         });
@@ -34,10 +41,11 @@ class Salud extends Component{
         const urlFactor = `${baseUrl}/v1/salud/buscarDatosFactor`;
         getData(urlFactor).then(result =>{
             let option = result.map((value,x) =>{
-            return  <>
-                        <input type="radio" class="btn-check" name="datosfactor" value={value.TIP_NOMBRE} id={`#btn-checkfactor${x}`} autocomplete="off"></input>
-                        <label class="btn btn-outline-primary" htmlFor={`#btn-checkfactor${x}`}>{value.TIP_NOMBRE}</label>&nbsp;
-                        </>
+            let required = x === 0 ? 'btn-check inputRequired':'btn-check'
+            return  <Fragment key={x}>
+                        <input type="radio" className={required} name="datosfactor" value={value.TIP_NOMBRE} id={`#btn-checkfactor${x}`} autoComplete="off"></input>
+                        <label className="btn btn-outline-primary" htmlFor={`#btn-checkfactor${x}`}>{value.TIP_NOMBRE}</label>&nbsp;
+                        </Fragment>
             });
             this.setState({dataFactor:option});             
         });
@@ -52,25 +60,388 @@ class Salud extends Component{
         // consultar plan salud
         const urlPlan = `${baseUrl}/v1/salud/buscarDatosPlanSalud`;
         getData(urlPlan).then(result =>{
-                let option = result.map((value,x) => <option  key={x} value={value["TIP_NOMBRE"]}>{value["TIP_NOMBRE"]}</option>);
+                let option = result.map((value,x) => <option  key={x} value={value["TIP_ATRIBUTO1"]}>{value["TIP_NOMBRE"]}</option>);
                 this.setState({dataPlanSalud:option});                    
         });
+
+        this.loadDataPrincipal();
 
     }   
 
     seePregnancyTab = (response) =>{
         if(response){
+            this.setState({estadonav:''})
+            simulateClick('pregnancy-tab',0,'click')
+            setTimeout(() => {
+                this.setState({estadonav:'disabled'})
+            }, 500);
+            this.putInputRequerid('input[name=haveDangerPregnancyF]','','add','haveDangerPregnancyF')
+            this.putInputRequerid(`#${this.dateexam.id}`,'','add',this.dateexam.id)
+            this.putInputRequerid(`#${this.tiempogesta.id}`,'','add',this.tiempogesta.id)
+            this.putInputRequerid(`#${this.dateprobably.id}`,'','add',this.dateprobably.id)
             this.setState({seePregnancy:''})
             simulateClick('pregnancy-tab',0,'click');
         }else{
+            this.setState({estadonav:''})
             this.setState({seePregnancy:'hidden'})
+            this.putInputRequerid('input[name=haveDangerPregnancyF]','','remove','haveDangerPregnancyF')
+            this.putInputRequerid(`#${this.dateexam.id}`,'','remove',this.dateexam.id)
+            this.putInputRequerid(`#${this.tiempogesta.id}`,'','remove',this.tiempogesta.id)
+            this.putInputRequerid(`#${this.dateprobably.id}`,'','remove',this.dateprobably.id)
             simulateClick('characteristic-tab',0,'click');
+            setTimeout(() => {
+                this.setState({estadonav:'disabled'})
+            }, 500);
         }
+    }
+
+    saveDataPrincipal = () =>{
+
+        if(validateInputSelect('inputRequired') > 0 || validateRadioButtons('gruposanguineo') === 0 || validateRadioButtons('datosfactor') === 0){
+            this.validateInputTabs()
+        }else{
+            const dataUser = JSON.parse( localStorage.getItem("d_u"));
+            const cedula = parseInt(dataUser['cedula'])
+            const empresa = parseInt(dataUser['empresa'])        
+            const datos = {
+                "EMPRESA": empresa,
+                "NRO_DOCUMENTO": cedula,
+                "GRUPO_SANGUINEO": document.querySelector('input[name=gruposanguineo]:checked')? document.querySelector('input[name=gruposanguineo]:checked').value.trim():'',
+                "FACTOR": document.querySelector('input[name=datosfactor]:checked')? document.querySelector('input[name=datosfactor]:checked').value.trim():'',
+                "ESTATURA": this.estatura.value.toString().trim(),
+                "PESO": this.peso.value.toString().trim(),
+                "RAZA": this.raza.value.trim(),
+                "FUMADOR": document.querySelector('input[name=smoke]:checked')? document.querySelector('input[name=smoke]:checked').value.trim():'',
+                "BEBEDOR": document.querySelector('input[name=licor]:checked')? document.querySelector('input[name=licor]:checked').value.trim():'',
+                "ANTEOJOS": document.querySelector('input[name=anteojosF]:checked')? document.querySelector('input[name=anteojosF]:checked').value.trim():'',
+                "ENFERMEDADES": this.sicks.value.trim(),
+                "RESTRICCIONES_MEDICAS": this.restri.value.trim(),
+                "FRECUENCIA_ASISTENCIA_MEDICA": this.fredocotr.value.trim(),
+                "SUFRE_ALERGIAS": document.querySelector('input[name=typeAlergyF]:checked')? document.querySelector('input[name=typeAlergyF]:checked').value:'',
+                "ALERGIAS": this.alergias.value.trim(),
+                "CONTACTO_EMERGENCIA":this.contact.value.trim(),
+                "NUMERO_CONTACTO_EMERGENCIA": this.numbercontact.value.trim(),
+                "ENFERMEDAD_LABORAL": document.querySelector('input[name=sickCalificateF]:checked')? document.querySelector('input[name=sickCalificateF]:checked').value:'',
+                "PERDIDA_CAPACIDAD_SALUD": this.percent.value?parseInt(this.percent.value):null,
+                "PLAN_SALUD_NO_EPS": document.querySelector('input[name=planSalud]:checked')? document.querySelector('input[name=planSalud]:checked').value:'',
+                "PLAN_SALUD": this.planhave.value,
+                "PLAN_SALUD_OTROS":this.planhaveother.value,
+                "ENTIDAD_OTROS": this.entity.value,
+                "EMBARAZO_ALTO_RIESGO": document.querySelector('input[name=haveDangerPregnancyF]:checked')? parseInt(document.querySelector('input[name=haveDangerPregnancyF]:checked').value):null,
+                "FECHA_EXAMEN_EMBARAZO": this.dateexam.value,
+                "TIEMPO_GESTACION": this.tiempogesta.value?parseInt(this.tiempogesta.value):null,
+                "FECHA_PARTO": this.dateprobably.value,
+                "OBSERVACION": this.observa.value.trim()
+              }
+    
+                const urlSave =  `${baseUrl}/v1/salud/crearRegistroSalud`;
+                postData(urlSave,datos).then(result => {
+                    console.log(result);
+                if(result.ok){
+                    Swal.fire({
+                        title: '',
+                        text: "Se registro con éxito",
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#2c7be5',
+                        confirmButtonText: 'Cerrar'
+                    })
+                    this.loadDataPrincipal();
+                }
+            })
+        }
+    }
+
+    loadDataPrincipal = () => {
+        const dataUser = JSON.parse( localStorage.getItem("d_u"));
+        const cedula = parseInt(dataUser['cedula'])
+        const empresa = parseInt(dataUser['empresa']) 
+        this.setState({sexo:dataUser.genero})
+
+        const datos = {
+            "cedula": cedula,
+            "empresa": empresa
+          }
+
+        const urlSave =  `${baseUrl}/v1/salud/buscarDatos`;
+        postData(urlSave,datos).then(result => {
+            result.forEach(element => {
+
+                this.estatura.value = element.ESTATURA?element.ESTATURA.trim():''
+                this.peso.value = element.PESO?element.PESO.trim():''
+                this.raza.value = element.RAZA?element.RAZA.trim():''
+                this.sicks.value = element.ENFERMEDADES?element.ENFERMEDADES.trim():''
+                this.restri.value = element.RESTRICCIONES_MEDICAS?element.RESTRICCIONES_MEDICAS.trim():''
+                this.fredocotr.value = element.FRECUENCIA_ASISTENCIA_MEDICA?element.FRECUENCIA_ASISTENCIA_MEDICA.trim():''
+                this.alergias.value = element.ALERGIAS?element.ALERGIAS.trim():''
+                this.contact.value = element.CONTACTO_EMERGENCIA?element.CONTACTO_EMERGENCIA.trim():''
+                this.numbercontact.value = element.NUMERO_CONTACTO_EMERGENCIA?element.NUMERO_CONTACTO_EMERGENCIA.trim():''
+                this.percent.value = element.PERDIDA_CAPACIDAD_SALUD? parseInt(element.PERDIDA_CAPACIDAD_SALUD):''
+                this.planhave.value = element.PLAN_SALUD?element.PLAN_SALUD.trim():''
+                this.planhaveother.value = element.PLAN_SALUD_OTROS?element.PLAN_SALUD_OTROS.trim():''
+                this.entity.value = element.ENTIDAD_OTROS?element.ENTIDAD_OTROS.trim():''
+                
+                this.dateexam.value = moment(element.FECHA_EXAMEN_EMBARAZO).format('yyyy-MM-DD') 
+                this.tiempogesta.value = element.TIEMPO_GESTACION
+                this.dateprobably.value = moment(element.FECHA_PARTO).format('yyyy-MM-DD') 
+                this.observa.value = element.OBSERVACION
+                if(element.EMBARAZO_ALTO_RIESGO != null){
+                    element.EMBARAZO_ALTO_RIESGO === 1 ?document.getElementById('radiohaveDangerPregnancy').checked = true:document.getElementById('radiohaveDangerPregnancy2').checked = true
+                }
+
+                if(element.SUFRE_ALERGIAS != null){
+                    element.SUFRE_ALERGIAS === 'S' ?document.getElementById('radiotypeAlergy').checked = true:document.getElementById('radiotypeAlergy2').checked = true
+                    this.alergias.removeAttribute('readOnly')
+                }
+                if(element.ANTEOJOS != null){
+                    element.ANTEOJOS === 'S' ?document.getElementById('radioanteojos').checked = true:document.getElementById('radioanteojos2').checked = true
+                }
+                if(element.ENFERMEDAD_LABORAL != null){
+                    element.ENFERMEDAD_LABORAL === 'S' ?document.getElementById('radiosickCalificate').checked = true:document.getElementById('radiosickCalificate2').checked = true
+                    this.percent.removeAttribute('readOnly')
+                }
+                if(element.BEBEDOR != null){
+                    element.BEBEDOR === 'S' ?document.getElementById('radioLicor').checked = true:document.getElementById('radioLicor2').checked = true
+                }
+                if(element.FUMADOR != null){
+                    element.FUMADOR === 'S' ?document.getElementById('radiosmoke').checked = true:document.getElementById('radiosmoke2').checked = true
+                }
+
+                if(element.PLAN_SALUD_NO_EPS != null){
+                    if(element.PLAN_SALUD_NO_EPS === 'S') {
+                        document.getElementById('radioPlansalud').checked = true
+                        this.planhave.removeAttribute('disabled')
+
+                        if(element.PLAN_SALUD_OTROS != null){
+                            this.planhaveother.value = element.PLAN_SALUD_OTROS
+                            this.planhaveother.removeAttribute('readOnly')
+                        }
+
+                        this.entity.removeAttribute('readOnly')
+                    }else{
+                        document.getElementById('radioPlansalud2').checked = true
+                    }
+                }
+                if(element.FACTOR != null){
+                    const grup = element.FACTOR.trim()
+                    document.getElementsByName('datosfactor').forEach(element => {
+                        if(element.value.trim() === grup){
+                            element.setAttribute('checked','checked')
+                        }
+                    });
+                }
+                if(element.GRUPO_SANGUINEO != null){
+                    const grup = element.GRUPO_SANGUINEO.trim()
+                    document.getElementsByName('gruposanguineo').forEach(element => {
+                        if(element.value === grup){
+                            element.setAttribute('checked','checked')
+                        }
+                    });
+                }
+            });
+  
+        })
+
+    }
+
+    putInputRequerid = (identificador,tipo,accion,label) =>{
+       const campo =  document.querySelector(identificador)
+       const labelCampo = document.querySelector(`label[for=${label}]`)
+       console.log(labelCampo);
+       console.log(campo.type)
+       console.log(tipo)
+       console.log(identificador)
+       switch (campo.type) {
+                case 'text':
+                    if(accion === 'add'){
+                        campo.classList.add('inputRequired')
+                        // labelCampo.classList.add('text-danger')
+                        campo.removeAttribute('readOnly')
+                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                    }else  if(accion === 'remove'){
+                        campo.classList.remove('inputRequired')
+                        campo.setAttribute('readOnly','readOnly')
+                        campo.value= ''
+                        if(labelCampo.getElementsByTagName('span').length){
+                            labelCampo.getElementsByTagName('span')[0].remove()
+                            // labelCampo.classList.remove('text-danger')
+
+                        }
+                    }
+               break;
+
+                case 'number':
+                    if(accion === 'add'){
+                        campo.classList.add('inputRequired')
+                        // labelCampo.classList.add('text-danger')
+                        campo.removeAttribute('readOnly')
+                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                    }else  if(accion === 'remove'){
+                        campo.classList.remove('inputRequired')
+                        campo.setAttribute('readOnly','readOnly')
+                        campo.value= ''
+                        if(labelCampo.getElementsByTagName('span').length){
+                            labelCampo.getElementsByTagName('span')[0].remove()
+                            // labelCampo.classList.remove('text-danger')
+
+                        }
+                    }
+               break;
+
+                case 'select-one':
+                if(accion === 'add'){
+                    campo.classList.add('inputRequired')
+                    // labelCampo.classList.add('text-danger')
+                    campo.removeAttribute('disabled')
+                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                }else  if(accion === 'remove'){
+                    campo.classList.remove('inputRequired')
+                    campo.setAttribute('disabled','disabled')
+                    campo.value= ''
+                    if(labelCampo.getElementsByTagName('span').length){
+                        labelCampo.getElementsByTagName('span')[0].remove()
+                        // labelCampo.classList.remove('text-danger')
+
+                    }
+                }
+
+               break;
+
+                case 'radio':
+                if(accion === 'add'){
+                    campo.classList.add('inputRequired')
+                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                }else  if(accion === 'remove'){
+                    campo.classList.remove('inputRequired')
+                    campo.value= ''
+                    if(labelCampo.getElementsByTagName('span').length){
+                        labelCampo.getElementsByTagName('span')[0].remove()
+                    }
+                }
+
+                break;
+
+                case 'date':
+                    if(accion === 'add'){
+                        campo.classList.add('inputRequired')
+                        // labelCampo.classList.add('text-danger')
+                        campo.removeAttribute('readOnly')
+                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                    }else  if(accion === 'remove'){
+                        campo.classList.remove('inputRequired')
+                        campo.setAttribute('readOnly','readOnly')
+                        campo.value= ''
+                        if(labelCampo.getElementsByTagName('span').length){
+                            labelCampo.getElementsByTagName('span')[0].remove()
+                            // labelCampo.classList.remove('text-danger')
+
+                        }
+                    }
+               break;
+       
+           default:
+               break;
+       }
+       
+    }
+
+    validateInputTabs = (tabidentificador) =>{
+
+
+        let labelValidate = ''
+
+        document.querySelectorAll('.active .inputRequired').forEach(element =>{
+            const type = element.type
+            const val = element.value.trim()
+            const id = element.id
+            let label =''
+            const name = element.name
+
+
+            if(type === 'radio'){
+                label = document.querySelector(`label[for=${name}]`)
+            }else{
+                label = document.querySelector(`label[for=${id}]`)
+            }
+
+            switch (type) {
+                case 'text':
+                    if(val === ''){
+                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
+                    }
+                break;
+                case 'number':
+                    if(!val){
+                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
+                    }
+                break;
+                case 'select-one':
+
+                    if(val === '' ){
+                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
+                    }
+
+                break;
+                case 'select-multiple':
+                
+                break;
+
+                case 'radio':
+                  const vali =  document.querySelector(`input[name=${name}]:checked`)? document.querySelector(`input[name=${name}]:checked`).value.trim():''
+                  if(vali === ''){
+                    labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
+                  }
+                break;
+                case 'date':
+                    if(val === ''){
+                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
+                    }
+                break;
+            
+                default:
+                    break;
+            }
+        })
+
+        if(labelValidate){
+            let list = `<ul class="list-group list-group-flush">
+                            ${labelValidate}
+                        </ul>`
+                Swal.fire({
+                    title: "Validar las siguientes preguntas",
+                    html: list,
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#2c7be5',
+                    confirmButtonText: 'Cerrar'
+                });
+               
+        }else{
+            this.setState({estadonav:''})
+        //    document.getElementById(tabidentificador).removeAttribute('disabled')
+           simulateClick(tabidentificador,0,'click')
+        //    document.getElementById(tabidentificador).setAttribute('disabled','')
+            setTimeout(() => {
+                this.setState({estadonav:'disabled'})
+            }, 500);
+
+
+        }
+
+    
+    }
+
+    vaidateBack =(tabidentificador) =>{
+        this.setState({estadonav:''})
+        simulateClick(tabidentificador,0,'click')
+        setTimeout(() => {
+            this.setState({estadonav:'disabled'})
+        }, 500);
     }
 
     render(){
 
-        const {seePregnancy,dataGroupBlood,dataFactor,dataEtnia,dataPlanSalud} = this.state;
+        const {seePregnancy,dataGroupBlood,dataFactor,dataEtnia,dataPlanSalud,estadonav,sexo} = this.state;
 
         return<>
         
@@ -82,19 +453,19 @@ class Salud extends Component{
                     <img hidden={seePregnancy}  src={fotoW} alt="" />
                     <div className="card-body">
                         <ul className="nav nav-pills" id="myTab" role="tablist">
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link active" id="sick-tab" data-bs-toggle="tab" data-bs-target="#sick" type="button" role="tab" aria-controls="sick" aria-selected="true">Diagn&oacute;stico de enfermedades</button>
+                            <li  className="nav-item" role="presentation">
+                                <button disabled={estadonav}   className="nav-link active " id="sick-tab" data-bs-toggle="tab" data-bs-target="#sick" type="button" role="tab" aria-controls="sick" aria-selected="true">Diagn&oacute;stico de enfermedades</button>
                             </li>
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link " id="complementary-tab" data-bs-toggle="tab" data-bs-target="#complementary" type="button" role="tab" aria-controls="complementary" aria-selected="true">Salud complementaria</button>
+                            <li   className="nav-item" role="presentation">
+                                <button  disabled={estadonav} className="nav-link " id="complementary-tab" data-bs-toggle="tab" data-bs-target="#complementary" type="button" role="tab" aria-controls="complementary" aria-selected="true">Salud complementaria</button>
                             </li>
                            
-                            <li hidden={seePregnancy} className="nav-item " role="presentation">
-                                <button className="nav-link " id="pregnancy-tab" data-bs-toggle="tab" data-bs-target="#pregnancy" type="button" role="tab" aria-controls="pregnancy" aria-selected="true">Reporte de embarazo</button>
+                            <li  hidden={seePregnancy} className="nav-item " role="presentation">
+                                <button disabled={estadonav} className="nav-link " id="pregnancy-tab" data-bs-toggle="tab" data-bs-target="#pregnancy" type="button" role="tab" aria-controls="pregnancy" aria-selected="true">Reporte de embarazo</button>
                             </li>
                             
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link " id="characteristic-tab" data-bs-toggle="tab" data-bs-target="#characteristic" type="button" role="tab" aria-controls="characteristic" aria-selected="true">Caracter&iacute;sticas f&iacute;sicas y h&aacute;s</button>
+                            <li readOnly className="nav-item" role="presentation">
+                                <button disabled={estadonav} className="nav-link readONly" id="characteristic-tab" data-bs-toggle="tab" data-bs-target="#characteristic" type="button" role="tab" aria-controls="characteristic" aria-selected="true">Caracter&iacute;sticas f&iacute;sicas y m&aacute;s</button>
                             </li>
                         </ul>
 
@@ -103,88 +474,79 @@ class Salud extends Component{
                             <div className="tab-pane fade show active" id="sick" role="tabpanel" aria-labelledby="sick-tab">
                                 <div className="row">
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                    <label>&#191;Padece alguna enfermedad&#63; &#191;Cu&aacute;l&#63;</label>
-                                            <input type="text" className="form-control" id="diag-padece" name="diag-padece"></input>
+                                    <label htmlFor="diag-padece">&#191;Padece alguna enfermedad&#63; &#191;Cu&aacute;l&#63;<span className="text-danger">*</span></label>
+                                            <input ref={inp => this.sicks = inp}  type="text" className="form-control inputRequired" id="diag-padece" name="diag-padece"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Escriba sus restricciones m&eacute;dicas</label>
-                                        <input type="text" className="form-control" id="diag-restriccion" name="diag-restriccion"></input>
+                                        <input ref={inp => this.restri = inp} type="text" className="form-control" id="diag-restriccion" name="diag-restriccion"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >&#191;Con qu&eacute; frecuencia asiste al m&eacute;dico&#63;</label>
-                                        <input type="text" className="form-control" id="diag-frecuency" name="diag-frecuency"></input>
+                                        <input ref={inp => this.fredocotr = inp} type="text" className="form-control" id="diag-frecuency" name="diag-frecuency"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Sufre alg&uacute;n tipo de alergia&#63;</label>
-                                        <div className="input-group d-flex justify-content-around d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" onChange={() => document.getElementById("diag-allergy").removeAttribute('readOnly')  }  name="typeAlergyF" className="btn-check" id="radiotypeAlergy" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radiotypeAlergy">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" onChange={() => {
-                                                                                    const input =  document.getElementById("diag-allergy")
-                                                                                    input.setAttribute('readOnly','readOnly')
-                                                                                    input.value= ''
-                                                                                }}
-                                                         name="typeAlergyF" className="btn-check" id="radiotypeAlergy2" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radiotypeAlergy2">No</label>
-                                                </div>
-                                            </div>                                       
+                                        <label htmlFor="radiotypeAlergy">&#191;Sufre alg&uacute;n tipo de alergia&#63;</label>
+                                        <div className=" d-flex justify-content-around ">
+ 
+                                            <input type="radio" value="S" onChange={() => {
+                                                this.putInputRequerid('#diag-allergy','textselectdate','add','diag-allergy')
+                                            
+                                            }}  name="typeAlergyF" className="btn-check" id="radiotypeAlergy" autoComplete="off"></input>
+                                            <label className="btn btn-outline-primary" htmlFor="radiotypeAlergy">SI</label>&nbsp;
+                                            <input type="radio" value="N" onChange={() => {
+                                                                            this.putInputRequerid('#diag-allergy','textselectdate','remove','diag-allergy')
+                                                                        }}
+                                                    name="typeAlergyF" className="btn-check" id="radiotypeAlergy2" autoComplete="off"></input>
+                                            <label className="btn btn-outline-primary" htmlFor="radiotypeAlergy2">No</label>
+                                           
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >&#191;Qu&eacute; alergia tiene&#63;</label>
-                                        <input readOnly type="text" className="form-control" id="diag-allergy" name="diag-allergy"></input>
+                                        <label htmlFor="diag-allergy" >&#191;Qu&eacute; alergia tiene&#63;</label>
+                                        <input ref={inp => this.alergias = inp}  readOnly type="text" className="form-control" id="diag-allergy" name="diag-allergy"></input>
                                     </div>
 
                                     </div>
-                                    <div className="row">
+                                <div className="row">
 
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label>&#191;Tiene una enfermedad laboral calificada&#63;</label>
-                                        <div className="input-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" onChange={() => document.getElementById("diag-percent").removeAttribute('readOnly')  }  name="sickCalificateF" className="btn-check" id="radiosickCalificate" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radiosickCalificate">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" onChange={() => {
-                                                                                    const input =  document.getElementById("diag-percent")
-                                                                                    input.setAttribute('readOnly','readOnly')
-                                                                                    input.value = ''
-                                                                                }} name="sickCalificateF" className="btn-check" id="radiosickCalificate2" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radiosickCalificate2">NO</label>
-                                                </div>
-                                            </div>                                       
+                                        <div className=" d-flex justify-content-around">
+                                          
+                                            <input type="radio" value="S" onChange={() => this.putInputRequerid('#diag-percent','textselectdate','add','diag-percent') }  name="sickCalificateF" className="btn-check" id="radiosickCalificate" autoComplete="off"></input>
+                                            <label className="btn btn-outline-primary" htmlFor="radiosickCalificate">SI</label>&nbsp;
+                                            <input type="radio" value="N" onChange={() => {
+                                                this.putInputRequerid('#diag-percent','textselectdate','remove','diag-percent')
+                                                                     
+                                                                        }} name="sickCalificateF" className="btn-check" id="radiosickCalificate2" autoComplete="off"></input>
+                                            <label className="btn btn-outline-primary" htmlFor="radiosickCalificate2">NO</label>
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >&#37; de p&eacute;rdida de capacidad  de salud</label>
-                                        <input readOnly type="number" className="form-control" id="diag-percent" name="diag-percent"></input>
+                                        <label htmlFor="diag-percent" >&#37; de p&eacute;rdida de capacidad  de salud</label>
+                                        <input  ref={inp => this.percent = inp} readOnly type="number" min="0" max="100" className="form-control" id="diag-percent" name="diag-percent"></input>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label>&#191;Usa anteojos&#63;</label>
-                                        <div className="input-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" name="anteojosF" className="btn-check" id="radioanteojos" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radioanteojos">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" name="anteojosF" className="btn-check" id="radioanteojos2" autoComplete="off"></input>
+                                        <div className=" d-flex justify-content-around">
+                                                    <input type="radio" name="anteojosF" value="S" className="btn-check" id="radioanteojos" autoComplete="off"></input>
+                                                    <label className="btn btn-outline-primary" htmlFor="radioanteojos">SI</label>&nbsp;
+                                                    <input type="radio" value="N" name="anteojosF" className="btn-check" id="radioanteojos2" autoComplete="off"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="radioanteojos2">NO</label>
-                                                </div>
-                                            </div>                                       
+
                                         </div>
                                     </div>                             
                                 </div>
-
+                                <div className="row pb-4 flex">
+                                    <div className="col d-flex flex-wrap justify-content-end">
+                                        <button   onClick={() => this.validateInputTabs('complementary-tab')     } className="btn btn-primary">Siguiente</button>
+                                        {/* <button   onClick={() => simulateClick('parent-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
+                                    </div>
+                                </div>
 
 
 
@@ -193,82 +555,56 @@ class Salud extends Component{
                                 <div className="row">
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label>&#191;Plan de salud diferente a la EPS&#63;</label>
-                                        <div className="nput-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" onChange={() => {
-                                                                            const entity = document.getElementById("diag-entity")
-                                                                            const other = document.getElementById("diag-other")
-                                                                            const input =  document.getElementById("comp-planHave")
-                                                                            input.removeAttribute('disabled')
-                                                                            entity.removeAttribute('readOnly') 
-                                                                            other.setAttribute('readOnly','readOnly')
-                                                                            entity.value= ''
-                                                                            other.value = ''
-                                                                            input.value= ''
-                                                                            // document.getElementById("diag-other")
+                                        <div className=" d-flex justify-content-around">
+                                                    <input value="S" type="radio" onChange={() => {
+                                                                        this.putInputRequerid('#diag-entity','textselectdate','add','diag-entity')
+                                                                        this.putInputRequerid('#comp-planHave','textselectdate','add','comp-planHave')
+
                                                                             }} name="planSalud" className="btn-check" id="radioPlansalud" autoComplete="off" />
-                                                    <label className="btn btn-outline-primary" htmlFor="radioPlansalud">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" name="planSalud" className="btn-check" id="radioPlansalud2" autoComplete="off" onChange={() => {
-                                                                                    const input =  document.getElementById("comp-planHave")
-                                                                                    const entity = document.getElementById("diag-entity")
-                                                                                    const other = document.getElementById("diag-other")
-                                                                                    entity.setAttribute('readOnly','readOnly')
-                                                                                    other.setAttribute('readOnly','readOnly')
-                                                                                    input.setAttribute('disabled','disabled')
-                                                                                    entity.value= ''
-                                                                                    other.value = ''                                                                                    
-                                                                                    input.value = ''
+                                                    <label className="btn btn-outline-primary" htmlFor="radioPlansalud">SI</label>&nbsp;
+                                                    <input value="N" type="radio" name="planSalud" className="btn-check" id="radioPlansalud2" autoComplete="off" onChange={() => {
+
+                                                                                    this.putInputRequerid('#diag-entity','textselectdate','remove','diag-entity')
+                                                                                    this.putInputRequerid('#comp-planHave','textselectdate','remove','comp-planHave')
+                                                                                    this.putInputRequerid('#diag-other','textselectdate','remove','diag-other')
                                                                                     
                                                                                 }} />
                                                     <label className="btn btn-outline-primary" htmlFor="radioPlansalud2">NO</label>
-                                                </div>
-                                            </div>                                       
                                         </div>
                                     </div>  
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >&#191;Cu&aacute;l plan tiene&#63;</label>
-                                        <select disabled className="form-select" name="comp-planHave"  id="comp-planHave" onChange={e => {
-                                                                                                                            const input = e.target.value
-                                                                                                                            const other = document.getElementById("diag-other")
-                                                                                                                            if(input === 'OTROS POLIZAS'){
-                                                                                                                                other.removeAttribute('readOnly')
-                                                                                                                            }else{
-                                                                                                                                other.setAttribute('readOnly','readOnly')
-                                                                                                                                other.value = ''
-                                                                                                                            }
-
-                                                                                                                                }} >
+                                        <label  htmlFor="comp-planHave">&#191;Cu&aacute;l plan tiene&#63;</label>
+                                        <select ref={inp =>this.planhave = inp} disabled className="form-select" name="comp-planHave"  id="comp-planHave" onChange={e => {
+                                                                                    const input = e.target.value
+                                                                                    if(input === 'O'){
+                                                                                        this.planhaveother.removeAttribute('readOnly')
+                                                                                        this.putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
+                                                                                    }else{
+                                                                                        this.putInputRequerid(`#${this.planhaveother.id}`,'','remove',this.planhaveother.id)
+                                                                                    }
+                                                                                        }} >
                                             <option value=""></option>
                                             {dataPlanSalud}
                                         </select>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Si respondio otro, indique &#191;Cu&aacute;l es &#63;</label>
-                                        <input readOnly type="text" className="form-control" id="diag-other" name="diag-other"></input>
+                                        <label htmlFor="diag-other">Si respondio otro, indique &#191;Cu&aacute;l es &#63;</label>
+                                        <input ref={inp => this.planhaveother = inp} readOnly type="text" className="form-control" id="diag-other" name="diag-other"></input>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >&#191;Con qu&eacute; entidad lo tiene&#63;</label>
-                                        <input readOnly type="text" className="form-control" id="diag-entity" name="diag-entity"></input>
+                                        <label htmlFor="diag-entity" >&#191;Con qu&eacute; entidad lo tiene&#63;</label>
+                                        <input ref={inp => this.entity = inp} readOnly type="text" className="form-control" id="diag-entity" name="diag-entity"></input>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Est&aacute;s en embarazoa&#63;</label>
-                                        <div className="nput-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" name="pregnancyF" className="btn-check" id="radioPregnancy" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" onClick={() => this.seePregnancyTab(true)} htmlFor="radioPregnancy">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" name="pregnancyF" className="btn-check" id="radioPregnancy2" autoComplete="off"></input>
+                                    <div   hidden={sexo ==='M'?'hidden':''}  className="col-sm-12 col-md-4 pb-4">
+                                        <label htmlFor="pregnancyF">&#191;Est&aacute;s en embarazo&#63;</label>
+                                        <div className=" d-flex justify-content-around">
+                                                    <input type="radio" name="pregnancyF" value="1" className="btn-check" id="radioPregnancy" autoComplete="off"></input>
+                                                    <label className="btn btn-outline-primary" onClick={() => this.seePregnancyTab(true)} htmlFor="radioPregnancy">SI</label>&nbsp;
+                                                    <input type="radio" name="pregnancyF" value="0" className="btn-check" id="radioPregnancy2" autoComplete="off"></input>
                                                     <label className="btn btn-outline-primary" onClick={() => this.seePregnancyTab(false)} htmlFor="radioPregnancy2">No</label>
-                                                </div>
-                                            </div>                                       
                                         </div>
                                     </div>
                                 </div>
@@ -280,124 +616,141 @@ class Salud extends Component{
                                     &nbsp;
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Nombre de su contacto de emergencia</label>
-                                        <input type="text" className="form-control" id="comp-contactEmer" name="comp-contactEmer"></input>
+                                        <input ref={inp => this.contact = inp} type="text" className="form-control" id="comp-contactEmer" name="comp-contactEmer"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Tel&eacute;fono del contacto de emergencia</label>
-                                        <input type="text" className="form-control" id="comp-contacNumber" name="comp-contacNumber"></input>
+                                        <input ref={inp => this.numbercontact = inp} type="text" className="form-control" id="comp-contacNumber" name="comp-contacNumber"></input>
                                     </div>
                                 </div>
-
+                                                                                                                            
+                                <div className="row pb-4 flex">
+                                    <div className="col d-flex flex-wrap justify-content-start">
+                                        <button onClick={() => this.vaidateBack('sick-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                    </div>
+                                    <div className="col d-flex flex-wrap justify-content-end">
+                                        <button onClick={() => {
+                                            let seePreg = !seePregnancy? 'pregnancy-tab':'characteristic-tab'
+                                            this.validateInputTabs(seePreg) 
+                                            }} className="btn btn-primary">Siguiente</button>
+                                        {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
+                                    </div>
+                                </div>
                             </div>
                             <div hidden={seePregnancy} className="tab-pane fade " id="pregnancy" role="tabpanel" aria-labelledby="pregnancy-tab">
                                 <div className="row">
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Tienes embarazo de alto riesgo&#63;</label>
-                                        <div className="nput-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" name="haveDangerPregnancyF" className="btn-check" id="radiohaveDangerPregnancy" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radiohaveDangerPregnancy">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" name="haveDangerPregnancyF" className="btn-check" id="radiohaveDangerPregnancy2" autoComplete="off"></input>
+                                        <label htmlFor="haveDangerPregnancyF">&#191;Tienes embarazo de alto riesgo&#63;</label>
+                                        <div className=" d-flex justify-content-around">
+                                                    <input type="radio" name="haveDangerPregnancyF"  value="1" className="btn-check" id="radiohaveDangerPregnancy" autoComplete="off"></input>
+                                                    <label className="btn btn-outline-primary" htmlFor="radiohaveDangerPregnancy">SI</label>&nbsp;
+                                                    <input type="radio" name="haveDangerPregnancyF" value="0" className="btn-check" id="radiohaveDangerPregnancy2" autoComplete="off"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="radiohaveDangerPregnancy2">No</label>
-                                                </div>
-                                            </div>                                       
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >&#191;Fecha de entrega del examen de embarazo&#63;</label>
-                                        <input type="date" className="form-control" id="diag-dateExamen" name="diag-dateExamen"></input>
+                                        <label htmlFor="diag-dateExamen">&#191;Fecha de entrega del examen de embarazo&#63;</label>
+                                        <input ref={inp => this.dateexam = inp} type="date" className="form-control" id="diag-dateExamen" name="diag-dateExamen"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Tiempo de gestaci&oacute;n (SEMANAS)</label>
-                                        <input type="number" className="form-control" id="diag-dateExamen" name="diag-dateExamen"></input>
+                                        <label htmlFor="diag-timeweek">Tiempo de gestaci&oacute;n (SEMANAS)</label>
+                                        <input ref={inp => this.tiempogesta = inp} type="number" className="form-control" id="diag-timeweek" name="diag-timeweek"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >&#191;Fecha probable del parto</label>
-                                        <input type="date" className="form-control" id="diag-dateApro" name="diag-dateApro"></input>
+                                        <label htmlFor="diag-dateApro">&#191;Fecha probable del parto</label>
+                                        <input ref={inp => this.dateprobably = inp} type="date" className="form-control" id="diag-dateApro" name="diag-dateApro"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Observaci&oacute;n</label>
-                                        <input type="text" className="form-control" id="diag-dateExamen" name="diag-dateExamen"></input>
+                                        <input ref={inp => this.observa = inp} type="text" className="form-control" id="diag-obser" name="diag-obser"></input>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Resultado de la prueba de embarazo</label>
-                                        <input type="file" className="form-control" id="diag-fileExamen" name="diag-fileExamen"></input>
+                                        <input ref={inp => this.file = inp} type="file" className="form-control" id="diag-fileExamen" name="diag-fileExamen"></input>
                                     </div>
 
 
 
                                 </div>
-
+                                <div className="row pb-4 flex">
+                                    <div className="col d-flex flex-wrap justify-content-start">
+                                        <button onClick={() => this.vaidateBack('complementary-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                    </div>
+                                    <div className="col d-flex flex-wrap justify-content-end">
+                                        <button onClick={() => this.validateInputTabs('characteristic-tab') } className="btn btn-primary">Siguiente</button>
+                                        {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
+                                    </div>
+                                </div>
                             </div>
                             <div className="tab-pane fade " id="characteristic" role="tabpanel" aria-labelledby="characteristic-tab">
                                 <div className="row">
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Grupo sangu&iacute;neo</label>
-                                        <div className="nput-group d-flex justify-content-around">
+                                        <label  htmlFor="gruposanguineo">Grupo sangu&iacute;neo<span className="text-danger">*</span></label>
+                                        <div className=" d-flex justify-content-around">
                                             {dataGroupBlood}
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Factor</label>
-                                        <div className="nput-group d-flex justify-content-around">
+                                        <label htmlFor="datosfactor">Factor<span className="text-danger">*</span></label>
+                                        <div className=" d-flex justify-content-around">
                                             {dataFactor}
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Estatura</label>
-                                        <input type="text" className="form-control" id="carac-height" name="carac-height"></input>
+                                        <label  htmlFor="carac-height">Estatura<span className="text-danger">*</span></label>
+                                        <input ref={inp => this.estatura = inp} type="number" className="form-control inputRequired" id="carac-height" name="carac-height"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Peso</label>
-                                        <input type="text" className="form-control" id="carac-weight" name="carac-weight"></input>
+                                        <label htmlFor="carac-weight" >Peso<span className="text-danger">*</span></label>
+                                        <input ref={inp => this.peso = inp} type="number" className="form-control inputRequired" id="carac-weight" name="carac-weight"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>Grupo &eacute;tnico</label>
-                                        <select className="form-select" name="carac-etnia"  id="carac-etnia" >
+                                        <label htmlFor="carac-etnia">Grupo &eacute;tnico<span className="text-danger">*</span></label>
+                                        <select ref={inp => this.raza = inp}  className="form-select inputRequired" name="carac-etnia"  id="carac-etnia" >
                                             <option value=""></option>
                                             {dataEtnia}
                                         </select>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label>&#191;Consume licor&#63;</label>
-                                        <div className="nput-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" name="licor" className="btn-check" id="radioLicor" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radioLicor">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" name="licor" className="btn-check" id="radioLicor2" autoComplete="off"></input>
+                                        <div className=" d-flex justify-content-around">
+                                                    <input type="radio" name="licor" value="S" className="btn-check" id="radioLicor" autoComplete="off"></input>
+                                                    <label className="btn btn-outline-primary" htmlFor="radioLicor">SI</label>&nbsp;
+                                                    <input type="radio" name="licor" value="N" className="btn-check" id="radioLicor2" autoComplete="off"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="radioLicor2">No</label>
-                                                </div>
-                                            </div>                                       
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label>&#191;Fuma&#63;</label>
-                                        <div className="nput-group d-flex justify-content-around">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <input type="radio" name="smoke" className="btn-check" id="radiosmoke" autoComplete="off"></input>
-                                                    <label className="btn btn-outline-primary" htmlFor="radiosmoke">SI</label>
-                                                </div>
-                                                <div className="col">
-                                                    <input type="radio" name="smoke" className="btn-check" id="radiosmoke2" autoComplete="off"></input>
+                                        <div className=" d-flex justify-content-around">
+                                                    <input type="radio" name="smoke" value="S" className="btn-check" id="radiosmoke" autoComplete="off"></input>
+                                                    <label className="btn btn-outline-primary" htmlFor="radiosmoke">SI</label>&nbsp;
+                                                    <input type="radio" name="smoke" value="N" className="btn-check" id="radiosmoke2" autoComplete="off"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="radiosmoke2">No</label>
-                                                </div>
-                                            </div>                                       
                                         </div>
                                     </div>
                                                                     
                                 </div>
 
+                                <div className="row pb-4 flex">
+                                    <div className="col d-flex flex-wrap justify-content-start">
+                                        <button onClick={() =>{
+
+                                            let seePreg = !seePregnancy? 'pregnancy-tab':'complementary-tab'
+                                            
+
+                                            this.vaidateBack(seePreg)
+                                             
+                                             }} className="btn btn-primary">Atr&aacute;s</button>
+                                    </div>
+                                    <div className="col d-flex flex-wrap justify-content-end">
+                                        <button onClick={() => this.saveDataPrincipal()} className="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
