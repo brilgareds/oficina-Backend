@@ -48,12 +48,12 @@ const routes = {
         subPages: {
             hojaVida: { url: '/cv/datos_basicos', componente: CV },
             datosBasicos: { url: '/cv/hoja_de_vida', componente: CV },
-            education:{url:'/cv/educacion_formal', componente:Education},
-            family:{url:'/cv/mis_familiares',componente:Family},
-            dataAdditional:{url:'/cv/datos_adicionales',componente:DataAdditional},
-            salud:{url:'/cv/salud',componente:Salud},
-            livingPlace:{url:'/cv/vivienda',componente:LivingPlace}
-            
+            education: { url: '/cv/educacion_formal', componente: Education },
+            family: { url: '/cv/mis_familiares', componente: Family },
+            dataAdditional: { url: '/cv/datos_adicionales', componente: DataAdditional },
+            salud: { url: '/cv/salud', componente: Salud },
+            livingPlace: { url: '/cv/vivienda', componente: LivingPlace }
+
         }
     }
 
@@ -79,6 +79,12 @@ const api = {
     getTypesIncapacity: `${backendPath}/incapacity/getTypesIncapacity`,
     getDocumentsIncapacity: `${backendPath}/incapacity/getDocumentsIncapacity`,
     postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`,
+    getUserIncapacities: `${backendPath}/incapacity/getUserIncapacities`,
+    getUserIncapacitiesFiles: `${backendPath}/incapacity/getUserIncapacitiesFiles`,
+    getUserDataIncapacity: `${backendPath}/incapacity/getUserDataIncapacity`,
+    getConsultarDatosUsuarioBilletera: `${backendPath}/mywallet/getConsultarDatosUsuarioBilletera`,
+    deleteGastoBilletera: `${backendPath}/mywallet/deleteGastoBilletera`,
+    saveGastoBilletera: `${backendPath}/mywallet/saveGastoBilletera`,
 
 };
 

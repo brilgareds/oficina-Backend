@@ -427,7 +427,7 @@ const postFetch = async ({
 
         return responseApi;
     } catch (error) {
-        throw new Error(error);
+        return error;
     }
 
 }

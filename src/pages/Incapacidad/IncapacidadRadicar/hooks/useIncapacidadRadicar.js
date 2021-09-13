@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 import { api } from '../../../../environments/environments';
@@ -139,7 +138,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
     }
 
     const [filesState, setFilesState] = useState();
-    const onChangeInputFileHandle = ({ numero, documento, target }) => {
+    const onChangeInputFileHandle = ({ tipoArchivo, documento, target }) => {
 
         // formValue.files.push({
         //     fileInfo: target.target.files[0],
@@ -148,7 +147,8 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
         filesState.files.push({
             fileInfo: target.target.files[0],
-            tipoDocumento: documento
+            tipoDocumento: documento,
+            codigoTipoArchivo: tipoArchivo,
         });
 
         // setStateForm({
@@ -171,6 +171,8 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         setRowsTable();
         let rowsDTable = [];
 
+        console.log("data documentos", data);
+
         data.forEach((element, key) => {
             let numberRow = key + 1;
             rowsDTable.push({
@@ -178,7 +180,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 documento: (element.TIP_NOMBRE).toUpperCase(),
                 archivo:
                     <input
-                        onChange={values => { onChangeInputFileHandle({ numero: numberRow, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
+                        onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
                         key={key}
                         id={`file_${numberRow}`} name={`file_${numberRow}`}
                         className="form-control"
@@ -231,6 +233,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         filesState.files.forEach(file => {
             dataForm.append("file", file.fileInfo);
             dataForm.append("filesNames", file.tipoDocumento);
+            dataForm.append("filesCodigos", file.codigoTipoArchivo);
         });
 
         postFetch({
@@ -254,11 +257,35 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                     confirmButtonText: 'Cerrar',
                 });
             });
-
-
-
     }
 
+
+    useEffect(() => {
+        let fechaini = new Date(formValue.fechaInicio);
+        let fechafin = new Date(formValue.fechaFin);
+        let diasdif = fechafin.getTime() - fechaini.getTime();
+        let contdias = Math.round(diasdif / (1000 * 60 * 60 * 24));
+
+        if (contdias <= 2 && formValue?.tipoIncapacidad?.label === "ENFERMEDAD GENERAL") {
+
+            Swal.fire({
+                title: 'Advertencia',
+                html: `
+                        <div className="row">
+                            <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                                Recuerde que si su incapacidad no supera los dos dias el documento de la historia clinica no es obligatorio. El documento sera obligarotio solo si se trata de una prorroga en la incapacidad y solo aplica a ENFERMEDAD GENERAL
+                            </div>
+                        </div>
+                         <br/>
+                    `,
+                icon: 'warning',
+                confirmButtonText: 'Cerrar',
+            });
+
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formValue.fechaFin, formValue.fechaInicio]);
 
 
     return ({
