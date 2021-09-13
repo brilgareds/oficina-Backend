@@ -23,11 +23,14 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
         })
     }
 
+    const showButtonCheckIn = (tipoEncuesta === 'riesgoCovid');
+
     console.log('\nencuestas: ', encuestas)
 
     return (
         <>
             <div className="card mb-3">
+                <div className="bg-holder d-none d-lg-block bg-card bg-encuesta"></div>
                 <div className="card-header position-relative" style={{ paddingLeft: '3rem' }}>
                     <div className="col-12">
                         <h3>{
@@ -63,7 +66,7 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
                                         </div>
                                     </Tabs>
                                     :
-                                    <Report/>}
+                                    <Report showButtonCheckIn={showButtonCheckIn} />}
                             </div>
                         </div>
                     </div>

@@ -85,6 +85,9 @@ const files = {
 
 const api = {
     path: backendPath,
+    getAllBranches: `${backendPath}/allBranches/`,
+    getAllCities: `${backendPath}/allCities/`,
+    getCitiesForASpecificPerson: `${backendPath}/citiesForASpecificPerson/`,
     getAllMenu: `${backendPath}/navigator/`,
     getSurveysCovid: `${backendPath}/surveys/covid`,
     getSurveysFence: `${backendPath}/surveys/epidemiologicalFence`,

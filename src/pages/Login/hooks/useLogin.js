@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { api, routes } from '../../../environments/environments';
-import { getFetchWithHeader, postFetch, overlay } from '../../../generalHelpers';
+import { getFetchWithHeader, overlay } from '../../../generalHelpers';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/dist/sweetalert2.css';
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
+import { generateToken, getUserInfoResponse } from '../../../repositories/Login/login';
 
 
 export const useLogin = (formInitialState = {}) => {
@@ -31,87 +32,77 @@ export const useLogin = (formInitialState = {}) => {
         window.location.href = routes.login.url;
     }
 
+    const formatUserInfo = (userInfo) => {
+        
+        return JSON.stringify({
+            'nombres': userInfo.Nombres,
+            'apellidos': userInfo.Apellidos,
+            'cedula': userInfo.Cedula,
+            'genero': userInfo.Genero,
+            'mail': userInfo.Mail,
+            'numContrato': userInfo.NUMERO_CONTRATO,
+            'cargo': userInfo.Cargo,
+            'area': userInfo.Area,
+            'fechaIngreso': userInfo.FECHA_INGRESO,
+            'fechaVencimiento': userInfo.FECHA_VENCIMIENTO,
+            'ccostos': userInfo.C_COSTOS,
+            'estado': userInfo.ESTADO,
+            'empresa': userInfo.Empresa,
+            'entidad': userInfo.Entidad,
+            'jefe': userInfo.Jefe,
+            'numeroCelular': userInfo.Numero,
+        })
+    };
 
-    const onSubmitForm = (e) => {
+    const setToken = (res) => {
+        localStorage.setItem('a_t', res.access_token);  // access_token
+        localStorage.setItem('r_t', res.refresh_token); // refresh_token
+
+        return res;
+    };
+
+
+    const onSubmitForm = async (e) => {
 
         e.preventDefault();
 
-        if (validarInputIdentificacion(formValue.identification)) {    //Si la informacion es solo tipo numero
+        if (validarInputIdentificacion(formValue.identification)) { // Si la informacion es solo tipo numero
 
             overlay(true);
             localStorage.clear();
 
-            postFetch({     // Realizamos el consumo para obtener el refresh_token y el access_token mandando la cedula del usuario
-                url: api.getTokenPath,
-                params: { identification: Number(formValue.identification) }
-            })
-                .then((res) => {  // Si el usuario existe colocará toda la informacion consultada en la cookie d_u
+            try {
+                setToken(await generateToken(formValue)); // Si el usuario existe colocará toda la informacion consultada en el localStorage
 
-                    let access_token = res.access_token;
-                    let refresh_token = res.refresh_token;
+                const promisesArray = [
+                    getUserInfoResponse()
+                ];
 
-                    getFetchWithHeader({
-                        url: api.getUserInfoPath,
-                        headers: {
-                            'accept': '*/*',
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + access_token
-                        }
-                    })
-                        .then((getUserInfoResponse) => {
+                const [userInfo] = await Promise.all(promisesArray);
+                
+                localStorage.setItem('d_u', formatUserInfo(userInfo)); // data_user
 
-                            console.log("getUserInfoResponse", getUserInfoResponse);
+                window.location.href = routes.home.url;
 
-                            localStorage.setItem('a_t', access_token);  // access_token
-                            localStorage.setItem('r_t', refresh_token); // refresh_token
-                            localStorage.setItem('d_u', JSON.stringify({
-                                'nombres': getUserInfoResponse.Nombres,
-                                'apellidos': getUserInfoResponse.Apellidos,
-                                'cedula': getUserInfoResponse.Cedula,
-                                'genero': getUserInfoResponse.Genero,
-                                'mail': getUserInfoResponse.Mail,
-                                'numContrato': getUserInfoResponse.NUMERO_CONTRATO,
-                                'cargo': getUserInfoResponse.Cargo,
-                                'area': getUserInfoResponse.Area,
-                                'fechaIngreso': getUserInfoResponse.FECHA_INGRESO,
-                                'fechaVencimiento': getUserInfoResponse.FECHA_VENCIMIENTO,
-                                'ccostos': getUserInfoResponse.C_COSTOS,
-                                'estado': getUserInfoResponse.ESTADO,
-                                'empresa': getUserInfoResponse.Empresa,
-                                'entidad': getUserInfoResponse.Entidad,
-                                'jefe': getUserInfoResponse.Jefe,
-                                'numeroCelular': getUserInfoResponse.Numero,
-                            })); // data_user
+            } catch (error) { // //Si el usuario no existe le despliega una modal de alerta para ingresar como contratista
 
-                            console.log('This is: ', localStorage.getItem('d_u'))
-
-                            window.location.href = routes.home.url;
-
-                        });
-
-                })
-                .catch((error) => { //Si el usuario no existe le despliega una modal de alerta para ingresar como contratista
-
-
-                    Swal.fire({
-                        title: 'Usuario no encontrado en el sistema',
-                        html: `
-                        <div className="row">
-                            <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                                Si eres un contratistas por favor ingresa por las opciones habilitadas en pantalla
-                            </div>
+                Swal.fire({
+                    title: 'Usuario no encontrado en el sistema',
+                    html: `
+                    <div className="row">
+                        <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                            Si eres un contratistas por favor ingresa por las opciones habilitadas en pantalla
                         </div>
-                        <br/>
-                    `,
-                        icon: 'warning',
-                        confirmButtonText: 'Cerrar',
-                    });
-
-                    document.querySelector("#divContratistas").style.display = 'unset';
+                    </div>
+                    <br/>
+                `,
+                    icon: 'warning',
+                    confirmButtonText: 'Cerrar',
                 });
 
+                document.querySelector('#divContratistas').style.display = 'unset';
+            }
         }
-
     }
 
 

@@ -1,22 +1,48 @@
 import React, { useState } from 'react';
+import  { Redirect } from 'react-router-dom'
+import Swal from 'sweetalert2';
 import { PersonalCampo } from '../../components/CheckIn/PersonalCampo/PersonalCampo';
 import { Sedes } from '../../components/CheckIn/Sedes/Sedes';
 
 export const Ingreso = () => {
 
-    const [checkSede, setCheckSede] = useState(false);  
-    const [checkHomeOffice, setCheckHomeOffice] = useState(false);
-    const [checkPersonalCampo, setCheckPersonalCampo] = useState(false);
+    const [formCheckIn, setFormCheckIn] = useState({});
+    const [finished, setFinished] = useState(false)
 
-    const setCheck = functionSet => {
-        setCheckSede(false);
-        setCheckHomeOffice(false);
-        setCheckPersonalCampo(false);
-
-        functionSet(true);
+    const handleCheckUpdate = (e) => {
+        setFormCheckIn(() => ({ typeCheckIn: e.target.value }));
     };
 
-    return (
+    const tipoIngresos = [
+        {
+           id: 'ingresoHomeOffice',
+           title: 'Home Office'
+        },
+        {
+            id: 'ingresoPersonalDeCampo',
+            title: 'Personal campo'
+        },
+        {
+            id: 'ingresoSede',
+            title: 'Sede'
+        }
+    ];
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form has: ', formCheckIn);
+
+        Swal.fire({
+            title: '',
+            text: 'Ingreso realizado con exito!',
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonColor: '#2c7be5',
+            confirmButtonText: 'Cerrar'
+        }).then(setFinished(true));
+    };
+
+    return (finished) ? <Redirect to='/' /> : (
         <>
             <div className="card mb-3">
                 <div className="card-header position-relative" style={{ paddingLeft: '3rem' }}>
@@ -28,46 +54,31 @@ export const Ingreso = () => {
 
             <div className="card pt-3 pb-5">
                 <div className="card-body bg-light">
-                    <div className='offset-1 col-10 mb-4 mt-2'>
-                        <div className="form-check" style={{paddingLeft: '0', marginBottom: '1rem'}}>
-                            <label className="form-check-label">Tipo ingreso:</label>
+                    <form onSubmit={handleFormSubmit}>
+                        <div className='offset-1 col-10 mb-4 mt-2'>
+                            <div className="form-check" style={{paddingLeft: '0', marginBottom: '1rem'}}>
+                                <label className="form-check-label">Tipo ingreso:</label>
+                            </div>{
+                            tipoIngresos.map(({id, title}) => (
+                                <div key={id}>
+                                    <div className='form-check'>
+                                        <input className='form-check-input' type='radio' name='tipoIngreso' id={id} value={id} checked={formCheckIn.typeCheckIn === id} onChange={handleCheckUpdate} required />
+                                        <label className='form-check-label' htmlFor={id}>
+                                            { title }
+                                        </label>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className='offset-1 col-10'>{
+                                (formCheckIn.typeCheckIn === 'ingresoPersonalDeCampo') ? <PersonalCampo form={formCheckIn} setForm={setFormCheckIn} /> :
+                                (formCheckIn.typeCheckIn === 'ingresoSede')            ? <Sedes         form={formCheckIn} setForm={setFormCheckIn} /> : <></> }
+                            </div>
+
+                            <div className='offset-1 col-10 text-center text-md-end'>
+                                <button type='submit' className='btn btn-primary col-12 col-sm-6 col-md-4 col-xl-3' disabled={!Object.keys(formCheckIn).length}>Ingresar</button>
+                            </div>
                         </div>
-
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name='tipoIngreso' id='ingresoHomOffice' checked={checkHomeOffice} onChange={()=>setCheck(setCheckHomeOffice)}/>
-                            <label className="form-check-label" htmlFor='ingresoHomOffice'>
-                                Home Office
-                            </label>
-                        </div>
-
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name='tipoIngreso' id='ingresoPersonalCampo' checked={checkPersonalCampo} onChange={()=>setCheck(setCheckPersonalCampo)} />
-                            <label className="form-check-label" htmlFor='ingresoPersonalCampo'>
-                                Personal campo
-                            </label>
-                        </div>
-
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name='tipoIngreso' id='ingresoSede' checked={checkSede} onChange={()=>setCheck(setCheckSede)} />
-                            <label className="form-check-label" htmlFor='ingresoSede'>
-                                Sede
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className='offset-1 col-10'>
-                        {
-                            (checkPersonalCampo) ? <PersonalCampo/> :
-                            (checkSede)          ? <Sedes/>         : ''
-                        }
-                    </div>
-
-                    <div className='offset-1 col-10 text-center text-md-end'>
-                        {
-                            (checkPersonalCampo || checkSede || checkHomeOffice) &&
-                                <span className='btn btn-primary col-12 col-sm-6 col-md-4 col-xl-3'>Ingresar</span>
-                        }
-                    </div>
+                    </form>
                 </div>
             </div>
         </>

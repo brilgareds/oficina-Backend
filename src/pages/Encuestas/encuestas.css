@@ -1,3 +1,9 @@
 .encuesta {
     background-image: url("../../assets/img/vumOfficeImgs/background-form-1.png");
 }
+
+.bg-encuesta {
+    background-image: url("../../assets/img/vumOfficeImgs/logo-vision.png");
+    background-position: right 3rem top 1rem;
+    background-size: 150px;
+}

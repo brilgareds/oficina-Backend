@@ -19,7 +19,7 @@ const formatSurveys = (questions) => {
                 if (pregunta.SELECCION === 'M') {
 
                     pregunta.responses.forEach((response, j) => {
-                        pregunta.responses[j].single = (response.RESPUESTA.toLowerCase().includes('ninguna de las anteriores'));
+                        pregunta.responses[j].single = (response.RESPUESTA.toLowerCase().includes('ninguna'));
                     });
                 }
 
@@ -40,14 +40,14 @@ const formatSurveys = (questions) => {
 const getSurveys = async({tipoEncuesta=''}) => {    
 
     const url = (
-        (tipoEncuesta === 'casosCovid')          ? api.getSurveysCovid      :
+        (tipoEncuesta === 'casosCovid')          ? api.getSurveysCovid :
         (tipoEncuesta === 'cercoEpidemeologico') ? api.getSurveysFence :
         (tipoEncuesta === 'riesgoCovid')         ? api.getSurveysHealthCondition : ''
     );
-    const surveys = await(url ? getFetch({ url }) : {});
+    const surveys = await(await(url ? getFetch({ url }) : {}) || {});
     const response = formatSurveys(surveys.data);
 
-    console.log('\nEncuesta: ', response)
+    console.log('\nEncuesta: ', response);
 
     return response;
 };

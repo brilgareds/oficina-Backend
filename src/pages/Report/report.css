@@ -1,7 +1,11 @@
-.mensaje-covid {
-    margin-top: 1.5rem;
-    padding: 0.5rem 1rem;
-    background: #1780e8;
-    color: white;
+.report-container .mensaje-covid {
+    padding: 0.8rem 1.2rem;
+    background: #9AF185;
+    color: #707070;
     border-radius: 1rem;
+    font-size: 0.85rem;
+}
+
+.report-container div {
+    font-size: 0.91rem;
 }

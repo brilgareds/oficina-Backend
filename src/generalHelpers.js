@@ -5,7 +5,13 @@ import 'sweetalert2/dist/sweetalert2.css';
 const getFetch = async ({ url, set }) => {
 
     try {
-        const result = (await axios.get(url)).data;
+        const token = localStorage.getItem('a_t');
+        const headers = {
+            'Authorization': (token) ? `Bearer ${token}` : '',
+            'accept': '*/*',
+            'Content-Type': 'application/json'
+        };
+        const result = await(await axios.get(url, { headers })).data;
 
         if (typeof set === 'function') set(result);
 
@@ -58,7 +64,7 @@ const changeCommaToDot = text => text.replaceAll(',', '.').replaceAll(/[.]+/gm, 
 const formatDecimals = text => changeCommaToDot(removeNotNumber(text));
 
 
-const specificDecimals = (value=0, quantityDecimals) => {
+const specificDecimals = (value=0, quantityDecimals=0) => {
 
     if (quantityDecimals) quantityDecimals++;
 
@@ -197,6 +203,27 @@ const getFullUser = () => {
     return user;
 };
 
+const getBranches = () => {
+
+    let branches = [];
+
+    if (localStorage.getItem('branches') && JSON.parse(localStorage.getItem('branches'))) {
+        branches = JSON.parse(localStorage.getItem('branches'));
+    }
+
+    return branches;
+};
+
+const getCities = () => {
+    let cities = [];
+
+    if (localStorage.getItem('cities') && JSON.parse(localStorage.getItem('cities'))) {
+        cities = JSON.parse(localStorage.getItem('cities'));
+    }
+
+    return cities;
+}
+
 const getEmailUser      = () => ( getFullUser().mail || '');
 const getGenderUser     = () => ( getFullUser().genero || '');
 const getStatusUser     = () => ( getFullUser().estado || '');
@@ -235,5 +262,7 @@ export {
     getEmailUser,
     getStatusUser,
     specificDecimals,
-    getDateToday
+    getDateToday,
+    getBranches,
+    getCities
 }

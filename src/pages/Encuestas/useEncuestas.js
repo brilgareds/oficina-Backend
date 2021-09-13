@@ -8,7 +8,7 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
 
     const [tabIndex, setTabIndex] = useState(0);
     const [encuestas, setEncuestas] = useState([]);
-    const [formEncuesta, setFormEncuesta] = useState({});
+    const [formEncuesta, setFormEncuesta] = useState([]);
     const [currentQuestions, setCurrentQuestions] = useState({});
     const [formularioEnviado, setFormularioEnviado] = useState(false);
 
@@ -24,9 +24,32 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         setFormularioEnviado(true);
     };
 
+    const formatRespuestas = (formEncuesta) => {
+        let respuestas = [];
+
+        const filtro = formEncuesta.reduce((acc, el) => ({ ...acc, ...el }), {})
+
+        for (let prop in filtro) {
+            let obj = filtro[prop];
+            const esArray = Array.isArray(obj);
+          
+            if (!esArray) respuestas.push(filtro[prop])
+            else {
+                respuestas = [ ...respuestas, ...obj.map(({value}) => ({ COD_ER: value, value: null })) ];
+            }
+        }
+
+        return respuestas
+    };
+
+
     const respuestasConfirmadas = (evt, value) => {
 
-        console.log('formEncuesta: ', formEncuesta)
+        console.log('formEncuesta: ', formEncuesta);
+        
+        let respuestasRespondidas = formatRespuestas(formEncuesta);
+
+        console.log('\n\nrespuestasRespondidas: ', respuestasRespondidas)
 
         const respuestasFueronAlmacenadas = true;
 

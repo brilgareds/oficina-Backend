@@ -98,6 +98,20 @@ a {
     /* padding-left: 0.3rem; */
 }
 
+.containerCardsFilter {
+    display: grid;
+    gap: 1rem;
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(auto-fill, minmax(max(30%, 14rem), 1fr));
+}
+
+.containerTimeFilter {
+    display: grid;
+    gap: 3rem;
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+
 .react-tabs__tab--selected {
     background: #816DDD !important;
     color: white !important;
