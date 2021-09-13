@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { files } from '../../environments/environments';
+import { getFullNameUser } from '../../generalHelpers';
 import './bienestar.css';
 
 export const Bienestar = () => {
@@ -21,7 +22,7 @@ export const Bienestar = () => {
 
             <div className="col-md-12 paddingRRHH divTitulosRRHH">
                 <h3 className="tituloModulo">Bienestar</h3>
-                <span className="spanNameUserRRHH">Gabriel Enrique Angarita Rengifo</span>
+                <span className="spanNameUserRRHH">{getFullNameUser()}</span>
                 <p className="copyPage mt-4">
                     Como nuestro trabajador entendemos que tienes objetivos que alcanzar,<br/>
                     aquí te damos las herramientas para que los consigas.

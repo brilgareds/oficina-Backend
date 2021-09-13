@@ -15,7 +15,7 @@ export const SubMenuSecundario = ({ subMenu, k }) => {
     } = definirPropiedadesLink(subMenu, k);
     
     return (
-        <Link className={ `dropdown-item` } to={{ pathname: `${href}` }} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle }  aria-controls={ href } target={ target } title={ descripcion }>
+        <Link className={ `dropdown-item` } to={{ pathname: `${href}` }} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle } aria-controls={ href } target={ target } title={ descripcion }>
             {titulo}
         </Link>
     );

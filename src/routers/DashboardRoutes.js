@@ -28,9 +28,9 @@ export const DashboardRoutes = () => {
 
         Object.keys(newRoutes).forEach(prop => {
             const key = `${k}_${prop}`;
-            const { url, componente, subPages } = newRoutes[prop];
+            const { url, componente, subPages, exact=true } = newRoutes[prop];
 
-            if (url && componente) arrayRoutes.push(<Route key={key} exact path={url} component={componente} />);
+            if (url && componente) arrayRoutes.push(<Route key={key} exact={exact} path={url} component={componente} />);
 
             if (subPages) obtenerRutas(subPages, arrayRoutes, key);
         });
@@ -61,8 +61,17 @@ export const DashboardRoutes = () => {
                                 </Route>
                             </Switch>
 
+
                             <div className="content">
-                                <Header menu={menu[1]} />
+                                <Switch>
+                                    <Route path='/cv'>
+                                        <h2>cv header</h2>
+                                    </Route>
+                                    <Route>
+                                        <Header menu={menu[1]} />
+                                    </Route>
+                                </Switch>
+                                
                                 <div className="dashboard" id="root" style={{ minHeight: '94.7vh' }}>
                                     <div className="container-2">
                                         <Switch>

@@ -5,7 +5,13 @@ import 'sweetalert2/dist/sweetalert2.css';
 const getFetch = async ({ url, set }) => {
 
     try {
-        const result = (await axios.get(url)).data;
+        const token = localStorage.getItem('a_t');
+        const headers = {
+            'Authorization': (token) ? `Bearer ${token}` : '',
+            'accept': '*/*',
+            'Content-Type': 'application/json'
+        };
+        const result = await(await axios.get(url, { headers })).data;
 
         if (typeof set === 'function') set(result);
 
@@ -38,377 +44,71 @@ const definirPropiedadesLink = (menu, k, first) => {
 };
 
 
+const getDotOrCommaPosition = (value) => {
+    const dotPosition   = value.indexOf('.');
+    const commaPosition = value.indexOf(',');
 
-/*
-    tipoRespuesta
-    'M' = Multiple,
-    'U' = Simple,
-    'A' = Abierta
-    'F' = fecha
-    SED  ???
-    0.0  ???
-    NUM  ???
+    const response = (
+        (dotPosition   >= 0) ? dotPosition   :
+        (commaPosition >= 0) ? commaPosition : -1
+    );
 
-
-    detalle: 'TXT',
-*/
-
-
-const fakeQuestions = [
-    // tab
-    {
-        cod: 'tab1',
-        titulo: 'Preexistencia o Comorbilidades',
-        primeraPregunta: 'tab1_pre_1',
-        preguntas: {
-            tab1_pre_1: {
-                cod: '',
-                pregunta: 'Número de identificación',
-                tipoRespuesta: 'N',
-                respuestas: [
-                    {
-                        cod: 100,
-                        detalle: '',
-                        preguntaSiguiente: 'tab1_pre_2'
-                    }
-                ]
-            },
-            tab1_pre_2: {
-                cod: '',
-                pregunta: '¿Has viajado a algún lugar del territorio nacional en los últimos 30 días?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 101,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab1_pre_3'
-                    },
-                    {
-                        cod: 102,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    }
-                ]
-            },
-            tab1_pre_3: {
-                cod: '',
-                pregunta: 'Selecciona la región en la qué estuviste de viaje',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 103,
-                        detalle: 'Bogota',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                    {
-                        cod: 104,
-                        detalle: 'Valle',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                    {
-                        cod: 105,
-                        detalle: 'Antioquia',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                    {
-                        cod: 106,
-                        detalle: 'Otras',
-                        preguntaSiguiente: 'tab1_pre_4'
-                    },
-                ]
-            },
-            tab1_pre_4: {
-                cod: '',
-                pregunta: '¿Tienes alguna de las siguientes enfermedades o condiciones de salud de base?',
-                tipoRespuesta: 'M',
-                respuestas: [
-                    {
-                        cod: 107,
-                        detalle: 'Artritis reumatoidea',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Asma moderada grave',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Diabetes mellitus',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Esta en embarazo',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Estado de inmunosupresión',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Hipertensión arterial',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Consume esteroides',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'obesidad',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Sida',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'Tratamiento contra el cáncer',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 107,
-                        detalle: 'NINGUNA DE LAS ANTERIORES',
-                        preguntaSiguiente: ''
-                    },
-
-
-                ]
-            },
-            tab1_pre_5: {
-                cod: '',
-                pregunta: 'direccion de su domicilio',
-                tipoRespuesta: 'A',
-                respuestas: [
-
-                ]
-            },
-
-
-
-
-
-
-
-
-
-
-        }
-    },
-    {
-        cod: 'tab2',
-        titulo: 'Sintomatología',
-        primeraPregunta: 'tab2_pre_1',
-        preguntas: {
-            tab2_pre_1: {
-                cod: '',
-                pregunta: 'En los últimos 7 días, ¿Has presentado sensación de perdida del olfato y del gusto en las comidas ó bebidas?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 1,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_2'
-                    },
-                    {
-                        cod: 2,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_2'
-                    }
-                ]
-            },
-
-            tab2_pre_2: {
-                cod: '',
-                pregunta: 'En las últimas 72 horas, ¿Has presentado fiebre?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 3,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_3'
-                    },
-                    {
-                        cod: 4,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_4'
-                    }
-                ]
-            },
-
-            tab2_pre_3: {
-                cod: '',
-                pregunta: 'Temperatura',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 5,
-                        detalle: 'De 37,5 a 38',
-                        preguntaSiguiente: 'tab2_pre_4'
-                    },
-                    {
-                        cod: 6,
-                        detalle: 'Mayor a 38',
-                        preguntaSiguiente: 'tab2_pre_4'
-                    }
-                ]
-            },
-
-            tab2_pre_4: {
-                pregunta: 'En las últimas 48 horas, ¿Has presentado tos?',
-                tipoRespuesta: 'S',
-                cod: '',
-                respuestas: [
-                    {
-                        cod: 7,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_5'
-                    },
-                    {
-                        cod: 8,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_5'
-                    }
-                ],
-            },
-
-            tab2_pre_5: {
-                cod: '',
-                pregunta: 'En las últimas 48 horas, ¿Has presentado dificultad para respirar?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 9,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_6'
-                    },
-                    {
-                        cod: 10,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_6'
-                    }
-                ],
-            },
-            tab2_pre_6: {
-                cod: '',
-                pregunta: 'En las últimas 24 horas, ¿Te has sentido muy débil sin posibilidad de moverte?',
-                tipoRespuesta: 'S',
-                respuestas: [
-                    {
-                        cod: 11,
-                        detalle: 'Si',
-                        preguntaSiguiente: 'tab2_pre_7'
-                    },
-                    {
-                        cod: 12,
-                        detalle: 'No',
-                        preguntaSiguiente: 'tab2_pre_7'
-                    }
-                ],
-            },
-            tab2_pre_7: {
-                cod: '',
-                pregunta: 'En las últimas 6 horas, ¿Has presentado algún cambio en tu condición de estado físico que tenga como referencia alguno de estos síntomas?',
-                tipoRespuesta: 'M',
-                respuestas: [
-                    {
-                        cod: 13,
-                        detalle: 'Congestión nasal',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 14,
-                        detalle: 'Dolor de cabeza',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 15,
-                        detalle: 'Dolor de garganta',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 16,
-                        detalle: 'Dolor o presión en el pecho',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 17,
-                        detalle: 'Dolores musculares',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 18,
-                        detalle: 'Fatiga',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 19,
-                        detalle: 'Mareos',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 20,
-                        detalle: 'Ojos llorosos',
-                        preguntaSiguiente: ''
-                    },
-                    {
-                        cod: 315,
-                        detalle: 'Ninguna de las anteriores',
-                        preguntaSiguiente: ''
-                    }
-                ]
-            }
-        }
-    },
-    {
-        cod: 'tab3',
-        titulo: 'Convivencia',
-        primeraPregunta: '',
-        preguntas: {
-
-        }
-    },
-    {
-        cod: 'tab4',
-        titulo: 'Evaluación actos ocupacionales',
-        primeraPregunta: '',
-        preguntas: {
-
-        }
-    },
-    {
-        cod: 'tab5',
-        titulo: 'Actualizacion datos personales',
-        primeraPregunta: '',
-        preguntas: {
-
-        }
-    }
-];
-
-
-
-
-const getFakePreguntasRiesgoCovid = async () => {
-
-    try {
-
-        const response = fakeQuestions;
-
-        return response;
-
-    } catch (e) {
-        console.log(e.toString());
-    }
-
-
+    return response;
 };
+
+
+const removeNotNumber = text => text.replaceAll(/[^0-9.,]+/gm, '');
+
+const changeCommaToDot = text => text.replaceAll(',', '.').replaceAll(/[.]+/gm, '.');
+
+const formatDecimals = text => changeCommaToDot(removeNotNumber(text));
+
+
+const specificDecimals = (value=0, quantityDecimals=0) => {
+
+    if (quantityDecimals) quantityDecimals++;
+
+    const dotOrCommaPosition = getDotOrCommaPosition(value);
+
+    if (dotOrCommaPosition === 0) {
+        value = (quantityDecimals) ? `0${value}` : value.substring(1);
+    }
+
+    const maxQuantityCharacters = (dotOrCommaPosition && value[dotOrCommaPosition]) ? parseFloat(dotOrCommaPosition)+quantityDecimals : value.length;
+    value = formatDecimals(value.substring(0, maxQuantityCharacters)); // value[value.length-1]).toString();
+
+    return value;
+};
+
+
+const getTwoLastCharacters = text => text.substring(text.length-2);
+
+
+const currentDate = (obj={}) => {
+
+    const { format='spanish', withTime=true } = obj;
+
+    const dateNow = new Date();
+    const year    = dateNow.getFullYear();
+    const month   = getTwoLastCharacters(`0${dateNow.getMonth()+1}`);
+    const day     = getTwoLastCharacters(`0${dateNow.getDate()}`);
+    const hour    = getTwoLastCharacters(`0${dateNow.getHours()}`);
+    const minutes = getTwoLastCharacters(`0${dateNow.getMinutes()}`);
+    const seconds = getTwoLastCharacters(`0${dateNow.getSeconds()}`);
+    const time    = `${hour}:${minutes}:${seconds}`;
+
+    const englishDate = `${year}-${month}-${day}`;
+    const spanishDate = `${day}/${month}/${year}`;
+
+    const date = (
+        (format === 'english') ? englishDate :
+        (format === 'spanish') ? spanishDate : ''
+    );
+
+    const fullDate = `${date} ${ (withTime) ? ` ${time}` : '' }`;
+
+    return fullDate;
+}
 
 
 const postFetch = async ({
@@ -493,28 +193,45 @@ const capitalizarPalabras = (val) => {
         .join(' ');
 }
 
+const getFullUser = () => {
+    let user = {};
 
-const getDocumentId = () => {
-
-    let documentId = '';
-
-    if (localStorage.getItem('d_u') && JSON.parse(localStorage.getItem('d_u')) && JSON.parse(localStorage.getItem('d_u')).cedula) {
-        documentId = JSON.parse(localStorage.getItem('d_u')).cedula;
+    if (localStorage.getItem('d_u') && JSON.parse(localStorage.getItem('d_u'))) {
+        user = JSON.parse(localStorage.getItem('d_u'));
     }
 
-    return documentId;
+    return user;
 };
 
-const getFullNameUser = () => {
+const getBranches = () => {
 
-    let nombreUsuario = '';
+    let branches = [];
 
-    if (localStorage.getItem('d_u')) {
-        nombreUsuario = `${JSON.parse(localStorage.getItem('d_u')).nombres.trim()} ${JSON.parse(localStorage.getItem('d_u')).apellidos.trim()}`;
+    if (localStorage.getItem('branches') && JSON.parse(localStorage.getItem('branches'))) {
+        branches = JSON.parse(localStorage.getItem('branches'));
     }
 
-    return capitalizarPalabras(nombreUsuario);
+    return branches;
+};
+
+const getCities = () => {
+    let cities = [];
+
+    if (localStorage.getItem('cities') && JSON.parse(localStorage.getItem('cities'))) {
+        cities = JSON.parse(localStorage.getItem('cities'));
+    }
+
+    return cities;
 }
+
+const getEmailUser      = () => ( getFullUser().mail || '');
+const getGenderUser     = () => ( getFullUser().genero || '');
+const getStatusUser     = () => ( getFullUser().estado || '');
+const getDocumentIdUser = () => ( getFullUser().cedula || '');
+const getNameUser       = () => ( getFullUser().nombres || '').trim();
+const getLastNameUser   = () => ( getFullUser().apellidos || '').trim();
+const getPhoneUser      = () => ( getFullUser().numeroCelular || '' ).trim();
+const getFullNameUser   = () => ( capitalizarPalabras(`${getNameUser()} ${getLastNameUser()}`) );
 
 const getDateToday = () => {
 
@@ -528,17 +245,24 @@ const getDateToday = () => {
 }
 
 
-
 export {
     getFetch,
     definirPropiedadesLink,
-    getFakePreguntasRiesgoCovid,
     getFetchWithHeader,
     postFetch,
     overlay,
     capitalizarPalabras,
     getFullNameUser,
-    getDocumentId,
+    getDocumentIdUser,
     advertenciaFormularioVacio,
-    getDateToday
+    currentDate,
+    getFullUser,
+    getGenderUser,
+    getPhoneUser,
+    getEmailUser,
+    getStatusUser,
+    specificDecimals,
+    getDateToday,
+    getBranches,
+    getCities
 }

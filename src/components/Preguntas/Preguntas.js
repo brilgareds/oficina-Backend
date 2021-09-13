@@ -5,13 +5,22 @@ import { Simple } from '../Inputs/Simple/Simple';
 import './test.css';
 import { Text } from '../Inputs/Text/Text';
 import { Numeric } from '../Inputs/Numeric/Numeric';
+import { Date } from '../Inputs/Date/Date';
+import { getDocumentIdUser } from '../../generalHelpers';
 
-export const Preguntas = ({ encuesta, formEncuestaRiesgoCovid, setFormEncuestaRiesgoCovid, nextTab, tabIndex, currentQuestions, setCurrentQuestions }) => {
-    
+export const Preguntas = (props) => {
+
+    const {
+        nextTab,
+        tabIndex,
+        existeProximoTab,
+        formEncuesta,
+        setFormEncuesta
+    } = props;
+
     let i = 0;
     let currentArray_0 = {};
-    const { agregarPregunta, preguntas, esRespuestaUnica, handleSubmit } = usePreguntas({ encuesta, nextTab, tabIndex, init: currentQuestions[tabIndex], setFormEncuestaRiesgoCovid, currentQuestions, setCurrentQuestions });
-
+    const { agregarPregunta, preguntas, handleSubmit } = usePreguntas(props);
 
     return (
         <form onSubmit={ handleSubmit }> {
@@ -20,17 +29,30 @@ export const Preguntas = ({ encuesta, formEncuestaRiesgoCovid, setFormEncuestaRi
 
             Object.keys(preguntas).map(prop => {
 
-                if (preguntas[prop] && preguntas[prop].respuestas && preguntas[prop].respuestas.length) {
-                    preguntas[prop].respuestas.map(esRespuestaUnica);
-                }
-
                 const obj = preguntas[prop];
                 currentArray_0[prop] = obj;
                 const currentArray = Object.assign({}, currentArray_0);
 
-                const { pregunta, respuestas, tipoRespuesta } = obj;
+                if (!obj) return <div key={ prop } ></div>;
+
+                const { PREGUNTA:pregunta, responses:respuestas, SELECCION } = obj;
 
                 const iteracionPregunta = ++i;
+                const preguntaSinTildes = pregunta.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+                const isNumericField  = (['N','0.0'].includes(SELECCION)) || preguntaSinTildes.includes('numero') || preguntaSinTildes.includes('dias acumulados');
+                const isDateField     = (SELECCION === 'F');
+                const isTextField     = ((respuestas[0]?.RESPUESTA || '') === 'txt') && !isNumericField;
+                const isRadioField    = (SELECCION === 'U');
+                const isMultipleField = (SELECCION === 'M');
+                
+                const initDateField     = '';
+                const initTextField     = '';
+                const initNumericField  = (isNumericField && preguntaSinTildes.substr(preguntaSinTildes.length-14) === 'identificacion') ? getDocumentIdUser() : '';
+                const initRadioField    = '';
+                const initMultipleField = '';
+
+                const maxDecimals = (isNumericField && preguntaSinTildes.includes('temperatura')) ? 1 : 0;
 
                 return (
                     <div 
@@ -40,19 +62,20 @@ export const Preguntas = ({ encuesta, formEncuestaRiesgoCovid, setFormEncuestaRi
                     >
                         <div className={ (iteracionPregunta !== 1) ? 'question' : '' }>
                             <span className="div-pregunta">
-                                <span className="numeracion-pregunta">{ iteracionPregunta }.</span>
+                                <span className="numeracion-pregunta">{ iteracionPregunta }</span>
                                 <span className="descripcion-pregunta">{ pregunta }</span>
                             </span> {
                                 /*
-                                    tipoRespuesta:   'M' = Multiple, 'U' = Simple, 'A' = Abierta 'F' = fecha SED  ??? 0.0  ??? NUM  ???    detalle: 'TXT'
+                                    SELECCION:   'M' = Multiple, 'U' = Simple, 'A' = Abierta 'F' = fecha SED  ??? 0.0  ??? NUM  ???    detalle: 'TXT'
                                 */
 
                             (respuestas) && 
                                 <div className="div-form-check"> {
-                                    (tipoRespuesta === 'S') ? <Simple   prop={prop} tabIndex={tabIndex} nextTab={nextTab} items={respuestas}    currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuestaRiesgoCovid={ formEncuestaRiesgoCovid } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } /> : 
-                                    (tipoRespuesta === 'M') ? <Multiple prop={prop} tabIndex={tabIndex} nextTab={nextTab} items={respuestas}    currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuestaRiesgoCovid={ formEncuestaRiesgoCovid } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } /> : 
-                                    (tipoRespuesta === 'N') ? <Numeric  prop={prop} tabIndex={tabIndex} nextTab={nextTab} item={respuestas[0]}  currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuestaRiesgoCovid={ formEncuestaRiesgoCovid } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } /> : 
-                                    (tipoRespuesta === 'A') ? <Text     prop={prop} tabIndex={tabIndex} nextTab={nextTab} item={respuestas[0]}  currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuestaRiesgoCovid={ formEncuestaRiesgoCovid } setFormEncuestaRiesgoCovid={ setFormEncuestaRiesgoCovid } /> : '' /* Multiple */ }
+                                    (isDateField)     ? <Date     prop={prop} tabIndex={tabIndex} nextTab={nextTab} item={respuestas[0]}  currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuesta={ formEncuesta } setFormEncuesta={ setFormEncuesta } init={initDateField} /> :
+                                    (isTextField)     ? <Text     prop={prop} tabIndex={tabIndex} nextTab={nextTab} item={respuestas[0]}  currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuesta={ formEncuesta } setFormEncuesta={ setFormEncuesta } init={initTextField} /> :
+                                    (isNumericField)  ? <Numeric  prop={prop} tabIndex={tabIndex} nextTab={nextTab} item={respuestas[0]}  currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuesta={ formEncuesta } setFormEncuesta={ setFormEncuesta } init={initNumericField} maxDecimals={maxDecimals} /> :
+                                    (isRadioField)    ? <Simple   prop={prop} tabIndex={tabIndex} nextTab={nextTab} items={respuestas}    currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuesta={ formEncuesta } setFormEncuesta={ setFormEncuesta } init={initRadioField} /> :
+                                    (isMultipleField) ? <Multiple prop={prop} tabIndex={tabIndex} nextTab={nextTab} items={respuestas}    currentArray={currentArray} agregarPregunta={ agregarPregunta } formEncuesta={ formEncuesta } setFormEncuesta={ setFormEncuesta } init={initMultipleField} /> : '' }
                                 </div>}
                         </div>
                     </div>
@@ -62,7 +85,7 @@ export const Preguntas = ({ encuesta, formEncuestaRiesgoCovid, setFormEncuestaRi
             <div className="div-form-check">
                 <div className="text-end" style={{ marginTop: '3rem' }}>
                     <button type='submit' className="btn btn-primary" style={{ width: 'min(16rem, 100%)', marginTop: '1rem' }} >
-                        Siguiente
+                        { (existeProximoTab) ? 'Siguiente' : 'Enviar Respuestas'}
                     </button>
                 </div>
             </div>
