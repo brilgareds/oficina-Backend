@@ -14,8 +14,10 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         loadTipoIncapacidad();
         loadOtherEntenty();
+        setFilesState({ files: [] });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
 
     const [formValue, setStateForm] = useState(formInitialState);
@@ -27,6 +29,9 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
     }
 
     const onChangeSelectHandle = ({ nameSelect, value }) => {
+
+        // console.log();
+
         setStateForm({
             ...formValue,
             [nameSelect]: value
@@ -38,7 +43,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         setStateOtraEntidadCheck(!stateOtraEntidadCheck)
         setStateForm({
             ...formValue,
-            otraEntidad: null
+            otraEntidad: stateOtraEntidadCheck
         });
     }
 
@@ -105,9 +110,19 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
         overlay(true);
 
+        // setStateForm({
+        //     ...formValue,
+        //     files: formValue.files.splice(0, formValue.files.length)
+        // });
+
         setStateForm({
             ...formValue,
-            files: formValue.files.splice(0, formValue.files.length)
+            tipoIncapacidad: value
+        });
+
+        setFilesState({
+            ...filesState,
+            files: filesState.files.splice(0, filesState.files.length)
         });
 
         postFetch({
@@ -118,26 +133,34 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 actualizarRowsTable(resGetDocumentsIncapacity);
             });
 
+
+
     }
 
-
-    const onChangeInputFileHandle = ({ target }) => {
-        // const onChangeInputFileHandle = ({ numero, documento, target }) => {
+    const [filesState, setFilesState] = useState();
+    const onChangeInputFileHandle = ({ tipoArchivo, documento, target }) => {
 
         // formValue.files.push({
         //     fileInfo: target.target.files[0],
         //     tipoDocumento: documento
         // });
 
+        filesState.files.push({
+            fileInfo: target.target.files[0],
+            tipoDocumento: documento,
+            codigoTipoArchivo: tipoArchivo,
+        });
+
         // setStateForm({
         //     ...formValue,
         //     files: formValue.files
         // });
 
-        setStateForm({
-            ...formValue,
-            archivo_de_prueba: target.target.files[0]
+        setFilesState({
+            ...filesState,
+            files: filesState.files
         });
+
 
 
 
@@ -148,12 +171,22 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         setRowsTable();
         let rowsDTable = [];
 
+        console.log("data documentos", data);
+
         data.forEach((element, key) => {
             let numberRow = key + 1;
             rowsDTable.push({
                 numero: numberRow,
                 documento: (element.TIP_NOMBRE).toUpperCase(),
-                archivo: <input onChange={values => { onChangeInputFileHandle({ numero: numberRow, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }} key={key} id={`file_${numberRow}`} name={`file_${numberRow}`} className="form-control" type="file" />
+                archivo:
+                    <input
+                        onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
+                        key={key}
+                        id={`file_${numberRow}`} name={`file_${numberRow}`}
+                        className="form-control"
+                        type="file"
+                        accept=".pdf"
+                    />
             });
         });
 
@@ -166,6 +199,8 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         e.preventDefault();
         overlay(true);
 
+
+
         const allData = {
             dataUser: {
                 cedula: formValue.cedula,
@@ -173,9 +208,9 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 correoElectronico: formValue.correoElectronico,
                 eps: formValue.eps,
                 telefono: formValue.telefono,
+                empresa: dataUser.empresa.trim(),
             },
             dataForm: {
-                files: formValue?.archivo_de_prueba || "null",
                 tipoIncapacidad: formValue?.tipoIncapacidad?.value || "null",
                 prorroga: formValue?.prorroga || false,
                 otraEntidad: {
@@ -189,15 +224,21 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
             },
         };
 
-        const data = new FormData();
-        data.append("allData", allData);
-        data.append("files", formValue.files);
+        console.log("json axio == > ", allData);
+        console.log("filesState axio == > ", filesState);
 
-        console.log("allData - --- ", allData);
+        const dataForm = new FormData();
+        dataForm.append("allData", JSON.stringify(allData));
+
+        filesState.files.forEach(file => {
+            dataForm.append("file", file.fileInfo);
+            dataForm.append("filesNames", file.tipoDocumento);
+            dataForm.append("filesCodigos", file.codigoTipoArchivo);
+        });
 
         postFetch({
-            url: "https://httpbin.org/anything",
-            params: { data }
+            url: api.postSaveDisabilityFiling,
+            params: dataForm
         })
             .then(() => {
                 Swal.fire({
@@ -205,7 +246,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                     title: 'Datos guardados correctamente.',
                     confirmButtonText: 'Ok',
                 }).then((result) => {
-                    // window.location.reload();
+                    window.location.reload();
                 })
             })
             .catch(() => {
@@ -216,10 +257,35 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                     confirmButtonText: 'Cerrar',
                 });
             });
-
-        console.log("state ===> ", formValue);
-        console.log("formulario ===> ", allData);
     }
+
+
+    useEffect(() => {
+        let fechaini = new Date(formValue.fechaInicio);
+        let fechafin = new Date(formValue.fechaFin);
+        let diasdif = fechafin.getTime() - fechaini.getTime();
+        let contdias = Math.round(diasdif / (1000 * 60 * 60 * 24));
+
+        if (contdias <= 2 && formValue?.tipoIncapacidad?.label === "ENFERMEDAD GENERAL") {
+
+            Swal.fire({
+                title: 'Advertencia',
+                html: `
+                        <div className="row">
+                            <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                                Recuerde que si su incapacidad no supera los dos dias el documento de la historia clinica no es obligatorio. El documento sera obligarotio solo si se trata de una prorroga en la incapacidad y solo aplica a ENFERMEDAD GENERAL
+                            </div>
+                        </div>
+                         <br/>
+                    `,
+                icon: 'warning',
+                confirmButtonText: 'Cerrar',
+            });
+
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formValue.fechaFin, formValue.fechaInicio]);
 
 
     return ({
@@ -234,7 +300,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
         onSubmitFormIncapacidad,
         onChangeSelectHandle,
         onCheckedInputCheck,
-        onChangeInputFileHandle,
     });
 
 

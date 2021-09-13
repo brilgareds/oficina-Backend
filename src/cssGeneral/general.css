@@ -66,6 +66,45 @@
   }
 
 
-  .cv label.btn-outline-primary{
-    width: 11vmax;
+  .cv label.btn-outline-primary, .cv label.btn-outline-danger{
+    width: 20vh;
+
   }
+
+
+  .cv .btn-check:checked+.btn-outline-primary{
+    background: #DFECFF 0% 0% no-repeat padding-box;
+    border: 1px solid #1783EE;
+    border-radius: 6px;
+    opacity: 1;
+    color:#2c7be5;
+  }
+
+
+  .cv .btn-check:checked+.btn-outline-danger{
+    background: #e63757 0% 0% no-repeat padding-box;
+    border: 1px solid #e63757;
+    border-radius: 6px;
+    opacity: 1;
+    /* color:#2c7be5; */
+  }
+
+  
+
+  /* #E3E3E3 color boton gris */
+  /* #74E36B color verde boton */
+
+
+  .checkGreen{
+    color: #74E36B ;
+    opacity: 1;
+  }
+  .checkGrey{
+    color: #E3E3E3;
+    opacity: 1;
+  }
+  .listnavCV{
+    color:#1783EE;
+  }
+
+  

@@ -7,7 +7,6 @@ import { Sst } from "../pages/Sst/Sst.js";
 import { EncuestaRiesgoCovid } from "../pages/Encuestas/EncuestaRiesgoCovid/EncuestaRiesgoCovid.js";
 import { routesAyuda } from "../pages/Ayuda/routes.js";
 import { MenuCV } from "../components/Menus/MenuCV/MenuCV.js";
-import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
 import { routesIncapacidad } from "../pages/Incapacidad/routes.js";
 import { Desarrollo } from "../pages/Desarrollo/Desarrollo.js";
 import { Report } from "../pages/Report/Report.js";
@@ -22,6 +21,7 @@ import DataAdditional from "../pages/DataAdditional/Data.js";
 import Salud from "../pages/Salud/Salud.js";
 import LivingPlace from "../pages/LivingPlace/LivingPlave.js";
 import { baseUrl } from "../config/config.js";
+import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
 
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
@@ -56,12 +56,12 @@ const routes = {
         subPages: {
             hojaVida: { url: '/cv/datos_basicos', componente: CV },
             datosBasicos: { url: '/cv/hoja_de_vida', componente: CV },
-            education:{url:'/cv/educacion_formal', componente:Education},
-            family:{url:'/cv/mis_familiares',componente:Family},
-            dataAdditional:{url:'/cv/datos_adicionales',componente:DataAdditional},
-            salud:{url:'/cv/salud',componente:Salud},
-            livingPlace:{url:'/cv/vivienda',componente:LivingPlace}
-            
+            education: { url: '/cv/educacion_formal', componente: Education },
+            family: { url: '/cv/mis_familiares', componente: Family },
+            dataAdditional: { url: '/cv/datos_adicionales', componente: DataAdditional },
+            salud: { url: '/cv/salud', componente: Salud },
+            livingPlace: { url: '/cv/vivienda', componente: LivingPlace }
+
         }
     },
     certificados: {
@@ -104,7 +104,13 @@ const api = {
     getEpsIncapacidad: `${backendPath}/incapacity/getEpsIncapacidad`,
     getTypesIncapacity: `${backendPath}/incapacity/getTypesIncapacity`,
     getDocumentsIncapacity: `${backendPath}/incapacity/getDocumentsIncapacity`,
-    postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`
+    postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`,
+    getUserIncapacities: `${backendPath}/incapacity/getUserIncapacities`,
+    getUserIncapacitiesFiles: `${backendPath}/incapacity/getUserIncapacitiesFiles`,
+    getUserDataIncapacity: `${backendPath}/incapacity/getUserDataIncapacity`,
+    getConsultarDatosUsuarioBilletera: `${backendPath}/mywallet/getConsultarDatosUsuarioBilletera`,
+    deleteGastoBilletera: `${backendPath}/mywallet/deleteGastoBilletera`,
+    saveGastoBilletera: `${backendPath}/mywallet/saveGastoBilletera`
 };
 
 export {
