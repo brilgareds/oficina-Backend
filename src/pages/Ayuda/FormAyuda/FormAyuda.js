@@ -36,7 +36,7 @@ export const FormAyuda = (props) => {
                 (typeForm) ?  //Si trae el tipo de formulario por el cual entra al componente
                     <>
                         <div className="card mb-3">
-                            <div className="card-body position-relative">
+                            <div className="card-body position-relative textoMigaDePan">
                                 <div className="row">
                                     <div className="col-lg-8">
                                         <h3>{stateTitle}</h3>

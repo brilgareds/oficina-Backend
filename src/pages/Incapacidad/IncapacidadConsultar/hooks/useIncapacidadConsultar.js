@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { api } from "../../../../environments/environments";
 import { overlay, postFetch } from "../../../../generalHelpers";
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
@@ -127,11 +129,12 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         let tdBody = ``;
         dataApi.forEach((data, key) => {
+
             tdBody +=
                 `<tr>
                     <td>${key + 1}</td>
                     <td>${data.TIP_NOMBRE}</td>
-                    <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-info" >Archivo</button> </a></td>
+                    <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-info" >Descargar</button> </a></td>
                 </tr>`
                 ;
 
@@ -161,31 +164,12 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
             showCancelButton: true,
             cancelButtonText: "Cerrar",
             showConfirmButton: false,
-            didOpen: () => {
 
-                // creamos  los eventos listenes realacionados a los botones de los archivos
-                for (let i = 0; i < dataApi.length; i++) {
-                    document.getElementById(`btnArchivoModal_${i}`)?.addEventListener('click', () => {
-                        onClickBtnARchivoModal();
-                    });
-                }
-
-            },
-
-        }).then(() => {
-
-            // Eliminamos todos los eventos listenes realacionados a los botones de los archivos
-            for (let i = 0; i < dataApi.length; i++) {
-                document.getElementById(`btnArchivoModal_${i}`)?.removeEventListener('click', onClickBtnARchivoModal());
-            }
 
         });
 
     }
 
-    const onClickBtnARchivoModal = () => {
-        console.log("onClickBtnARchivoModal");
-    }
 
     const onClickActualizarIncapacidad = ({ event }) => {
         overlay(true);
@@ -202,8 +186,50 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
     }
 
 
+
+    const validarEstadosArchivos = (estadoArchivo) => {
+
+        let response = {};
+
+        switch (estadoArchivo) {
+            case '1':
+                response = {
+                    estado: "RADICADO",
+                    habilitado: '',
+                    clase: '',
+                    trDeshabilitadoClase: '',
+                };
+                break;
+            case '2':
+                response = {
+                    estado: "APROBADO",
+                    habilitado: 'disabled',
+                    clase: 'estadoInhabilitado',
+                    trDeshabilitadoClase: 'trDesahbilitado',
+                };
+                break;
+            case '3':
+                response = {
+                    estado: "RECHAZADO",
+                    habilitado: '',
+                    clase: '',
+                    trDeshabilitadoClase: '',
+                };
+                break;
+
+            default:
+                response = "";
+                break;
+        }
+
+        return response;
+    }
+
+
     const desplegarModalActualizarDatos = (dataIncapacityObj) => {
 
+
+        
 
         const { dataIncapacity, documentsIncapacity } = dataIncapacityObj;
 
@@ -214,9 +240,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
             dataIncapacity[0].INCAP_OTRA_ENTID_NOMBRE = "";
         }
 
-        console.log("dataIncapacity[0]", dataIncapacity[0]);
         const columnsTableDocumentos = [
-            { title: 'SELECCION' },
             { title: 'DOCUMENTO' },
             { title: 'ESTADO' },
             { title: 'MOTIVO RECHAZO' },
@@ -228,14 +252,14 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         let tdBody = ``;
         documentsIncapacity.forEach((data, key) => {
-            console.log("data", data.RECHAZO);
+
+            const { estado, habilitado, trDeshabilitadoClase } = validarEstadosArchivos(String(data.ARCH_ESTADO));
             tdBody +=
-                `<tr>
-                    <td> <input class="form-check-input" type="checkbox" value="" /> </td>
+                `<tr class="${trDeshabilitadoClase}">
                     <td>${data.TIP_NOMBRE}</td>
-                    <td>${validarEstadosArchivos(String(data.ARCH_ESTADO))}</td>
-                    <td>${(data.RECHAZO !== null) ? data.RECHAZO : ""}</td>
-                    <td><input class="form-control" type="file" style="width: 18rem;"></td>
+                    <td>${estado}</td>
+                    <td>${(data.RECHAZO !== null) ? data.RECHAZO.toUpperCase() : "N/A"}</td>
+                    <td><input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" style="width: 18rem;"></td>
                 </tr>`
                 ;
 
@@ -246,105 +270,190 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
             width: '1200px',
             title: 'Actualización de datos',
             html: `
-                    <div class="row" style="text-align: left; margin: 10px;">
-                        <div className="card-header">
-                            <h5 className="card-title">Datos del colaborador</h5>
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <label class="form-label" htmlFor="cedula">Cédula:</label>
-                            <input value="${dataIncapacity[0].INCAP_CEDULA}" id="cedula" name="cedula" class="form-control" type="text" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <label class="form-label" htmlFor="nombre">Nombre:</label>
-                            <input value="${dataIncapacity[0].INCAP_NOMBRE}" id="nombre" name="nombre" class="form-control" type="text" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <label class="form-label" htmlFor="telefono">Teléfono:</label>
-                            <input value="${dataIncapacity[0].INCAP_TELEFONO}" id="telefono" name="telefono" class="form-control" type="text" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <label class="form-label" htmlFor="email">Correo Electrónico:</label>
-                            <input value="${dataIncapacity[0].INCAP_EMAIL}" id="email" name="email" class="form-control" type="email" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <label class="form-label" htmlFor="eps">Eps:</label>
-                            <input value="${dataIncapacity[0].INCAP_EMAIL}" id="eps" name="eps" class="form-control" type="text" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4 mb-4">
-                            <label class="form-label" htmlFor="otraEntidad">Otra Entidad:</label>
-                            <input value="${dataIncapacity[0].INCAP_OTRA_ENTID_NOMBRE}" id="otraEntidad" name="otraEntidad" class="form-control" type="text" disabled />
-                        </div>
-                        <div className="card-header">
-                            <h5 className="card-title">Datos de la incapacidad</h5>
-                        </div>
-                        <div class="col-12 col-lg-4 mb-4">
-                            <label class="form-label" htmlFor="tipoIncapacidad">Tipo Incapacidad:</label>
-                            <input value="${dataIncapacity[0].TIP_NOMBRE}" id="tipoIncapacidad" name="tipoIncapacidad" class="form-control" type="text" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4 mb-4">
-                            <label class="form-label" htmlFor="fechaInicio">Ficha Inicio:</label>
-                            <input value="${dataIncapacity[0].INCAP_FECHA_INI}" id="fechaInicio" name="fechaInicio" class="form-control" type="text" disabled />
-                        </div>
-                        <div class="col-12 col-lg-4 mb-4">
-                            <label class="form-label" htmlFor="fechaFin">Ficha Fin:</label>
-                            <input value="${dataIncapacity[0].INCAP_FECHA_FIN}" id="fechaFin" name="fechaFin" class="form-control" type="text" disabled />
-                        </div>
+                    <form id="formModalActualizacionDocumentosIncapacidad">
+                        <div class="row" style="text-align: left; margin: 10px;">
+                            <div className="card-header">
+                                <h5 className="card-title">Datos del colaborador</h5>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label" htmlFor="cedula">Cédula:</label>
+                                <input value="${dataIncapacity[0].INCAP_CEDULA}" id="cedula" name="cedula" class="form-control" type="text" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label" htmlFor="nombre">Nombre:</label>
+                                <input value="${dataIncapacity[0].INCAP_NOMBRE}" id="nombre" name="nombre" class="form-control" type="text" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label" htmlFor="telefono">Teléfono:</label>
+                                <input value="${dataIncapacity[0].INCAP_TELEFONO}" id="telefono" name="telefono" class="form-control" type="text" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label" htmlFor="email">Correo Electrónico:</label>
+                                <input value="${dataIncapacity[0].INCAP_EMAIL}" id="email" name="email" class="form-control" type="email" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label" htmlFor="eps">Eps:</label>
+                                <input value="${dataIncapacity[0].INCAP_EMAIL}" id="eps" name="eps" class="form-control" type="text" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4 mb-4">
+                                <label class="form-label" htmlFor="otraEntidad">Otra Entidad:</label>
+                                <input value="${dataIncapacity[0].INCAP_OTRA_ENTID_NOMBRE}" id="otraEntidad" name="otraEntidad" class="form-control" type="text" disabled />
+                            </div>
+                            <div className="card-header">
+                                <h5 className="card-title">Datos de la incapacidad</h5>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-4">
+                                <label class="form-label" htmlFor="tipoIncapacidad">Tipo Incapacidad:</label>
+                                <input value="${dataIncapacity[0].TIP_NOMBRE}" id="tipoIncapacidad" name="tipoIncapacidad" class="form-control" type="text" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4 mb-4">
+                                <label class="form-label" htmlFor="fechaInicio">Ficha Inicio:</label>
+                                <input value="${dataIncapacity[0].INCAP_FECHA_INI}" id="fechaInicio" name="fechaInicio" class="form-control" type="text" disabled />
+                            </div>
+                            <div class="col-12 col-lg-4 mb-4">
+                                <label class="form-label" htmlFor="fechaFin">Ficha Fin:</label>
+                                <input value="${dataIncapacity[0].INCAP_FECHA_FIN}" id="fechaFin" name="fechaFin" class="form-control" type="text" disabled />
+                            </div>
 
-                        <div className="card-header">
-                            <h5 className="card-title">Documentos</h5>
-                        </div>
+                            <div className="card-header">
+                                <h5 className="card-title">Documentos</h5>
+                            </div>
 
-                        <div class="table-responsive scrollbar">
-                            <table class="table">
-                                <thead class="headersDataTableModal">
-                                    <tr>
-                                        ${thHeader}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${tdBody}
-                                </tbody>
-                            </table>
-                        </div>
+                            <div class="table-responsive scrollbar">
+                                <table class="table">
+                                    <thead class="headersDataTableModal">
+                                        <tr>
+                                            ${thHeader}
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbodyModal">
+                                        ${tdBody}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                    </div>
+                            <div class="col-12 col-lg-12 mb-4" style="text-align: right;">
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button id="btnModalGuardar" class="btn btn-success" type="button">Guardar</button>
+                                    <button id="btnModalCerrar" class="btn btn-secondary" type="button">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                          
                     <br/>
             `,
-            showCancelButton: true,
-            cancelButtonText: "Cerrar",
+            showCancelButton: false,
             showConfirmButton: false,
             didOpen: () => {
 
+                document.getElementById("btnModalGuardar").addEventListener("click", () => { onClickGuardarDatosFormulario(dataIncapacity[0].INCAP_CODIGO) }, false);
+
+                document.getElementById("btnModalCerrar").addEventListener("click", () => {
+                    Swal.close();
+                }, false);
+
+                for (let index = 0; index < documentsIncapacity.length; index++) {
+                    document.getElementById(`inputFile_${index}`).addEventListener("change", onChangeInputFileHandle, false);
+                }
 
             },
 
+        }).then((result) => {
+
+            limpiarEventosModalActualizacionAlCerrar(documentsIncapacity);
+
+        })
+
+    }
+
+
+
+    const [filesState, setFilesState] = useState([]);
+    const onChangeInputFileHandle = (event) => {
+
+        filesState.push({
+            file: event.target.files[0],
+            codigoArchivo: event.target.dataset.target,
         });
 
-    }
+        setFilesState(filesState);
+    };
 
-    const validarEstadosArchivos = (estadoArchivo) => {
 
-        let response = "";
+    const onClickGuardarDatosFormulario = (numerIncapacidad) => {
 
-        switch (estadoArchivo) {
-            case '1':
-                response = "RADICADO";
-                break;
-            case '2':
-                response = "APROBADO";
-                break;
-            case '3':
-                response = "RECHAZADO";
-                break;
+        if (filesState.length !== 0) {
+            overlay(true);
 
-            default:
-                response = "";
-                break;
+            // const formularioModal = document.getElementById("formModalActualizacionDocumentosIncapacidad");
+
+            const dataForm = new FormData();
+            // dataForm.append("formData", formularioModal);
+            dataForm.append("numeroIncapacidad", numerIncapacidad);
+            dataForm.append("correoUsuario", dataUser.mail);
+            dataForm.append("cedulaUsuario", dataUser.cedula);
+
+
+            filesState.forEach(infofile => {
+                dataForm.append("file", infofile.file);
+                dataForm.append("codigosArchivos", infofile.codigoArchivo);
+            });
+
+            postFetch({
+                url: api.postUpdateDisabilityFiling,
+                params: dataForm
+            })
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Datos actualizados correctamente.',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        window.location.reload();
+                    })
+                })
+                .catch(() => {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hubo un error en la actualización, por favor revisa el formulario.',
+                        confirmButtonText: 'Cerrar',
+                    });
+                });
+        } else {
+
+            alertify.warning(`
+            <div className="row">
+                <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
+                    Error.
+                </div>
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                    Para actualizar los datos debes cargar los archivos
+                </div>
+            </div>
+            `).delay(7);
+
         }
 
-        return response;
+
     }
+
+
+    const limpiarEventosModalActualizacionAlCerrar = (documentsIncapacity) => {
+
+        document.getElementById("btnModalGuardar").removeEventListener("click", () => { }, false);
+        document.getElementById("btnModalCerrar").removeEventListener("click", () => { }, false);
+
+        for (let index = 0; index < documentsIncapacity.length; index++) {
+            document.getElementById(`inputFile_${index}`).removeEventListener("click", () => { }, false);
+        }
+
+        filesState.splice(0, filesState.length)
+        setFilesState(filesState.splice(0, filesState.length));
+        
+    }
+
 
     return ({
         formValue,

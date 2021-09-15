@@ -38,7 +38,7 @@ export const FormRrhh = (props) => {
                         <div className="card mb-3">
                             <div className="bg-holder d-none d-lg-block bg-card bg-image-vum">
                             </div>
-                            <div className="card-body position-relative">
+                            <div className="card-body position-relative textoMigaDePan">
                                 <div className="row">
                                     <div className="col-lg-8">
                                         <h3>{stateTitle}</h3>

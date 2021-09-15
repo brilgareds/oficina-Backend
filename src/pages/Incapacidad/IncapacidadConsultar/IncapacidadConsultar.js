@@ -33,7 +33,7 @@ export const IncapacidadConsultar = () => {
     return (
         <>
             <div className="card mb-3">
-                <div className="card-body position-relative">
+                <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
                             <h3>Consultar Incapacidades</h3>
