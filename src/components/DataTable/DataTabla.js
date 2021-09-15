@@ -19,7 +19,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 import './dataTabla.css';
 
-export const DataTabla = ({ title, columns, data }) => {
+export const DataTabla = ({ title, columns, data, inputSearch = true }) => {
 
     const tableIcons = {
         Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -49,6 +49,7 @@ export const DataTabla = ({ title, columns, data }) => {
             data={data}
             options={{
                 maxBodyHeight: 400,
+                toolbar: inputSearch
             }}
             localization={{
                 toolbar: {

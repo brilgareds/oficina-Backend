@@ -105,6 +105,7 @@ const api = {
     getTypesIncapacity: `${backendPath}/incapacity/getTypesIncapacity`,
     getDocumentsIncapacity: `${backendPath}/incapacity/getDocumentsIncapacity`,
     postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`,
+    postUpdateDisabilityFiling: `${backendPath}/incapacity/updateDisabilityFiling`,
     getUserIncapacities: `${backendPath}/incapacity/getUserIncapacities`,
     getUserIncapacitiesFiles: `${backendPath}/incapacity/getUserIncapacitiesFiles`,
     getUserDataIncapacity: `${backendPath}/incapacity/getUserDataIncapacity`,

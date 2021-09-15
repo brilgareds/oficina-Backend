@@ -41,62 +41,90 @@ export const MiBilletera = () => {
 
     return (
         <>
+            <div className="card mb-3">
+                <div className="card-body position-relative textoMigaDePan">
+                    <div className="row">
+                        <div className="col-lg-8">
+                            <h3>Mi billetera</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="card mb-5 cardCabeceraImagen">
+                <img className="imagenCabecera" src="/assets/img/billetera/background-billetera.png" alt=""></img>
+            </div>
+
             <div className="col-md-12">
+
                 <div className="row">
-                    <div className="col-md-2"></div>
-                    <div className="col-md-8">
+                    <div className="col-md-3 p-4 dividorPantalla">
                         <div className="row">
-                            <div className="col-md-7 p-4 dividorPantalla text-center">
-                                <div className="row">
-                                    <div className="col-md-12 mb-4">
-                                        <span className="textoPpal">Gastos mensuales de<br /></span>
-                                        <span className="texto2rio">{getFullNameUser()}</span>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <DataTabla title={""} columns={columnsDataTable} data={rowsTable} />
-                                    </div>
-                                </div>
+                            <div className="col-md-12 textoPpal text-center">
+                                Ingresar nuevo gasto:
                             </div>
-                            <div className="col-md-5 p-4">
-                                <div className="row">
-                                    <div className="col-md-12 textoPpal text-center">
-                                        Ingresar nuevo gasto:
-                                    </div>
-                                    <div className="col-12 col-lg-12 mb-3 text-center">
-                                        <span className="form-label texto2rio" htmlFor="gasto">Gasto: </span>
-                                        <input onChange={onChangeInputHandle} value={gasto} name="gasto" id="gasto" className="form-control inputsMiBilletera" placeholder="Tipo de gasto" type="text" />
-                                    </div>
-                                    <div className="col-12 col-lg-12 mb-4 text-center">
-                                        <span className="form-label texto2rio" htmlFor="valorGasto">valor: </span>
-                                        <input onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="number" />
-                                    </div>
-                                    <div className="col-12 col-lg-12 mb-3 text-center">
-                                        <button className=" btns-billetera mb-3" type="button">
-                                            Agregar
-                                        </button>
-                                    </div>
+                            <div className="col-12 col-lg-12 mb-3 text-center">
+                                <span className="form-label texto2rio" htmlFor="gasto">Gasto: </span>
+                                <input onChange={onChangeInputHandle} value={gasto} name="gasto" id="gasto" className="form-control inputsMiBilletera" placeholder="Tipo de gasto" type="text" />
+                            </div>
+                            <div className="col-12 col-lg-12 mb-4 text-center">
+                                <span className="form-label texto2rio" htmlFor="valorGasto">valor: </span>
+                                <input onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="number" />
+                            </div>
 
-                                    <div className="col-12 col-lg-12 mb-4 text-left">
-                                        <span className="textoSalario">SALARIO: ${stateSalarioUsuario}</span>
-                                        <hr />
-                                        <span className="texto2rio">Total gastos: ${stateSumaDeGastos}</span>
-                                        <hr />
-                                        <span className="texto2rio">Total disponible: ${statetTatalDisponible}</span>
-                                    </div>
+                            <div className="col-12 col-lg-12 mb-4 text-left">
+                                <span className="textoSalario">SALARIO: ${stateSalarioUsuario}</span>
+                                <hr />
+                                <span className="texto2rio">Total gastos: ${stateSumaDeGastos}</span>
+                                <hr />
+                                <span className="texto2rio">Total disponible: ${statetTatalDisponible}</span>
+                            </div>
 
-                                    <div className="col-12 col-lg-12 mb-3 text-center">
-                                        <button onClick={onClickGuardar} className=" btns-billetera mb-3" type="button">
-                                            Guardar
-                                        </button>
-                                    </div>
+                            <div className="col-12 col-lg-12 mb-3 text-center">
+                                <button onClick={onClickGuardar} className=" btns-billetera mb-3" type="button">
+                                    Agregar y Guardar
+                                </button>
+                            </div>
 
-                                </div>
+                        </div>
+                    </div>
+                    <div className="col-md-6 p-4 dividorPantalla text-center">
+                        <div className="row">
+                            <div className="col-md-12 mb-4">
+                                <span className="textoPpal">Gastos mensuales de<br /></span>
+                                <span className="texto2rio">{getFullNameUser()}</span>
+                            </div>
+                            <div className="col-md-12">
+                                <DataTabla title={""} columns={columnsDataTable} data={rowsTable} inputSearch={false} />
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-2"></div>
+                    <div className="col-md-3 p-4">
+                        <div className="row">
+                            <div className="col-md-12 mb-5">
+                                <span className="textoPpal">Estos son tus beneficios:<br /></span>
+                                <span className="texto2rio">Descubre tus beneficios oprimiendo alguno de los botones de nuestras marcas aliadas.</span>
+                            </div>
+                            <div className="col-md-12 mb-4">
+                                <a href="https://employeeexpierences.gointegro.com/authentication/login" target="_blank" rel="noreferrer">
+                                    <img className="imgBeneficios" src="/assets/img/billetera/boton-employe.png" alt="boton-employe"></img>
+                                </a>
+                            </div>
+                            <div className="col-md-12 mb-4">
+                                <a href="https://www.fincomercio.com/" target="_blank" rel="noreferrer">
+                                    <img className="imgBeneficios" src="/assets/img/billetera/boton-fincomercio.png" alt="boton-fincomercio"></img>
+                                </a>
+                            </div>
+                            <div className="col-md-12 mb-4">
+                                <a href="https://suenos.co/" target="_blank" rel="noreferrer">
+                                    <img className="imgBeneficios" src="/assets/img/billetera/boton-suenos.png" alt="boton-suenos"></img>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </>
     )
 }

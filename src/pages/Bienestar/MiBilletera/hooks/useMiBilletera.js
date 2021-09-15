@@ -64,8 +64,10 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                                 gasto: element.GAST_NOMBRE,
                                 costo: "$" + element.GAST_VALOR,
                                 accion:
-                                    <button
-                                        className="btn btn-secondary"
+                                    <img
+                                        className="imgDeleteGasto"
+                                        alt="trash-fill-orange"
+                                        src="/assets/img/billetera/trash-fill-orange.png"
                                         onClick={
                                             () => {
                                                 onClickEliminarGasto({
@@ -74,8 +76,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                                                 })
                                             }
                                         }
-                                    ><i className="fas fa-trash-alt"></i>
-                                    </button>,
+                                    />,
                             });
                         });
 

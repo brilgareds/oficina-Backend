@@ -13,3 +13,17 @@ body {
     font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
     border-bottom: 1px solid black;
 }
+
+.trDesahbilitado{
+    background: #e9ecef;
+    cursor: not-allowed;
+}
+
+input[type="file"]:disabled{
+    cursor: not-allowed;
+}
+
+.tbodyModal,.tbodyModal>input[type="file"]{
+    font-size: 15px;
+}
+

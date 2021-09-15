@@ -30,8 +30,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
     const onChangeSelectHandle = ({ nameSelect, value }) => {
 
-        // console.log();
-
         setStateForm({
             ...formValue,
             [nameSelect]: value
@@ -101,8 +99,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 setOptionsTipoIncapacidad(optionsCategory);
 
             });
-
-
     }
 
 
@@ -133,9 +129,9 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 actualizarRowsTable(resGetDocumentsIncapacity);
             });
 
-
-
     }
+
+
 
     const [filesState, setFilesState] = useState();
     const onChangeInputFileHandle = ({ tipoArchivo, documento, target }) => {
@@ -170,8 +166,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
     const actualizarRowsTable = (data) => {
         setRowsTable();
         let rowsDTable = [];
-
-        console.log("data documentos", data);
 
         data.forEach((element, key) => {
             let numberRow = key + 1;
@@ -223,9 +217,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 }
             },
         };
-
-        console.log("json axio == > ", allData);
-        console.log("filesState axio == > ", filesState);
 
         const dataForm = new FormData();
         dataForm.append("allData", JSON.stringify(allData));

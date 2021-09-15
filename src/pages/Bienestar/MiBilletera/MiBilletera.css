@@ -1,5 +1,5 @@
 .mi-billetera {
-    background-image: url("../../../assets/img/vumOfficeImgs/background-form-1.png");
+    background-color: #0F4F80;
 }
 
 .btns-billetera {
@@ -41,16 +41,55 @@
 
 .textoPpal{
     color: #74E36B;
-    font-size: 25px;
+    font-size: 22px;
     font-weight: lighter;
 }
 
 .texto2rio{
     color: #FFFFFF;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: lighter;
 }
 
 .dividorPantalla{
     border-right: 1px solid #D8E2EF;
+}
+
+.imgBeneficios{
+    width: 100%;
+}
+
+.cardCabeceraImagen{
+    border-radius: .375rem;
+    background-color: unset;
+}
+
+.imagenCabecera{
+    border-radius: .375rem;
+}
+
+.imgDeleteGasto{
+    width: 20px;
+    cursor: pointer;
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: portrait) {
+    .cardCabeceraImagen{
+        display: none;
+    }
+    .mi-billetera {
+        background-color: #0F4F80;
+    }
+    
+}        
+
+@media only screen and (min-width: 320px) and (max-width: 736px) {
+    .cardCabeceraImagen{
+        display: none;
+    }
+    .mi-billetera {
+        background-color: #0F4F80;
+    }
+    
 }
