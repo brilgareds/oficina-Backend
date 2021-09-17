@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { api } from "../../../../environments/environments";
-import { getFetchWithHeader, overlay, postFetch } from "../../../../generalHelpers";
+import { advertenciaFormularioVacio, getFetchWithHeader, overlay, postFetch } from "../../../../generalHelpers";
 
 export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
 
+    const exprRegNumeros = /^[0-9+]+$/;                                                 //Expresion regular para validar el formato de solo numeros
+    const exprRegTelefono = /^[0-9+() -?]+$/;                                           //Expresion regular para validar el formato de un teléfono
+    const exprRegEmail = /^([a-zA-Z0-9_.-]+)@([\da-zA-Z0-9.-]+)\.([a-z.]{2,6})$/;       //Expresion regular para validar los correos electronicos
+    const exprRegSoloLetras = /^[a-zA-ZÑñáéíóúÁÉÍÓÚÄËÏÖÜäëïöü\s+]+$/;                   //Expresion regular para validar solo letras
     const [loadingPage, setloadingPage] = useState(formInitialState.loadingPage)
 
     const [formValue, setStateForm] = useState(formInitialState);
@@ -113,16 +117,25 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
     const [filesState, setFilesState] = useState([]);
     const onChangeInputFileHandle = ({ tipoArchivo, documento, target }) => {
 
-        filesState.push({
-            fileInfo: target.target.files[0],
-            tipoDocumento: documento,
-            codigoTipoArchivo: tipoArchivo,
-        });
+        if (target.target.files[0].type === "application/pdf") {
 
-        console.log("filesState", filesState);
+            filesState.push({
+                fileInfo: target.target.files[0],
+                tipoDocumento: documento,
+                codigoTipoArchivo: tipoArchivo,
+            });
 
-        setFilesState(filesState);
+            setFilesState(filesState);
 
+        } else {
+            document.getElementById(target.target.id).value = "";
+            Swal.fire({
+                icon: 'error',
+                title: 'Solo se permiten subir archivos tipo pdf',
+                confirmButtonText: 'Cerrar',
+            });
+        }
+        
     }
 
     useEffect(() => {
@@ -262,38 +275,66 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
             },
         }
 
-        const dataForm = new FormData();
-        dataForm.append("allData", JSON.stringify(allData));
+        if (!validarDatosFormulario(allData)) {
+            advertenciaFormularioVacio();
+        } else {
+            const dataForm = new FormData();
+            dataForm.append("allData", JSON.stringify(allData));
 
-        console.log("allData", allData);
+            console.log("allData", allData);
 
-        filesState.forEach(file => {
-            dataForm.append("file", file.fileInfo);
-            dataForm.append("filesNames", file.tipoDocumento);
-            dataForm.append("filesCodigos", file.codigoTipoArchivo);
-        });
-
-        postFetch({
-            url: api.saveInclusionBeneficios,
-            params: dataForm
-        })
-            .then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Datos guardados correctamente.',
-                    confirmButtonText: 'Ok',
-                }).then((result) => {
-                    window.location.reload();
-                })
-            })
-            .catch(() => {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Hubo un error en la inserción, por favor revisa el formulario.',
-                    confirmButtonText: 'Cerrar',
-                });
+            filesState.forEach(file => {
+                dataForm.append("file", file.fileInfo);
+                dataForm.append("filesNames", file.tipoDocumento);
+                dataForm.append("filesCodigos", file.codigoTipoArchivo);
             });
+
+            postFetch({
+                url: api.saveInclusionBeneficios,
+                params: dataForm
+            })
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Datos guardados correctamente.',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        window.location.reload();
+                    })
+                })
+                .catch(() => {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hubo un error en la inserción, por favor revisa el formulario.',
+                        confirmButtonText: 'Cerrar',
+                    });
+                });
+
+        }
+
+    }
+
+
+    const validarDatosFormulario = (allData) => {
+
+        const { correoElectronico, telefono } = allData.dataColaborador;
+        const { apellidoBeneficiario, beneficiarioPara, cedulaBeneficiario, nombreBeneficiario, tipoDocumento, tipoParentesco } = allData.dataNuevoBeneficiario;
+
+        if (
+            exprRegTelefono.test(telefono) &&
+            exprRegEmail.test(correoElectronico) &&
+            exprRegSoloLetras.test(beneficiarioPara) &&
+            exprRegNumeros.test(tipoParentesco) &&
+            exprRegNumeros.test(tipoDocumento) &&
+            exprRegNumeros.test(cedulaBeneficiario) &&
+            exprRegSoloLetras.test(nombreBeneficiario) &&
+            exprRegSoloLetras.test(apellidoBeneficiario)
+        ) {
+            return true;
+        }
+
+        return false;
 
     }
 

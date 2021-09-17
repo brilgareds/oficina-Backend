@@ -2,11 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { api } from "../../../../environments/environments";
-import { getFullNameUser, overlay, postFetch } from "../../../../generalHelpers";
+import { advertenciaFormularioVacio, getFullNameUser, overlay, postFetch } from "../../../../generalHelpers";
 
 
 export const useMiBilletera = (formInitialState = {}, dataUser) => {
 
+    const exprRegNumeros = /^[0-9+]+$/;                                                 //Expresion regular para validar el formato de solo numeros
+    const exprRegSoloLetras = /^[0-9a-zA-ZÑñáéíóúÁÉÍÓÚÄËÏÖÜäëïöü\s+]+$/;                   //Expresion regular para validar solo letras
     const [formValue, setStateForm] = useState(formInitialState);
     const [stateSalarioUsuario, setStateSalarioUsuario] = useState(formInitialState.salarioUsuario);
     const [stateSumaDeGastos, setStateSumaDeGastos] = useState(formInitialState.sumaDeGastos);
@@ -155,41 +157,55 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
 
     const onClickGuardar = () => {
 
-        overlay(false);
-        postFetch({
-            url: api.saveGastoBilletera,
-            params: {
-                billCod: formValue.dataUserGastos.gastosUsuario[0]?.BILL_CODIGO[0] || null,
-                billeteraNueva: formValue.billeteraNueva,
-                cedula: dataUser.cedula,
-                conceptos: { gasto: formValue.gasto.toUpperCase(), valor: Number(formValue.valorGasto), },
-                salario: formValue.dataUserGastos.dataUsuario.SALARIO,
-                nombreUser: getFullNameUser().toUpperCase(),
-                userDispo: statetTatalDisponible.replace(/\./g, ""),
-                userTotalGas: (formValue.billeteraNueva) ? Number(formValue.valorGasto) : Number(stateSumaDeGastos.replace(/\./g, "")) + Number(formValue.valorGasto),
-            }
-        })
-            .then((response) => {
-                overlay(false);
+        overlay(true);
+        let params = {
+            billCod: formValue.dataUserGastos.gastosUsuario[0]?.BILL_CODIGO[0] || null,
+            billeteraNueva: formValue.billeteraNueva,
+            cedula: dataUser.cedula,
+            conceptos: { gasto: formValue.gasto.toUpperCase(), valor: Number(formValue.valorGasto), },
+            salario: formValue.dataUserGastos.dataUsuario.SALARIO,
+            nombreUser: getFullNameUser().toUpperCase(),
+            userDispo: statetTatalDisponible.replace(/\./g, ""),
+            userTotalGas: (formValue.billeteraNueva) ? Number(formValue.valorGasto) : Number(stateSumaDeGastos.replace(/\./g, "")) + Number(formValue.valorGasto),
+        };
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Gasto guardado correctamente',
-                    showCancelButton: true,
-                    cancelButtonText: "Cerrar",
-                    showConfirmButton: false,
-                }).then(() => {
-                    setStateLoadingTable(true)
+        if (!validarInformacionFormulario(params)) {
+            advertenciaFormularioVacio();
+        } else {
+            postFetch({
+                url: api.saveGastoBilletera,
+                params: params
+            })
+                .then((response) => {
+                    overlay(false);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Gasto guardado correctamente',
+                        showCancelButton: true,
+                        cancelButtonText: "Cerrar",
+                        showConfirmButton: false,
+                    }).then(() => {
+                        setStateLoadingTable(true)
+                    });
                 });
-            });
-
-
-
-
-
-
+        }
     }
 
+
+    const validarInformacionFormulario = (params) => {
+
+        const { gasto, valor } = params.conceptos
+
+        if (
+            exprRegNumeros.test(valor) &&
+            exprRegSoloLetras.test(Number(gasto))
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 
     return ({
         formValue,

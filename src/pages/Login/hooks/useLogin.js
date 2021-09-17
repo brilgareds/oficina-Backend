@@ -180,7 +180,7 @@ export const useLogin = (formInitialState = {}) => {
 
         Swal.fire({
             width: '800px',
-            title: '¡¡Ingreso Externo¡¡',
+            title: '¡Ingreso Externo¡',
             html: `
                     <div class="row" style="text-align: left; margin: 10px;">
                         <div class="col-12 col-lg-12 mb-3 text-center">
@@ -252,9 +252,10 @@ export const useLogin = (formInitialState = {}) => {
                          
                     <br/>
             `,
+            showCloseButton: true,
             showCancelButton: false,
             showConfirmButton: false,
-            allowOutsideClick: false,
+            allowOutsideClick: true,
             didOpen: () => {
 
                 document.getElementById('btnEnviarModalContratistas').addEventListener('click', () => {
@@ -279,7 +280,7 @@ export const useLogin = (formInitialState = {}) => {
 
                         localStorage.setItem('d_u', JSON.stringify(dataContratistas)); //informacion de usuario contratista
 
-                        window.location.href = routes.sst.url;
+                        window.location.href = routes.encuestaRiesgoCovid.url;
 
                     } else {
 
