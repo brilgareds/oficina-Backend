@@ -1,7 +1,7 @@
 
 .cv{
-    background-image: none !important;
-    background-color: #ffffff;
+  background-image: url("../assets/img/vumOfficeImgs/background-form-1.png");
+    /* background-color: #ffffff; */
   }
 
   .cv .card{
