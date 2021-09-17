@@ -130,6 +130,10 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
         let tdBody = ``;
         dataApi.forEach((data, key) => {
 
+            if (data.ARCH_RUTA.includes('../../temporales/archivosIncapacidad')) {
+                data.ARCH_RUTA = data.ARCH_RUTA.replace('../../', 'http://www.listos.com.co:8080/oficinaVirtualPrueba/');
+            }
+
             tdBody +=
                 `<tr>
                     <td>${key + 1}</td>
@@ -229,7 +233,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
     const desplegarModalActualizarDatos = (dataIncapacityObj) => {
 
 
-        
+
 
         const { dataIncapacity, documentsIncapacity } = dataIncapacityObj;
 
@@ -259,7 +263,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                     <td>${data.TIP_NOMBRE}</td>
                     <td>${estado}</td>
                     <td>${(data.RECHAZO !== null) ? data.RECHAZO.toUpperCase() : "N/A"}</td>
-                    <td><input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" style="width: 18rem;"></td>
+                    <td><input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;"></td>
                 </tr>`
                 ;
 
@@ -372,12 +376,24 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
     const [filesState, setFilesState] = useState([]);
     const onChangeInputFileHandle = (event) => {
 
-        filesState.push({
-            file: event.target.files[0],
-            codigoArchivo: event.target.dataset.target,
-        });
+        if (event.target.files[0].type === "application/pdf") {
+            filesState.push({ file: event.target.files[0], codigoArchivo: event.target.dataset.target, });
+            setFilesState(filesState);
+        } else {
+            document.getElementById(event.target.id).value = "";
 
-        setFilesState(filesState);
+            alertify.warning(`
+                <div className="row">
+                    <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
+                        Error.
+                    </div>
+                    <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                        Solo se permiten subir archivos tipo pdf
+                    </div>
+                </div>
+            `).delay(7);
+        }
+
     };
 
 
@@ -385,11 +401,8 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         if (filesState.length !== 0) {
             overlay(true);
-
-            // const formularioModal = document.getElementById("formModalActualizacionDocumentosIncapacidad");
-
+            
             const dataForm = new FormData();
-            // dataForm.append("formData", formularioModal);
             dataForm.append("numeroIncapacidad", numerIncapacidad);
             dataForm.append("correoUsuario", dataUser.mail);
             dataForm.append("cedulaUsuario", dataUser.cedula);
@@ -451,7 +464,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         filesState.splice(0, filesState.length)
         setFilesState(filesState.splice(0, filesState.length));
-        
+
     }
 
 

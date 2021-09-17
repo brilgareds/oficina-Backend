@@ -20,8 +20,8 @@ export const DashboardRoutes = () => {
         if (!arrayRoutes.length && JSON.parse(localStorage.getItem('d_u')).ingresoExterno) {
             return (
                 <>
-                    <Route path="*" component={routes.sst.componente} />
-                    <Redirect to={routes.sst.url} />
+                    <Route path="*" component={routes.encuestaRiesgoCovid.componente} />
+                    <Redirect to={routes.encuestaRiesgoCovid.url} />
                 </>
             )
         }
