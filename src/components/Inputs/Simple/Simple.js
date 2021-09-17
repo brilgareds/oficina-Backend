@@ -5,7 +5,7 @@ export const Simple = ({ prop, items, currentArray, agregarPregunta, formEncuest
     const updateResponse = ({prop, currentArray, PREGUNTA_SIGUIENTE_ID, respuesta}) => {
 
         setFormEncuesta(old_value => {
-            old_value[tabIndex][prop] = { COD_ER: respuesta.COD_ER, value: null };
+            old_value[tabIndex][prop] = { codeER: respuesta.codeER, value: null };
 
             return old_value;
         });
@@ -17,12 +17,12 @@ export const Simple = ({ prop, items, currentArray, agregarPregunta, formEncuest
         {
             items.map(respuesta => {
 
-                const { RESPUESTA, PREGUNTA_SIGUIENTE_ID, COD_ER } = respuesta;
-                const id = `${prop}_${COD_ER}`;
+                const { RESPUESTA, PREGUNTA_SIGUIENTE_ID, codeER } = respuesta;
+                const id = `${prop}_${codeER}`;
 
                 return (
                     <div className="form-check" key={ id } >
-                        <input className="form-check-input" type="radio" defaultChecked={formEncuesta[tabIndex][prop]?.COD_ER === COD_ER} name={ prop } id={ id } onClick={ (e)=> updateResponse({prop, currentArray, PREGUNTA_SIGUIENTE_ID, respuesta}) } required />
+                        <input className="form-check-input" type="radio" defaultChecked={formEncuesta[tabIndex][prop]?.codeER === codeER} name={ prop } id={ id } onClick={ (e)=> updateResponse({prop, currentArray, PREGUNTA_SIGUIENTE_ID, respuesta}) } required />
                         <label className="form-check-label" htmlFor={ id }>
                             { RESPUESTA }
                         </label>

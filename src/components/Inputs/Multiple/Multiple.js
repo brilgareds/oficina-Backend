@@ -6,8 +6,8 @@ export const Multiple = ({ prop, items, currentArray, agregarPregunta, setFormEn
 
     const [valueSelect, setValueSelect] = useState(formEncuesta[tabIndex][prop] ?? []);
     
-    const options = items.map(({COD_ER, RESPUESTA, PREGUNTA_SIGUIENTE_ID, single}) => ({
-        value: COD_ER,
+    const options = items.map(({codeER, RESPUESTA, PREGUNTA_SIGUIENTE_ID, single}) => ({
+        value: codeER,
         label: RESPUESTA,
         single: single,
         PREGUNTA_SIGUIENTE_ID: PREGUNTA_SIGUIENTE_ID,

@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { getBranches, specificDecimals } from '../../../generalHelpers';
+import { specificDecimals } from '../../../generalHelpers';
+import { getAllBranches } from '../../../repositories/generalInfo';
 import { ColourStyles   } from '../../Inputs/Multiple/ColourStyles';
 
 export const Sedes = ({ setForm }) => {
 
     const [branch, setBranch] = useState('');
+    const [branches, setBranches] = useState([])
     const [reason, setReason] = useState('');
     const [temperature, setTemperature] = useState('');
-    const branches = getBranches();
+
+    useEffect(() => {
+        getAllBranches().then(setBranches);
+    }, []);
 
     const handleReasonUpdate = (e) => {
         setReason(e.target.value);
