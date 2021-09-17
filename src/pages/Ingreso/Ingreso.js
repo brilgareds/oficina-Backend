@@ -45,7 +45,7 @@ export const Ingreso = () => {
     return (finished) ? <Redirect to='/' /> : (
         <>
             <div className="card mb-3">
-                <div className="card-header position-relative" style={{ paddingLeft: '3rem' }}>
+                <div className="card-header position-relative text-center text-md-start ps-md-5" style={{ paddingLeft: '3rem' }}>
                     <div className="col-12">
                         <h3>Formulario Ingreso</h3>
                     </div>

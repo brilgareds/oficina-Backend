@@ -85,10 +85,12 @@ const files = {
 
 const api = {
     path: backendPath,
+    resquestApprovalPresentationCard: `${backendPath}/presentationCard/resquestApproval/`,
     getAllBranches: `${backendPath}/allBranches/`,
     getAllCities: `${backendPath}/allCities/`,
     getCitiesForASpecificPerson: `${backendPath}/citiesForASpecificPerson/`,
     getAllMenu: `${backendPath}/navigator/`,
+    saveSurveys: `${backendPath}/surveys/save`,
     getSurveysCovid: `${backendPath}/surveys/covid`,
     getSurveysFence: `${backendPath}/surveys/epidemiologicalFence`,
     getSurveysHealthCondition: `${backendPath}/surveys/healthCondition`,

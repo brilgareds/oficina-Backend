@@ -115,6 +115,7 @@ const postFetch = async ({
     url,
     params,
     headers = {
+        'Authorization': (!localStorage.getItem('a_t')) ? '' : `Bearer ${localStorage.getItem('a_t')}`,
         'accept': '*/*',
         'Content-Type': 'application/json'
     }
@@ -123,7 +124,7 @@ const postFetch = async ({
     let responseApi = null;
 
     try {
-        responseApi = (await axios.post(url, params, headers)).data;
+        responseApi = (await axios.post(url, params, { headers })).data;
 
         return responseApi;
     } catch (error) {
@@ -161,6 +162,32 @@ const overlay = (show = false) => {
         Swal.close();
     }
 }
+
+const makeWarningAlert = (props) => {
+
+    const { errors=[], title='Advertencia', subTitle='Revisa el formulario con las siguientes indicaciones:' } = props;
+
+    Swal.fire({
+        title,
+        html: `
+            <div className="row">
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                    ${subTitle}
+                </div>
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">${
+                    errors.map(({description}) => {
+                        return `◉ ${description}<br/>`
+                    })}
+                </div>
+            </div>
+             <br/>
+            
+        `,
+        icon: 'warning',
+        confirmButtonText: 'Cerrar',
+    });
+};
+
 
 const advertenciaFormularioVacio = () => {
     Swal.fire({
@@ -245,7 +272,38 @@ const getDateToday = () => {
 }
 
 
+const changeMinutes = ({time, operator, minutesToChange}) => {
+    const itsSum = (operator === '+');
+    const itsSubtraction = (operator === '-');
+
+    if (!time || (!itsSum && !itsSubtraction) || !minutesToChange) return '';
+
+    const arrayTime = time.split(':');
+    const hour = arrayTime[0];
+    const minutes = arrayTime[1];
+
+    const date = new Date();
+    date.setHours(hour);
+    date.setMinutes(minutes);
+    date.setSeconds('00');
+
+    const newTime = (
+        (itsSum)         ? `${date.getMinutes()+minutesToChange}` :
+        (itsSubtraction) ? `${date.getMinutes()-minutesToChange}` : ''
+    );
+
+    date.setMinutes(newTime);
+
+    const newHour    = getTwoLastCharacters(`0${date.getHours()}`);
+    const newMinutes = getTwoLastCharacters(`0${date.getMinutes()}`);
+
+    return `${newHour}:${newMinutes}`;
+};
+
+
 export {
+    changeMinutes,
+    makeWarningAlert,
     getFetch,
     definirPropiedadesLink,
     getFetchWithHeader,

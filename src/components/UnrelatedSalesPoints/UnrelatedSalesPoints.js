@@ -19,17 +19,19 @@ export const UnrelatedSalesPoints = ({filter, setForm, value}) => {
             handleSalesPointUpdate();
             getSalesPoints(filter).then(setSalesPoints);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
 
     useEffect(() => {
         setSalesPoint(value || []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
 
     return (
         <div>
             <label>Punto de venta no relacionado</label>
-            <Select isMulti styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
+            <Select isMulti closeMenuOnSelect={false} styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
             <input
                 tabIndex={-1}
                 autoComplete="off"
@@ -41,7 +43,7 @@ export const UnrelatedSalesPoints = ({filter, setForm, value}) => {
                 }}
                 onChange={ ()=>{} }
                 value={salesPoint}
-                required='required'
+                // required='required'
             />
         </div>
     )

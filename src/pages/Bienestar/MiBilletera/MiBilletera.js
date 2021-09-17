@@ -53,7 +53,7 @@ export const MiBilletera = () => {
                                         <span className="texto2rio">{getFullNameUser()}</span>
                                     </div>
                                     <div className="col-md-12">
-                                        <DataTabla title={""} columns={columnsDataTable} data={rowsTable} />
+                                        <DataTabla title={''} columns={columnsDataTable} data={rowsTable} />
                                     </div>
                                 </div>
                             </div>
