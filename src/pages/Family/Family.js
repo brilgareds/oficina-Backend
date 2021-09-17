@@ -526,12 +526,12 @@ class Family extends Component{
                     <div className=" d-flex justify-content-around">
                         
                         <div className="row">
-                            <h4>&#191;Deseas agregar familiares&#63;</h4>
+                            <h4 className="text-white">&#191;Deseas agregar familiares&#63;</h4>
                             <div className="col-sm">
                                 <input type="radio" name="uniform" className="btn-check " id="btn-check-outlined" autoComplete="off"></input>
                                 <label className="btn backGreen" htmlFor="btn-check-outlined" onClick={() =>{this.validarState(true)}}>SI</label> &nbsp;
                                 <input type="radio" name="uniform" className="btn-check backGreen" id="btn-check-outlined2" autoComplete="off"></input>
-                                <label className="btn backGreen" htmlFor="btn-check-outlined2" onClick={() => this.validarState(false)}>No</label>
+                                <label className="btn backGreen" htmlFor="btn-check-outlined2" onClick={() => this.validarState(false)}>NO</label>
                             </div>
                            
                         </div>                                       
