@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
-import AddBox from '@material-ui/icons/AddBox';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
@@ -19,12 +19,12 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 import './dataTabla.css';
 
-export const DataTabla = ({ title, columns, data, inputSearch = true }) => {
+export const DataTabla = ({ title, columns, data, search=true, toolbar=true, backgroundColor, color, onRowAdd=false, onRowDelete=false }) => {
 
     const tableIcons = {
-        Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-        Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-        Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+        Add: forwardRef((props, ref) => <div className='containerAddCircleIcon'><AddCircleIcon className='addCircleIcon' style={{ fontSize: '2rem', color: '#1780e8' }} {...props} ref={ref} /></div>),
+        Check: forwardRef((props, ref) => <Check style={{ color: '#1780e8' }} {...props} ref={ref} />),
+        Clear: forwardRef((props, ref) => <Clear style={{ color: 'darkred' }} {...props} ref={ref} />),
         Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
         DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
         Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
@@ -47,16 +47,36 @@ export const DataTabla = ({ title, columns, data, inputSearch = true }) => {
             title={title}
             columns={columns}
             data={data}
+            editable={{
+                onRowAdd,
+                onRowDelete
+            }}
             options={{
                 maxBodyHeight: 400,
-                toolbar: inputSearch
+                headerStyle: { backgroundColor, color },
+                search,
+                toolbar
             }}
             localization={{
                 toolbar: {
                     searchPlaceholder: 'Buscar...',
                 },
+                header: {
+                    actions: ''
+                },
+                pagination: {
+                    labelDisplayedRows: '{from}-{to} de {count}',
+                    labelRowsSelect: 'Filas'
+                },
                 body: {
-                    emptyDataSourceMessage: "No hay información",
+                    addTooltip: 'Agregar',
+                    deleteTooltip: 'Eliminar',
+                    editRow: {
+                        cancelTooltip: 'Cancelar',
+                        saveTooltip: 'Confirmar',
+                        deleteText: '¿Está seguro que desea eliminar el item?',
+                    },
+                    emptyDataSourceMessage: 'No hay información',
                 },
             }}
         />

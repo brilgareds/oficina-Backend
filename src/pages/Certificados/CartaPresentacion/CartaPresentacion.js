@@ -1,10 +1,11 @@
 import React from 'react';
-import { CartaIngreoMateriales } from '../../../components/CartaIngreoMateriales/CartaIngreoMateriales';
+import { CartaIngresoMateriales } from '../../../components/CartaIngresoMateriales/CartaIngresoMateriales';
 import { CartaPuntoVenta } from '../../../components/CartaPuntoVenta/CartaPuntoVenta';
 import { CartaPuntoVentaFueraHorario } from '../../../components/CartaPuntoVentaFueraHorario/CartaPuntoVentaFueraHorario';
 import { Cities } from '../../../components/Cities/Cities';
 import { SalesPoints } from '../../../components/SalesPoints/SalesPoints';
 import { UnrelatedSalesPoints } from '../../../components/UnrelatedSalesPoints/UnrelatedSalesPoints';
+import { ResquestApproval } from '../../../repositories/PresentationCard/PresentationCard';
 import { useCartaPresentacion } from './useCartaPresentacion';
 
 export const CartaPresentacion = () => {
@@ -13,7 +14,6 @@ export const CartaPresentacion = () => {
 
     const {formPresentationCard, setFormPresentationCard } = useCartaPresentacion();
     const { typeCard } = formPresentationCard;
-    console.log('formPresentationCard: ', formPresentationCard)
 
     const tipoCartas = [
         {
@@ -25,19 +25,62 @@ export const CartaPresentacion = () => {
             title: 'Carta de presentación a punto de venta con ingreso fuera de horario'
         },
         {
-            id: 'cartaIngreoMateriales',
+            id: 'cartaIngresoMateriales',
             title: 'Carta de ingreso de materiales a punto de venta'
         }
     ];
+
+    const formatRequestBody = (data) => {
+        const {
+            city='',
+            materials=[],
+            checkInTime='',
+            salesPoints=[],
+            checkOutTime='',
+            unrelatedsalesPoints=[]
+        } = data;
+
+        let response = {
+            city,
+            salesPoints: salesPoints.map(({value}) => value),
+            unrelatedsalesPoints: unrelatedsalesPoints.map(({value}) => value)
+        };
+
+        if (data.typeCard === 'cartaIngresoMateriales') {
+            Object.assign(response, {
+                materials: materials.map(({accion, cantidad, material}) => ({accion, cantidad, material}))
+            });
+        }
+
+        if (data.typeCard === 'cartaPuntoVentaFueraHorario') {
+            Object.assign(response, {
+                checkInTime,
+                checkOutTime
+            });
+        }
+
+        return response;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         
         console.log('Form has: ', formPresentationCard);
+
+        const params = formatRequestBody(formPresentationCard);
+
+        console.log('\nParams: ', params)
+
+        ResquestApproval({params})
+            .then(response => {
+                console.log('Response is: ', response);
+                return response;
+            })
+            .catch(err => { console.log('Error has: ', err) })
     };
 
     const handleChangeTypeCard = (e) => {
-        setFormPresentationCard(old_data => ({ ...old_data, typeCard: e.target.value }));
+        setFormPresentationCard(old_data => ({ city: old_data?.city || '', materials: old_data?.materials || [],  salesPoints: old_data?.salesPoints || [], unrelatedsalesPoints: old_data?.unrelatedsalesPoints || [], typeCard: e.target.value }));
     };
 
     const handleCityChange = (newData) => {
@@ -56,9 +99,9 @@ export const CartaPresentacion = () => {
     return (
         <>
             <div className="card mb-3">
-                <div className="card-header position-relative" style={{ paddingLeft: '3rem' }}>
+                <div className="card-header position-relative text-center text-md-start ps-md-5" style={{ paddingLeft: '3rem' }}>
                     <div className="col-12">
-                        <h3>Carta de presentacion</h3>
+                        <h3>Carta de presentación</h3>
                     </div>
                 </div>
             </div>
@@ -79,18 +122,18 @@ export const CartaPresentacion = () => {
                         </div>
 
                         <div className='offset-1 col-10 mt-5'>
-                            <div className='input-group containerCardsFilter' style={{ marginBottom: '1rem' }}>
+                            <div className='input-group containerCardsFilter mb-5' style={{ marginBottom: '1rem' }}>
                                 <Cities setForm={handleCityChange} />
                                 <SalesPoints filter={(formPresentationCard?.city || '').toLowerCase()} setForm={handleSalesPointChange} value={formPresentationCard?.salesPoints || []} />
                                 <UnrelatedSalesPoints filter={(formPresentationCard?.city || '').toLowerCase()} setForm={handleUnrelatedSalesPointChange} value={formPresentationCard?.unrelatedsalesPoints || []} />
                             </div>{
                             (typeCard === 'cartaPuntoVenta')             ? <CartaPuntoVenta form={formPresentationCard} setForm={setFormPresentationCard} /> :
-                            (typeCard === 'cartaIngreoMateriales')       ? <CartaIngreoMateriales form={formPresentationCard} setForm={setFormPresentationCard} /> : 
+                            (typeCard === 'cartaIngresoMateriales')      ? <CartaIngresoMateriales form={formPresentationCard} setForm={setFormPresentationCard} /> : 
                             (typeCard === 'cartaPuntoVentaFueraHorario') ? <CartaPuntoVentaFueraHorario form={formPresentationCard} setForm={setFormPresentationCard} /> : <></> }
                         </div>
 
                         <div className='offset-1 col-10 mt-4 text-end'>
-                            <span className='btn btn-primary'>Solicitar aprobación</span>
+                            <button type='submit' className='btn btn-primary'>Solicitar aprobación</button>
                         </div>
                     </form>
                 </div>

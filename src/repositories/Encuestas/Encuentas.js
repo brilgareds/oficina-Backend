@@ -1,5 +1,5 @@
 import { api } from '../../environments/environments';
-import { getFetch } from '../../generalHelpers';
+import { getFetch, postFetch } from '../../generalHelpers';
 
 const formatSurveys = (questions) => {
     let newQuestions = [];
@@ -53,6 +53,16 @@ const getSurveys = async({tipoEncuesta=''}) => {
 };
 
 
+const saveSurveys = async(params) => {
+
+    const url = api.saveSurveys;
+    const response = await(await(url ? postFetch({ url, params }) : {}) || {});
+
+    return response;
+};
+
+
 export {
-    getSurveys
+    getSurveys,
+    saveSurveys
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getSurveys } from '../../repositories/Encuestas/Encuentas';
+import { getSurveys, saveSurveys } from '../../repositories/Encuestas/Encuentas';
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.min.css';
 import 'alertifyjs/build/css/themes/default.min.css';
@@ -47,17 +47,18 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
 
         console.log('formEncuesta: ', formEncuesta);
         
-        let respuestasRespondidas = formatRespuestas(formEncuesta);
+        const respuestasRespondidas = formatRespuestas(formEncuesta);
 
-        console.log('\n\nrespuestasRespondidas: ', respuestasRespondidas)
+        console.log('\n\nrespuestasRespondidas: ', respuestasRespondidas);
 
-        const respuestasFueronAlmacenadas = true;
-
-        if (respuestasFueronAlmacenadas) {
-            alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', generarReporte);
-        } else {
-            alertify.error('Error al guardar las respuestas<br>Intente nuevamente!');
-        }
+        saveSurveys(respuestasRespondidas)
+            .then(response => {
+                alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', generarReporte);
+            })
+            .catch(e => {
+                console.log('Error: ', e);
+                alertify.error('Error al guardar las respuestas<br>Intente nuevamente!');
+            });
     };
 
     const respuestasDenegadas = () => {};

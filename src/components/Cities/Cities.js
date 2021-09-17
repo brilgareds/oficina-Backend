@@ -21,9 +21,9 @@ export const Cities = ({ setForm }) => {
 
 
     return (
-        <div>
+        <div style={{ zIndex:11 }}>
             <label>Ciudad</label>
-            <Select styles={ColourStyles} onChange={handleCityUpdate} value={ city } options={cities} />
+            <Select styles={ ColourStyles } onChange={handleCityUpdate} value={ city } options={cities} />
             <input
                 tabIndex={-1}
                 autoComplete="off"

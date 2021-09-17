@@ -42,27 +42,27 @@ const fakeSalesPoints = {
     cali: {
         data: [
             {
-                value: 'cali_1',
+                value: '3091',
                 label: 'cali_1'
             },
             {
-                value: 'cali_2',
+                value: 3104,
                 label: 'cali_2'
             },
             {
-                value: 'cali_3',
+                value: 3112,
                 label: 'cali_3'
             },
             {
-                value: 'cali_4',
+                value: 3130,
                 label: 'cali_4'
             },
             {
-                value: 'cali_5',
+                value: '3160',
                 label: 'cali_5'
             },
             {
-                value: 'cali_6',
+                value: '3178',
                 label: 'cali_6'
             }
         ]
