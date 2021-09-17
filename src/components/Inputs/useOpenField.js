@@ -8,7 +8,7 @@ export const useOpenField = ({ formEncuesta, currentArray, agregarPregunta, setF
     const actualizarFormulario = (newValue) => {
 
         setFormEncuesta(old_value => {
-            old_value[tabIndex][prop] = { COD_ER: item.COD_ER, value: newValue };
+            old_value[tabIndex][prop] = { codeER: item.codeER, value: newValue };
 
             return old_value;
         });

@@ -9,6 +9,7 @@ export const SalesPoints = ({filter, setForm, value}) => {
     const [salesPoint,  setSalesPoint]  = useState([]);
 
     const handleSalesPointUpdate = (e) => {
+        setSalesPoint(e || []);
         setForm(e || []);
     };
 

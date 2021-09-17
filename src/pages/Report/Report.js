@@ -4,11 +4,10 @@ import { routes } from '../../environments/environments';
 import { currentDate, getDocumentIdUser, getEmailUser, getFullNameUser, getGenderUser, getPhoneUser, getStatusUser } from '../../generalHelpers';
 import './report.css';
 
-export const Report = (obj={}) => {
-    const showButtonCheckIn = !!(obj.showButtonCheckIn);
-    const testId = obj.testId || 385582;
-    const fechaReg = obj.fechaReg || currentDate();
-    const nombreEmpresa = obj.nombreEmpresa || 'Vision & Marketing S.A.S';
+export const Report = ({showButtonCheckIn, dataReport}) => {
+    const testId = dataReport.survey.ENC_CODIGO;
+    const fechaReg = dataReport.fechaReg || currentDate();
+    const nombreEmpresa = dataReport?.logo[0].EMP_NOMBRE;
     const tipoDocumento = 'C';
 
     return (
@@ -33,7 +32,7 @@ export const Report = (obj={}) => {
                 </div>
 
                 <div className='col-12 col-lg-5'>
-                    <div className='mb-3 mensaje-covid'>Sintomatología: Por favor mantenga las medidas de prevención relacionadas al uso del tapabocas, distanciamiento y lavado de manos.</div>
+                    <div className='mb-3 mensaje-covid' style={{background: `rgb${dataReport.score[0]}`, color: `rgb${dataReport.score[1]}` }}>{dataReport.score[2]}</div>
                     <div className='offset-1 col-10 mb-3 p-0 text-center'>
                         <Link to={ '/assets/documents/Recomendaciones_generales.pdf' } style={{ fontSize: '0.9rem' }} target='_blank'>Conoce aquí las recomendaciones asociadas al Covid-19</Link>
                     </div>

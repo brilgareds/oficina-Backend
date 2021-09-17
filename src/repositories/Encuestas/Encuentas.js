@@ -16,12 +16,14 @@ const formatSurveys = (questions) => {
                     pregunta.responses[0].PREGUNTA_SIGUIENTE_ID = question.questions[i+1]?.ID || '';
                 }
 
-                if (pregunta.SELECCION === 'M') {
+                pregunta.responses.forEach((response, j) => {
+                    pregunta.responses[j].codeER = pregunta.responses[j].COD_ER;
+                    delete pregunta.responses[j].COD_ER;
 
-                    pregunta.responses.forEach((response, j) => {
+                    if (pregunta.SELECCION === 'M') {
                         pregunta.responses[j].single = (response.RESPUESTA.toLowerCase().includes('ninguna'));
-                    });
-                }
+                    }
+                });
 
                 newQuestion[pregunta.ID] = pregunta;
             });
@@ -53,9 +55,13 @@ const getSurveys = async({tipoEncuesta=''}) => {
 };
 
 
-const saveSurveys = async(params) => {
+const saveSurveys = async({params, tipoEncuesta}) => {
 
-    const url = api.saveSurveys;
+    const url = (
+        (tipoEncuesta === 'casosCovid') ? api.saveSurveysCovid :
+        (tipoEncuesta === 'riesgoCovid') ? api.saveSurveysHealthCondition :
+        (tipoEncuesta === 'cercoEpidemeologico') ? api.saveSurveysEpidemiologicalFence : '' 
+    );
     const response = await(await(url ? postFetch({ url, params }) : {}) || {});
 
     return response;

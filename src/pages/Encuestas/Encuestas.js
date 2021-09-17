@@ -11,7 +11,7 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
     const {
         encuestas, tabIndex, setTabIndex, currentQuestions, setCurrentQuestions,
         existeProximoTab, nextTab, formEncuesta, setFormEncuesta,
-        formularioEnviado
+        formularioEnviado, dataReport
     } = useEncuestas({tipoEncuesta});
 
     if (!encuestas || !encuestas.length) return <></>;
@@ -23,14 +23,12 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
         })
     }
 
-    const showButtonCheckIn = (tipoEncuesta === 'riesgoCovid');
-
-    console.log('\nencuestas: ', encuestas)
+    const showButtonCheckIn = !!(tipoEncuesta === 'riesgoCovid');
 
     return (
         <>
             <div className="card mb-3">
-                <div className="bg-holder d-none d-lg-block bg-card bg-encuesta"></div>
+                <div className="bg-holder d-none d-lg-block bg-card"></div>
                 <div className="card-header position-relative text-center text-md-start ps-md-5" style={{ paddingLeft: '3rem' }}>
                     <div className="col-12">
                         <h3>{
@@ -66,7 +64,7 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
                                         </div>
                                     </Tabs>
                                     :
-                                    <Report showButtonCheckIn={showButtonCheckIn} />}
+                                    <Report showButtonCheckIn={showButtonCheckIn} dataReport={dataReport} />}
                             </div>
                         </div>
                     </div>

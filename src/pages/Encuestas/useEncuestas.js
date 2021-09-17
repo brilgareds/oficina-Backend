@@ -11,6 +11,7 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
     const [formEncuesta, setFormEncuesta] = useState([]);
     const [currentQuestions, setCurrentQuestions] = useState({});
     const [formularioEnviado, setFormularioEnviado] = useState(false);
+    const [dataReport, setDataReport] = useState({});
 
     useEffect(() => {
 
@@ -19,10 +20,10 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         getSurveys({tipoEncuesta}).then(setEncuestas);
     }, [tipoEncuesta]);
 
-    const generarReporte = () => {
-        
+    const generarReporte = (response => {
+        setDataReport(response?.data);
         setFormularioEnviado(true);
-    };
+    });
 
     const formatRespuestas = (formEncuesta) => {
         let respuestas = [];
@@ -35,7 +36,7 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
           
             if (!esArray) respuestas.push(filtro[prop])
             else {
-                respuestas = [ ...respuestas, ...obj.map(({value}) => ({ COD_ER: value, value: null })) ];
+                respuestas = [ ...respuestas, ...obj.map(({value}) => ({ codeER: value, value: null })) ];
             }
         }
 
@@ -44,16 +45,13 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
 
 
     const respuestasConfirmadas = (evt, value) => {
-
-        console.log('formEncuesta: ', formEncuesta);
         
-        const respuestasRespondidas = formatRespuestas(formEncuesta);
+        const params = { answers: formatRespuestas(formEncuesta) };
+        const data = { params, tipoEncuesta };
 
-        console.log('\n\nrespuestasRespondidas: ', respuestasRespondidas);
-
-        saveSurveys(respuestasRespondidas)
+        saveSurveys(data)
             .then(response => {
-                alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', generarReporte);
+                alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', () => { generarReporte(response) });
             })
             .catch(e => {
                 console.log('Error: ', e);
@@ -97,6 +95,8 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         formEncuesta,
         setFormEncuesta,
         formularioEnviado,
-        setFormularioEnviado
+        setFormularioEnviado,
+        dataReport,
+        setDataReport
     }
 }
