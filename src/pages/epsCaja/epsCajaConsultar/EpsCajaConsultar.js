@@ -1,9 +1,10 @@
-import React from 'react';
-import { DataTabla } from '../../../components/DataTable/DataTabla';
-import { useIncapacidadConsultar } from './hooks/useIncapacidadConsultar';
-import './incapacidadConsultar.css';
 
-export const IncapacidadConsultar = () => {
+import { DataTabla } from '../../../components/DataTable/DataTabla';
+import { useEpsCajaConsultar } from './hooks/useEpsCajaConsultar';
+import './epsCajaConsultar.css';
+
+export const EpsCajaConsultar = () => {
+
 
     const dataUser = JSON.parse(localStorage.getItem('d_u'));
     const headerStyles = { backgroundColor: '#EDF2F9', color: '#344050', zIndex: 0, };
@@ -11,14 +12,17 @@ export const IncapacidadConsultar = () => {
     const {
         formValue,
         rowsTable,
-    } = useIncapacidadConsultar(
+    } = useEpsCajaConsultar(
         {
             columnsDataTable: [
                 { title: 'CONSECUTIVO', field: 'consecutivo', headerStyle: headerStyles },
-                { title: 'TIPO INCAPACIDAD', field: 'tipo_incapacidad', headerStyle: headerStyles },
-                { title: 'DOCUMENTOS', field: 'documentos', headerStyle: headerStyles },
+                { title: 'CEDULA INCAPACIDAD', field: 'cedulaIncapacidad', headerStyle: headerStyles },
+                { title: 'NOMBRE', field: 'nombre', headerStyle: headerStyles },
+                { title: 'PARENTESCO', field: 'parentesco', headerStyle: headerStyles },
+                { title: 'EPS', field: 'eps', headerStyle: headerStyles },
+                { title: 'CAJA COMPENSACION', field: 'cajaCompensacion', headerStyle: headerStyles },
                 { title: 'ESTADO', field: 'estado', headerStyle: headerStyles },
-                { title: 'ACTUALIZAR', field: 'actualizar', headerStyle: headerStyles },
+                { title: 'DOCUMENTOS', field: 'documentos', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             files: [],
@@ -30,13 +34,14 @@ export const IncapacidadConsultar = () => {
 
     const { columnsDataTable } = formValue;
 
+
     return (
         <>
             <div className="card mb-3">
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Consultar Incapacidades</h3>
+                            <h3>Consulta de solicitud Beneficiarios</h3>
                         </div>
                     </div>
                 </div>

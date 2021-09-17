@@ -22,6 +22,7 @@ import Salud from "../pages/Salud/Salud.js";
 import LivingPlace from "../pages/LivingPlace/LivingPlave.js";
 import { baseUrl } from "../config/config.js";
 import { Navbar } from "../components/Navbars/MainNavBar/Navbar.js";
+import { routesBeneficiarios } from "../pages/epsCaja/routes.js";
 
 
 const frontendPath = window.location.protocol + '//' + window.location.host;
@@ -52,6 +53,7 @@ const routes = {
     miBilletera: { url: '/mi_billetera', componente: MiBilletera },
     ayuda: routesAyuda,
     incapacidad: routesIncapacidad,
+    epsCaja: routesBeneficiarios,
     cv: {
         subPages: {
             hojaVida: { url: '/cv/datos_basicos', componente: CV },
@@ -107,12 +109,22 @@ const api = {
     getTypesIncapacity: `${backendPath}/incapacity/getTypesIncapacity`,
     getDocumentsIncapacity: `${backendPath}/incapacity/getDocumentsIncapacity`,
     postSaveDisabilityFiling: `${backendPath}/incapacity/saveDisabilityFiling`,
+    postUpdateDisabilityFiling: `${backendPath}/incapacity/updateDisabilityFiling`,
     getUserIncapacities: `${backendPath}/incapacity/getUserIncapacities`,
     getUserIncapacitiesFiles: `${backendPath}/incapacity/getUserIncapacitiesFiles`,
     getUserDataIncapacity: `${backendPath}/incapacity/getUserDataIncapacity`,
     getConsultarDatosUsuarioBilletera: `${backendPath}/mywallet/getConsultarDatosUsuarioBilletera`,
     deleteGastoBilletera: `${backendPath}/mywallet/deleteGastoBilletera`,
-    saveGastoBilletera: `${backendPath}/mywallet/saveGastoBilletera`
+    saveGastoBilletera: `${backendPath}/mywallet/saveGastoBilletera`,
+    getBeneficiariesByUser: `${backendPath}/inclusionBeneficiarios/getBeneficiariesByUser`,
+    getTipoDocumentoBeneficiario: `${backendPath}/inclusionBeneficiarios/getTipoDocumentoBeneficiario`,
+    getConsultarParentesco: `${backendPath}/inclusionBeneficiarios/consultarParentesco`,
+    getCajasBeneficiario: `${backendPath}/inclusionBeneficiarios/getCajasBeneficiario`,
+    consultarArchivosBeneficiarios: `${backendPath}/inclusionBeneficiarios/consultarArchivosBeneficiarios`,
+    saveInclusionBeneficios: `${backendPath}/inclusionBeneficiarios/saveInclusionBeneficios`,
+    consultarBeneficiarios: `${backendPath}/inclusionBeneficiarios/consultarBeneficiarios`,
+    consultarArchivosBenefactor: `${backendPath}/inclusionBeneficiarios/consultarArchivosBenefactor`,
+    updateArchivosInclusionBeneficiarios: `${backendPath}/inclusionBeneficiarios/updateArchivosInclusionBeneficiarios`,
 };
 
 export {
