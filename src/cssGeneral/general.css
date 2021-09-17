@@ -124,3 +124,7 @@
   .navbarPaddingcv{
     height:calc(100vh - 10.3125rem) !important ;
   }
+
+  .navbar-vertical .navbar-vertical-label{
+    font-size: 14px;
+  }
