@@ -1,8 +1,9 @@
-import {Component} from 'react';
+import React,{Component} from 'react';
 import { baseUrl } from '../../config/config';
-import { postData,getData, validateInputSelect } from '../../components/general/General';
+import { postData,getData, validateInputTabs, putInputRequerid, loadDataValidate } from '../../components/general/General';
 import moment from 'moment';
 import Swal from 'sweetalert2';
+import {  postFetch } from '../../generalHelpers';
 
 
 class Education extends Component{
@@ -84,12 +85,26 @@ class Education extends Component{
 
     validateDpto = () => {
         this.setState({valDpto:this.selectDpto.value})
-        const datos = { codDepartamento:parseInt(this.selectDpto.value) };
+        const datos = { codDepartamento:parseInt(this.selectDpto.value),codPais:parseInt(this.selectCountry.value) };
         const url = `${baseUrl}/v1/informacionBasica/consultarCiudades`;
         postData(url,datos).then(result => {
-            let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
-            this.setState({city:option});
-            this.selectCity.removeAttribute('disabled')
+
+            console.log(result)
+            if(!result.error){
+                let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
+                this.setState({city:option});
+                this.selectCity.removeAttribute('disabled')
+            }else{
+                Swal.fire({
+                    title: '',
+                    text: result.error,
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonColor: '#2c7be5',
+                    confirmButtonText: 'Cerrar'
+                })
+            }
+            
 
         })
 
@@ -97,37 +112,31 @@ class Education extends Component{
 
     saveEducation = () =>{
 
-        const validateData = validateInputSelect('educationRequerid')
-        if(validateData > 0){
-            Swal.fire({
-                title: '',
-                text: "Validar campos obligatorios",
-                icon: 'error',
-                showCancelButton: false,
-                confirmButtonColor: '#2c7be5',
-                confirmButtonText: 'Cerrar'
-            })
-        }else{
+        if( !validateInputTabs('inputRequired')){
+
             const dataUser = JSON.parse( localStorage.getItem("d_u"));
             const cedula = parseInt(dataUser['cedula'])
 
-            const datos = {
-                    "MENU_CODIGO": 2,
-                    "INFORMACION_BASICA_CODIGO": cedula,
-                    "NIVEL_ESTUDIO": parseInt(this.campo1.value),
-                    "TITULO": this.campo2.value,
-                    "INSTITUCION": this.campo4.value,
-                    "CIUDAD": parseInt(this.selectCity.value) ,
-                    "ESTADO_ESTUDIO": this.campo3.value,
-                    "FECHA_INICIO": this.campo5.value,
-                    "FECHA_FINALIZACION": this.campo6.value,
-                    "FECHA_GRADO_TENTATIVO": this.campo7.value,
-                    "MODALIDAD_ESTUDIO": parseInt(this.campo8.value),
-                    "PROMEDIO": this.campo9.value
-            }
+            var formData = new FormData();
+            formData.append('file',this.filePdf.files[0]?this.filePdf.files[0]:{})
+            formData.append('MENU_CODIGO', 2)
+            formData.append('INFORMACION_BASICA_CODIGO', cedula)
+            formData.append('NIVEL_ESTUDIO', parseInt(this.campo1.value))
+            formData.append('TITULO', this.campo2.value)
+            formData.append('INSTITUCION', this.campo4.value)
+            formData.append('PAI_CODIGO',parseInt(this.selectCountry.value))
+            formData.append('DTO_CODIGO',parseInt(this.selectDpto.value)) 
+            formData.append('CIUDAD', parseInt(this.selectCity.value) )
+            formData.append('ESTADO_ESTUDIO', this.campo3.value)
+            formData.append('FECHA_INICIO', this.campo5.value)
+            formData.append('FECHA_FINALIZACION', this.campo6.value?this.campo6.value:'')
+            formData.append('FECHA_GRADO_TENTATIVO', this.campo7.value?this.campo7.value:'')
+            formData.append('MODALIDAD_ESTUDIO',this.campo8.value? parseInt(this.campo8.value):0)
+            formData.append('PROMEDIO', this.campo9.value?this.campo9.value:'')
+
 
             const urlSave =  `${baseUrl}/v1/educacion/crearRegistro`;
-            postData(urlSave,datos).then(result => {
+            postFetch({url:urlSave,params:formData}).then(result => {
                 if(result.ok){
                     Swal.fire({
                         title: '',
@@ -144,23 +153,44 @@ class Education extends Component{
 
     }
 
+    changeInputReadOnly = (data) =>{
+        if(data.trim() === 'EN CURSO'){
+            console.log("en curso");
+            putInputRequerid(`#${this.campo6.id}`,'','remove',this.campo6.id)
+            putInputRequerid(`#${this.campo7.id}`,'','add',this.campo7.id)
+            putInputRequerid(`#${this.campo8.id}`,'','add',this.campo8.id)
+            putInputRequerid(`#${this.campo9.id}`,'','add',this.campo9.id)
+
+        }else if(data.trim() === 'FINALIZADO'){
+            this.campo6.removeAttribute("readonly")
+            putInputRequerid(`#${this.campo6.id}`,'','add',this.campo6.id)
+            putInputRequerid(`#${this.campo7.id}`,'','remove',this.campo7.id)
+            putInputRequerid(`#${this.campo8.id}`,'','remove',this.campo8.id)
+            putInputRequerid(`#${this.campo9.id}`,'','remove',this.campo9.id)
+        }else{
+            putInputRequerid(`#${this.campo6.id}`,'','remove',this.campo6.id)
+            putInputRequerid(`#${this.campo7.id}`,'','remove',this.campo7.id)
+            putInputRequerid(`#${this.campo8.id}`,'','remove',this.campo8.id)
+            putInputRequerid(`#${this.campo9.id}`,'','remove',this.campo9.id)
+        }
+    }
+
     updateLoadPrincipal = (data,accion) =>{
-
         this.cleanInputs()
-
-
         if(accion === 1){
             this.campo1.value = data.NIVEL_ESTUDIO
             this.campo2.value = data.TITULO
             this.campo3.value = data.ESTADO_ESTUDIO
+
+            this.changeInputReadOnly(data.ESTADO_NOMBRE)
+
             this.campo4.value = data.INSTITUCION
-            this.campo5.value = moment(data.FECHA_INICIO).format('yyyy-MM-DD')
-            this.campo6.value = moment(data.FECHA_FINALIZACION).format('yyyy-MM-DD')
-            this.campo7.value = moment(data.FECHA_GRADO_TENTATIVO).format('yyyy-MM-DD')
-            this.campo8.value = data.MODALIDAD_ESTUDIO
-            this.campo9.value = data.PROMEDIO
-            this.selectCity.removeAttribute('disabled')
-            this.selectDpto.removeAttribute('disabled')
+            this.campo5.value = moment.utc(data.FECHA_INICIO).format('yyyy-MM-DD')
+            this.campo6.value = data.FECHA_FINALIZACION?moment.utc(data.FECHA_FINALIZACION).format('yyyy-MM-DD'):''
+            this.campo7.value = data.FECHA_GRADO_TENTATIVO?moment.utc(data.FECHA_GRADO_TENTATIVO).format('yyyy-MM-DD'):''
+            this.campo8.value = data.MODALIDAD_ESTUDIO?data.MODALIDAD_ESTUDIO:''
+            this.campo9.value = data.PROMEDIO?data.PROMEDIO:''
+            
             document.getElementById('saveButton').style = 'display:none';
             this.setState({setHidden:''})
 
@@ -171,17 +201,34 @@ class Education extends Component{
             input.setAttribute("id","idDocument");
             input.setAttribute("value",data.EDUCACION_CODIGO);
             container.appendChild(input); 
-            
+
+
+            if(data.PAI_CODIGO != null){
+                this.selectCountry.value = data.PAI_CODIGO
+                this.loadDpto()
+                this.selectDpto.removeAttribute('disabled')
+                setTimeout(() => {
+                    this.setState({valDpto:data.DTO_CODIGO})
+                    this.validateDpto();
+                    setTimeout(() => {
+                        this.selectCity.removeAttribute('disabled')
+                        this.setState({valCity:data.CIUDAD})
+                    }, 500);
+
+                }, 500);
+            }
+           
 
         }else if(accion === 2){
             Swal.fire({
                 title: '',
-                text: "¿Desea eliminar el documento?",
+                text: "¿Desea eliminar el registro?",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#2c7be5',
                 cancelButtonColor: '#2c7be5',
-                confirmButtonText: 'Eliminar!'
+                confirmButtonText: 'Eliminar!',
+                cancelButtonText:'Cancelar'
               }).then((result) => {
                 if (result.isConfirmed) {
                     const datos = {EDUCACION_CODIGO:data.EDUCACION_CODIGO}
@@ -207,40 +254,32 @@ class Education extends Component{
               })
 
         }else if(accion === 3){
-            console.log('visualizar')
+            window.open(data)
         }
-
-
     }
 
     updateData = () => {
-        const validateData = validateInputSelect('educationRequerid')
-        if(validateData > 0){
-            Swal.fire({
-                title: '',
-                text: "Validar campos obligatorios",
-                icon: 'error',
-                showCancelButton: false,
-                confirmButtonColor: '#2c7be5',
-                confirmButtonText: 'Cerrar'
-            })
-        }else{
-            const datos = {
-                    "EDUCACION_CODIGO": document.getElementById('idDocument').value,
-                    "NIVEL_ESTUDIO": parseInt(this.campo1.value),
-                    "TITULO": this.campo2.value,
-                    "INSTITUCION": this.campo4.value,
-                    "CIUDAD": parseInt(this.selectCity.value) ,
-                    "ESTADO_ESTUDIO": parseInt(this.campo3.value),
-                    "FECHA_INICIO": this.campo5.value,
-                    "FECHA_FINALIZACION": this.campo6.value,
-                    "FECHA_GRADO_TENTATIVO": this.campo7.value,
-                    "MODALIDAD_ESTUDIO": parseInt(this.campo8.value),
-                    "PROMEDIO": this.campo9.value
-            }
+        if(!validateInputTabs()){
+
+                    var formData = new FormData();
+                    formData.append('file',this.filePdf.files[0]?this.filePdf.files[0]:{})
+                    formData.append('EDUCACION_CODIGO', document.getElementById('idDocument').value)
+                    formData.append('NIVEL_ESTUDIO', parseInt(this.campo1.value))
+                    formData.append('TITULO', this.campo2.value)
+                    formData.append('INSTITUCION', this.campo4.value)
+                    formData.append('PAI_CODIGO',parseInt(this.selectCountry.value))
+                    formData.append('DTO_CODIGO',parseInt(this.selectDpto.value)) 
+                    formData.append('CIUDAD', parseInt(this.selectCity.value) )
+                    formData.append('ESTADO_ESTUDIO', this.campo3.value)
+                    formData.append('FECHA_INICIO', this.campo5.value)
+                    formData.append('FECHA_FINALIZACION', this.campo6.value?this.campo6.value:'')
+                    formData.append('FECHA_GRADO_TENTATIVO', this.campo7.value?this.campo7.value:'')
+                    formData.append('MODALIDAD_ESTUDIO',this.campo8.value? parseInt(this.campo8.value):0)
+                    formData.append('PROMEDIO', this.campo9.value?this.campo9.value:'')
+
 
             const urlSave =  `${baseUrl}/v1/educacion/actualizarRegistro`;
-            postData(urlSave,datos).then(result => {
+            postFetch({url:urlSave,params:formData}).then(result => {
 
                 if(result.ok){
                     document.getElementById('saveButton').style = 'display:block';
@@ -255,8 +294,9 @@ class Education extends Component{
                         confirmButtonColor: '#2c7be5',
                         confirmButtonText: 'Cerrar'
                     })
-                    this.loadDataPrincipal();
+                    
                 }
+                this.loadDataPrincipal();
             })
         }
 
@@ -264,6 +304,9 @@ class Education extends Component{
     }
 
     loadDataPrincipal = () =>{
+
+        this.setState({tbody:''})
+        
         const dataUser = JSON.parse( localStorage.getItem("d_u"));
         const cedula = parseInt(dataUser['cedula'])
         const data = {cedula : cedula}
@@ -271,17 +314,22 @@ class Education extends Component{
         this.cleanInputs()
 
         postData(urlSave,data).then(result => {
-        
+            console.log(result);
             if(!result.error){
                 const tbodyData = result.map((value,x) =>{
+                    let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('L'):''
+                    let dataFin = value.FECHA_FINALIZACION != null ? moment.utc(value.FECHA_FINALIZACION).format('L'):''
+                    let icon = value.URL? 'fas fa-file-pdf text-danger fs-1':'fas fa-file-pdf text-muted fs-1'
+                    let disabled = value.URL? false:true
+
                     return  <tr key={x} >
                                 <td className="text-nowrap">{value.TITULO}</td>
                                 <td className="text-nowrap">{value.INSTITUCION}</td>
                                 <td className="text-nowrap">{value.NIVEL_NOMBRE}</td>
                                 <td className="text-nowrap">{value.ESTADO_NOMBRE}</td>
-                                <td className="text-nowrap">{moment(value.FECHA_INICIO).format('L')} - {moment(value.FECHA_FINALIZACION).format('L')}</td>
+                                <td className="text-nowrap">{dateIni} - {dataFin}</td>
                                 <td className="text-center">
-                                    <button className="btn"  onClick={e  => this.updateLoadPrincipal(value,3) }><i className="fas fa-file-pdf text-danger fs-1"></i></button>
+                                    <button disabled={disabled} className="btn"  onClick={e  =>this.updateLoadPrincipal(value.URL,3) }><i className={icon}></i></button>
                                 </td>
                                 <td className="text-center">
                                     <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,1)  }><i  className="far fa-edit text-primary fs-1" /> </button> 
@@ -311,6 +359,7 @@ class Education extends Component{
             }else{
                 this.setState({tbody:result.error})
             }
+            loadDataValidate()
 
         })
         
@@ -333,6 +382,8 @@ class Education extends Component{
         this.selectDpto.selectedIndex = ''
         this.selectDpto.setAttribute('disabled','disabled')
         this.selectCountry.selectedIndex  = ''
+        document.querySelector('#file-upload').value = ''
+
     }
 
 
@@ -353,46 +404,48 @@ render(){
                         <div className="tab-pane fade show active" id="educativos" role="tabpanel" aria-labelledby="educativos-tab">
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="">Nivel de estudio:<span className="text-danger">*</span></label>
-                                    <select ref={input => this.campo1 = input} className="form-select educationRequerid" id="edu-study" name="edu-study">
+                                    <label htmlFor="edu-study">Nivel de estudio:<span className="text-danger">*</span></label>
+                                    <select ref={input => this.campo1 = input} className="form-select inputRequired" id="edu-study" name="edu-study">
                                         <option value=""></option>
                                         {dataStudy}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">T&iacute;tulo otorgado:<span className="text-danger">*</span></label>
-                                    <input ref={input => this.campo2 = input}  type="text" className="form-control educationRequerid" id="edu-title" name="edu-title"></input>
+                                    <label htmlFor="edu-title">T&iacute;tulo otorgado:<span className="text-danger">*</span></label>
+                                    <input ref={input => this.campo2 = input}  type="text" className="form-control inputRequired" id="edu-title" name="edu-title"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="">Estado:<span className="text-danger">*</span></label>
-                                    <select  ref={input => this.campo3 = input}  className="form-select educationRequerid" id="edu-state" name="edu-state">
+                                    <label htmlFor="edu-state">Estado:<span className="text-danger">*</span></label>
+                                    <select  ref={input => this.campo3 = input}  className="form-select inputRequired" id="edu-state" name="edu-state" onChange={(e)=> {
+                                         this.changeInputReadOnly(e.target[e.target.selectedIndex].text)
+                                    }}>
                                         <option value=""></option>
                                         {dataStateStudy}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Instituci&oacute;n:<span className="text-danger">*</span></label>
-                                    <input type="text" ref={input => this.campo4 = input}  className="form-control educationRequerid" id="edu-institute" name="edu-institute"></input>
+                                    <label htmlFor="edu-institute">Instituci&oacute;n:<span className="text-danger">*</span></label>
+                                    <input type="text" ref={input => this.campo4 = input}  className="form-control inputRequired" id="edu-institute" name="edu-institute"></input>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="country">Pa&iacute;s:<span className="text-danger">*</span></label>
-                                    <select  ref={inputElement  => this.selectCountry = inputElement} name="country" id="country" className="form-select educationRequerid" onChange={() => this.loadDpto()  } >
+                                    <select  ref={inputElement  => this.selectCountry = inputElement} name="country" id="country" className="form-select inputRequired" onChange={() => this.loadDpto()  } >
                                         <option value=""></option>
                                         {dataCountry}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="resi-dpto">Departamento:<span className="text-danger">*</span></label>
-                                    <select value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select educationRequerid" onChange={() => this.validateDpto()}>
+                                    <select value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select inputRequired" onChange={() => this.validateDpto()}>
                                         <option value=""></option>
                                         {dpto}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="resi-city">Ciudad:<span className="text-danger">*</span></label>
-                                    <select value={valCity} ref={input => this.selectCity = input} onChange={() => this.validateCity()} name="resi-city" id="resi-city" className="form-select educationRequerid">
+                                    <select value={valCity} ref={input => this.selectCity = input} onChange={() => this.validateCity()} name="resi-city" id="resi-city" className="form-select inputRequired">
                                         <option value=""></option>
                                         {city}
                                     </select>
@@ -401,36 +454,35 @@ render(){
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Fecha de inicio:<span className="text-danger">*</span></label>
-                                    <input ref={input => this.campo5 = input}  type="date" className="form-control datefli educationRequerid" id="edu-dateini"  name="edu-dateini"></input>
+                                    <label htmlFor="edu-dateini">Fecha de inicio:<span className="text-danger">*</span></label>
+                                    <input ref={input => this.campo5 = input}  type="date" className="form-control datefli inputRequired" id="edu-dateini"  name="edu-dateini"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Fecha de finalizaci&oacute;n:<span className="text-danger">*</span></label>
-                                    <input type="date" ref={input => this.campo6 = input}  className="form-control datefli educationRequerid" id="edu-datefin" name="edu-datefin"></input>
+                                    <label htmlFor="edu-datefin">Fecha de finalizaci&oacute;n:</label>
+                                    <input type="date" readOnly ref={input => this.campo6 = input}  className="form-control datefli" id="edu-datefin" name="edu-datefin"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Fecha de grado:<span className="text-danger">*</span></label>
-                                    <input type="date" ref={input => this.campo7 = input}  className="form-control datefli educationRequerid" id="edu-grade" name="edu-grade"></input>
+                                    <label htmlFor="edu-grade">Fecha de grado:</label>
+                                    <input type="date" readOnly ref={input => this.campo7 = input}  className="form-control datefli" id="edu-grade" name="edu-grade"></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="">Modalidad de estudio:<span className="text-danger">*</span></label>
-                                    <select className="form-select educationRequerid" ref={input => this.campo8 = input}  id="edu-modal" name="edu-modal">
+                                    <label htmlFor="edu-modal">Modalidad de estudio:</label>
+                                    <select disabled className="form-select" ref={input => this.campo8 = input}  id="edu-modal" name="edu-modal">
                                         <option value=""></option>
                                         {dataModalidad}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Promedio:<span className="text-danger">*</span></label>
-                                    <input type="text" className="form-control educationRequerid" ref={input => this.campo9 = input}  id="edu-average" name="edu-average"></input>
+                                    <label htmlFor="edu-average">Promedio:</label>
+                                    <input type="text" readOnly  className="form-control" ref={input => this.campo9 = input}  id="edu-average" name="edu-average"></input>
                                 </div>
-                                <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="gene-numdocu">Certificado de estudio (PDF):</label>
+                                <div className="col-sm-12 col-md-4 pb-4 addinputFile">
+                                    <label htmlFor="">Certificado de estudio (PDF):</label>
                                     <label htmlFor="file-upload" className="custom-file-upload">
                                         <i className="text-danger far fa-file-pdf"></i> Subir archivo
                                     </label>
-                                    <input ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file"/>
-                                    
-                                </div>
+                                    <input ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
+                                </div> 
                             </div>
                             <div className="row pb-4">
                                 <p></p>
