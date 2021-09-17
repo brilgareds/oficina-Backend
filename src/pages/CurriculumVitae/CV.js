@@ -418,10 +418,7 @@ class CV extends Component {
             })     
         });
 
-        document.querySelector("#corp-12").addEventListener("keyup", function(event) {
-            console.log((event))
-
-
+        document.querySelector("#corp-12").addEventListener("keypress", function(event) {
             if(document.querySelector("#corp-12").value.trim()){
                 if (event.keyCode === 13 ) {
                     let container = document.querySelector(".cargosLi")
