@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import moment from 'moment';
 import { baseUrl } from '../../config/config';
-import { postData,getData,simulateClick, validateInputSelect } from '../../components/general/General';
+import { postData,getData,simulateClick, validateInputTabs, putInputRequerid, loadDataValidate } from '../../components/general/General';
 import Swal from 'sweetalert2';
 
 
@@ -50,7 +50,11 @@ class CV extends Component {
             TALLA_CAMISA: '',
             TALLA_PANTALON: '',
             TALLA_CALZADO: '',
-            seeInput:'hidden'
+            seeInput:'hidden',
+            estadonav:'disabled',
+            nivel2bd:'',
+            nivel4bd:'',
+            nivel5bd:''
         }
     }
 
@@ -93,12 +97,28 @@ class CV extends Component {
 
     validateDpto = () => {
         this.setState({valDpto:this.selectDpto.value})
-        const datos = { codDepartamento:parseInt(this.selectDpto.value) };
-        const url = `${baseUrl}/v1/informacionBasica/consultarCiudades`;
-        postData(url,datos).then(result => {
-            let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
-            this.setState({city:option});
-        })
+        if(this.selectDpto.value){
+            // this.setState({valDpto:this.selectDpto.value})
+            const datos = { codDepartamento:parseInt(this.selectDpto.value),codPais:parseInt(this.selectCountry.value) };
+            const url = `${baseUrl}/v1/informacionBasica/consultarCiudades`;
+            postData(url,datos).then(result => {
+                if(!result.error){
+                    let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
+                    this.setState({city:option});
+                }else{
+                    Swal.fire({
+                        title: '',
+                        text: result.error,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#2c7be5',
+                        confirmButtonText: 'Cerrar'
+                    })
+                }
+
+                
+            })
+        }
 
     }  
 
@@ -128,7 +148,7 @@ class CV extends Component {
             num_celular:this.corp3.value?this.corp3.value:'',
             num_celcorp:this.corp4.value?this.corp4.value:'',
             antiguedad:this.corp9.value?this.corp9.value:'',
-            cargos:this.corp11.value?this.corp11.value:'',
+            // cargos:this.corp11.value?this.corp11.value:'',
             ocupaciones:this.corp12.value?this.corp12.value:''
         })
     }
@@ -136,53 +156,49 @@ class CV extends Component {
 
     saveDataPrincipal = () =>{
 
-        const validateData = validateInputSelect('dataRequerid')
-        console.log(validateData);
+        if(!validateInputTabs()){
+            const dataUser = JSON.parse( localStorage.getItem("d_u"));
+            const cedula = parseInt(dataUser['cedula']);
+            const empresa = parseInt(dataUser['empresa']);
 
-        if(validateData > 0){
-            Swal.fire({
-                title: '',
-                text: "Validar campos obligatorios",
-                icon: 'error',
-                showCancelButton: false,
-                confirmButtonColor: '#2c7be5',
-                confirmButtonText: 'Cerrar'
-            })
-        }else{
 
-        
+            let dataButton = []
+            if(document.querySelectorAll('.cargosLi button').length){
+                document.querySelectorAll('.cargosLi button').forEach(element =>{
+                    dataButton.push(element.value)
+                })
+            }
 
-        const dataUser = JSON.parse( localStorage.getItem("d_u"));
-        const cedula = parseInt(dataUser['cedula']);
-        const empresa = parseInt(dataUser['empresa']);
+            const datos = {
+                TIP_CODIGO_DOCUMENTO: this.tipodocu.value?this.tipodocu.value:'',
+                EMP_CODIGO: empresa,
+                NRO_DOCUMENTO: cedula,
+                NOMBRES: this.nombre.value?this.nombre.value:'',
+                APELLIDOS: this.apellido.value?this.apellido.value:'',
+                SEXO: document.querySelector('input[name=options]:checked').value,
+                FECHA_NACIMIENTO: this.birth.value?this.birth.value:'',
+                ESTADO_CIVIL: this.selectCivil.value?this.selectCivil.value:'',
+                PAI_CODIGO:(this.selectCountry.value),
+                DEPARTAMENTO_RESIDENCIA: parseInt(this.selectDpto.value),
+                CIUDAD_RESIDENCIA: parseInt(this.selectCity.value),
+                BARRIO_RESIDENCIA: this.barrio.value?this.barrio.value:'',
+                LOCALIDAD_RESIDENCIA: this.locali.value?this.locali.value:'',
+                DIRECCION_COMPLETA: this.inputAddressFinal.value?this.inputAddressFinal.value:'',
+                EMAIL_PERSONAL: this.corp1.value?this.corp1.value:'',
+                EMAIL_CORPORATIVO: this.corp2.value?this.corp2.value:'',
+                CELULAR_CONTACTO: (this.corp3.value?this.corp3.value:''),
+                CELULAR_CORPORATIVO: (this.corp4.value?this.corp4.value:''),
+                ANTIGUEDAD_EMPRESA: parseInt(this.corp9.value?this.corp9.value:0),
+                PLAN_CARRERA: parseInt(document.querySelector('input[name=plancarrera]:checked').value),
+                NRO_CARGOS: document.querySelectorAll('.cargosLi button').length,
+                CARGOS_OCUPADOS: dataButton.toString(),
+                USA_UNIFORME: parseInt(document.querySelector('input[name=uniform]:checked').value),
+                TALLA_CAMISA: parseInt(this.corp15.value?this.corp15.value:0),
+                TALLA_PANTALON: parseInt(this.corp16.value?this.corp16.value:0),
+                TALLA_CALZADO: parseInt(this.corp17.value?this.corp17.value:0)
+            }
 
-        const datos = {
-            "TIP_CODIGO_DOCUMENTO": this.tipodocu.value?this.tipodocu.value:'',
-            "EMP_CODIGO": empresa,
-            "NRO_DOCUMENTO": cedula,
-            "NOMBRES": this.nombre.value?this.nombre.value:'',
-            "APELLIDOS": this.apellido.value?this.apellido.value:'',
-            "SEXO": document.querySelector('input[name=options]:checked').value,
-            "FECHA_NACIMIENTO": this.birth.value?this.birth.value:'',
-            "ESTADO_CIVIL": this.selectCivil.value?this.selectCivil.value:'',
-            "DEPARTAMENTO_RESIDENCIA": parseInt(this.selectDpto.value),
-            "CIUDAD_RESIDENCIA": parseInt(this.selectCity.value),
-            "BARRIO_RESIDENCIA": this.barrio.value?this.barrio.value:'',
-            "LOCALIDAD_RESIDENCIA": this.locali.value?this.locali.value:'',
-            "DIRECCION_COMPLETA": this.inputAddressFinal.value?this.inputAddressFinal.value:'',
-            "EMAIL_PERSONAL": this.corp1.value?this.corp1.value:'',
-            "EMAIL_CORPORATIVO": this.corp2.value?this.corp2.value:'',
-            "CELULAR_CONTACTO": (this.corp3.value?this.corp3.value:''),
-            "CELULAR_CORPORATIVO": (this.corp4.value?this.corp4.value:''),
-            "ANTIGUEDAD_EMPRESA": parseInt(this.corp9.value?this.corp9.value:0),
-            "PLAN_CARRERA": parseInt(document.querySelector('input[name=plancarrera]').value),
-            "NRO_CARGOS": parseInt(this.corp11.value?this.corp11.value:0),
-            "CARGOS_OCUPADOS": this.corp12.value?this.corp12.value:'',
-            "USA_UNIFORME": parseInt(document.querySelector('input[name=uniform]:checked').value),
-            "TALLA_CAMISA": parseInt(this.corp15.value?this.corp15.value:0),
-            "TALLA_PANTALON": parseInt(this.corp16.value?this.corp16.value:0),
-            "TALLA_CALZADO": parseInt(this.corp17.value?this.corp17.value:0)
-          }
+            console.log(datos);
 
             const url = `${baseUrl}/v1/informacionBasica/actualizacionDatos`;
             
@@ -206,6 +222,7 @@ class CV extends Component {
     }
 
     loadDataPrincipal= () =>{
+        loadDataValidate()
         const dataUser = JSON.parse( localStorage.getItem("d_u"));
         const cedula = parseInt(dataUser['cedula'])
         const empresa = parseInt(dataUser['empresa'])
@@ -216,21 +233,57 @@ class CV extends Component {
         const url = `${baseUrl}/v1/informacionBasica/consultaDatos`;
         postData(url,datos).then(result =>{
             const dataNew = result[0];
-            console.log(dataNew);
             if(dataNew){
-    
-
                 if(dataNew.PLAN_CARRERA != null){
-                    parseInt(dataNew.PLAN_CARRERA) === 1 ?document.getElementById('btn-check-outlined').checked = true:document.getElementById('btn-check-outlined2').checked = true
-                    // this.alergias.removeAttribute('readOnly')
+                    if(parseInt(dataNew.PLAN_CARRERA) === 1 ){
+                        document.getElementById('btn-check-outlined').checked = true
+                        // putInputRequerid('#corp-11','','add','corp-11')
+                        
+
+                        if(dataNew.CARGOS_OCUPADOS){
+
+                            document.querySelector(".cargosLi").innerHTML = ''
+                            document.querySelector("#corp-12").classList.remove('inputRequired')
+
+                            const cargos = dataNew.CARGOS_OCUPADOS.split(',')
+                            document.querySelectorAll('.smalldel ').forEach(el =>  el.removeAttribute('hidden'))
+
+                            cargos.forEach(element => {
+                                let input = document.createElement("button");
+                                let container = document.querySelector(".cargosLi")
+
+                                input.addEventListener( 'click', function(e){
+                                    e.target.remove()
+                                    if(!document.querySelectorAll('.cargosLi button').length){
+                                        document.querySelectorAll('.smalldel ').forEach(el =>  el.setAttribute('hidden','hidden'))
+                                        const labelCampo = document.querySelector(`label[for=corp-12]`)  
+                                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                                        document.querySelector("#corp-12").classList.add('inputRequired')
+                                    }
+                                });
+
+                                input.setAttribute("type","button");
+                                input.setAttribute("id",element);
+                                input.setAttribute("value",element);
+                                input.setAttribute("class",'btn btn-outline-primary me-1 mb-1')
+
+                                input.innerHTML += `${element}`
+                                container.appendChild(input);
+
+                            })
+                        }else{
+                            putInputRequerid('#corp-12','','add','corp-12')
+                        }
+
+                    }else{
+                        document.getElementById('btn-check-outlined2').checked = true
+                        // putInputRequerid('#corp-11','','remove','corp-11')
+                        putInputRequerid('#corp-12','','remove','corp-12')
+                    }
                 }
                 if(dataNew.USA_UNIFORME != null){
-                    console.log(" entro usa uniforme" +dataNew.USA_UNIFORME)
                     parseInt(dataNew.USA_UNIFORME) === 1 ?document.getElementById('checkUsesUniform').checked = true:document.getElementById('checkUsesUniform2').checked = true
-                    // this.alergias.removeAttribute('readOnly')
                 }
-
-
                 this.setState({
                     dataBasic: dataNew,
                     valCivil:dataNew.ESTADO_CIVIL,
@@ -248,23 +301,32 @@ class CV extends Component {
                     cargo:dataNew.nom_carg,
                     antiguedad:dataNew.ANTIGUEDAD_EMPRESA,
                     // plan:dataNew.PLAN_CARRERA,
-                    cargos:dataNew.NRO_CARGOS,
-                    ocupaciones:dataNew.CARGOS_OCUPADOS,
+                    // cargos:dataNew.NRO_CARGOS,
+                    // ocupaciones:dataNew.CARGOS_OCUPADOS,
                     // USA_UNIFORME: dataNew.USA_UNIFORME,
                     TALLA_CAMISA: dataNew.TALLA_CAMISA,
                     TALLA_PANTALON: dataNew.TALLA_PANTALON,
-                    TALLA_CALZADO: dataNew.TALLA_CALZADO
-                });
+                    TALLA_CALZADO: dataNew.TALLA_CALZADO,
+                    hiddensmall:'hidden'
+                }); 
+                this.calculaEdad(moment().utc(),moment.utc(result[0]['FECHA_NACIMIENTO']));
+
+                if(dataNew.PAI_RESI){
+                    simulateClick('country',500,'change')
+                }
+                if(dataNew.DEPARTAMENTO_RESIDENCIA != null){
+                    simulateClick('resi-dpto',1500,'change')
+                }
                 
-                this.calculaEdad(moment(),moment(result[0]['FECHA_NACIMIENTO']));
             }
-  
         });
+                
+
     }
 
     calculaEdad = (fecha,fecha_nac) => {
-            var a = moment(fecha);
-            var b = moment(fecha_nac);
+            var a = moment.utc(fecha);
+            var b = moment.utc(fecha_nac);
             var years = a.diff(b, 'year');
             b.add(years, 'years');
             this.setState({
@@ -273,9 +335,7 @@ class CV extends Component {
     }   
 
     componentDidMount(){
- 
-
-      
+        document.getElementById('root').className = 'cv';
 
         // consultar tipo documento
         const tipoDocu = `${baseUrl}/v1/informacionBasica/consultarTipDocumento`;
@@ -342,19 +402,111 @@ class CV extends Component {
             this.setState({dataShoe:option4});         
         });
 
-        document.getElementById('root').className = 'cv';
-        this.loadDataPrincipal();
-        simulateClick('country',1000,'change');
-        simulateClick('resi-dpto',1500,'change');
-
-            
         
+        // consultar  datalabels
+        const dataUser = JSON.parse( localStorage.getItem("d_u"));
+        const empresa = parseInt(dataUser['empresa'])
+        const urlLabelsLevels = `${baseUrl}/v1/informacionBasica/consultarLabelsNivel`;
+        const datalabeels = {
+            empresa: empresa
+          }
+        postData(urlLabelsLevels,datalabeels).then(result =>{
+            this.setState({
+                nivel2bd:result[0].nom_nive != null?result[0].nom_nive.toLowerCase().charAt(0).toUpperCase() + result[0].nom_nive.toLowerCase().slice(1):'',
+                nivel4bd:result[1].nom_nive != null?result[1].nom_nive.toLowerCase().charAt(0).toUpperCase() + result[1].nom_nive.toLowerCase().slice(1):'',
+                nivel5bd:result[2].nom_nive != null?result[2].nom_nive.toLowerCase().charAt(0).toUpperCase() + result[2].nom_nive.toLowerCase().slice(1):''
+            })     
+        });
+
+        document.querySelector("#corp-12").addEventListener("keyup", function(event) {
+            console.log((event))
+
+
+            if(document.querySelector("#corp-12").value.trim()){
+                if (event.keyCode === 13 ) {
+                    let container = document.querySelector(".cargosLi")
+                    let data = document.querySelector("#corp-12").value
+                    let input = document.createElement("button");
+                    input.addEventListener( 'click', function(e){
+                        e.target.remove()
+                        if(!document.querySelectorAll('.cargosLi button').length){
+                            // document.querySelector('.smalldel').setAttribute('hidden','hidden')
+                            document.querySelectorAll('.smalldel ').forEach(el =>  el.setAttribute('hidden','hidden'))
+                            const labelCampo = document.querySelector(`label[for=corp-12]`)  
+                            labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                            document.querySelector("#corp-12").classList.add('inputRequired')
+                        }
+                    });
+                    input.setAttribute("type","button");
+                    input.setAttribute("id",data);
+                    input.setAttribute("value",data);
+                    input.setAttribute("class",'btn btn-outline-primary me-1 mb-1')
+
+                    input.innerHTML += `${data}`
+                    container.appendChild(input);
+                    // container.innerHTML  +=  input
+                    const labelCampo = document.querySelector(`label[for=corp-12]`)       
+                    if(document.querySelectorAll('.cargosLi button')){
+                        if(document.querySelectorAll('.cargosLi button').length === 0){
+                            labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                            document.querySelector("#corp-12").classList.add('inputRequired')
+                            // document.querySelector('.smalldel').setAttribute('hidden','hidden')
+                            document.querySelectorAll('.smalldel ').forEach(el =>  el.setAttribute('hidden','hidden'))
+                        }else{
+                            if(labelCampo.getElementsByTagName('span').length){
+                                labelCampo.getElementsByTagName('span')[0].remove()
+                            }
+
+                            // document.querySelector('.smalldel').removeAttribute('hidden')
+                            document.querySelectorAll('.smalldel ').forEach(el =>  el.removeAttribute('hidden'))
+                            document.querySelector("#corp-12").classList.remove('inputRequired')
+                        }
+                    }
+                    document.querySelector("#corp-12").value = ''
+                }
+            }
+
+        });
+        
+        // document.querySelector("#corp-11").addEventListener("keypress", function(event) {
+        //     if (event.code === 'Enter') {
+        //         console.log("keypress",document.querySelector("#corp-12").value += document.querySelector("#corp-11").value)
+        //     }
+        // });
+    
+        this.loadDataPrincipal()        
+    }
+
+    validateInputTabsIn = (tab) => {
+        let valtab =  validateInputTabs(tab)
+        if(valtab === ''){
+            this.setState({estadonav:''})
+            simulateClick(tab,0,'click')
+            setTimeout(() => {
+                this.setState({estadonav:'disabled'})
+            }, 500);
+        }
+    }
+
+    vaidateBack =(tabidentificador) =>{
+        this.setState({estadonav:''})
+        simulateClick(tabidentificador,0,'click')
+        setTimeout(() => {
+            this.setState({estadonav:'disabled'})
+        }, 500);
     }
  
     render() {
-        const {age,dataBasic,tipDocu,staCivil,country,dpto,nomenclaturaStreet,nomenclaturaBis,nomenclaturaCardinalidad,nomenclaturaComplemento,valCivil,valCountry,valDpto,city,valCity,dirFinal,mail_perso,mail_corpo,num_celular,num_celcorp,nivel2,nivel4,nivel5,cargo,antiguedad,cargos,ocupaciones,dataAntiguedad,dataShirt,dataJeanM,dataJeanW,dataShoe ,TALLA_CAMISA ,TALLA_PANTALON,TALLA_CALZADO } = this.state
+        const {age,dataBasic,tipDocu,staCivil,country,dpto,nomenclaturaStreet,nomenclaturaBis,nomenclaturaCardinalidad,nomenclaturaComplemento,valCivil,valCountry,valDpto,city,valCity,dirFinal,mail_perso,mail_corpo,num_celular,num_celcorp,nivel2,nivel4,nivel5,cargo,antiguedad,dataAntiguedad,dataShirt,dataJeanM,dataJeanW,dataShoe ,TALLA_CAMISA ,TALLA_PANTALON,TALLA_CALZADO,estadonav} = this.state
         const alphabet = this.state.alphabet.map((value,x) =><option key={x} value={value}>{value}</option> );
-   
+        let  dataNewJean =''
+        if(dataBasic.SEXO === 'F'){
+            dataNewJean = dataJeanW
+        }else{
+            dataNewJean = dataJeanM
+        }
+
+
       return (
         <>
             <div className="card">
@@ -365,16 +517,16 @@ class CV extends Component {
                 <div className="card-body">
                     <ul className="nav nav-pills" id="myTab" role="tablist">
                         <li className="nav-item" role="presentation">
-                            <button className="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">Datos generales</button>
+                            <button disabled={estadonav} className="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">Datos generales</button>
                         </li>
                         <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="residencial-tab" data-bs-toggle="tab" data-bs-target="#residencial" type="button" role="tab" aria-controls="residencial" aria-selected="false">Datos residenciales</button>
+                            <button disabled={estadonav} className="nav-link" id="residencial-tab" data-bs-toggle="tab" data-bs-target="#residencial" type="button" role="tab" aria-controls="residencial" aria-selected="false">Datos residenciales</button>
                         </li>
                         <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="corpo-tab" data-bs-toggle="tab" data-bs-target="#corpo" type="button" role="tab" aria-controls="corpo" aria-selected="false">Datos corporativos</button>
+                            <button disabled={estadonav} className="nav-link" id="corpo-tab" data-bs-toggle="tab" data-bs-target="#corpo" type="button" role="tab" aria-controls="corpo" aria-selected="false">Datos corporativos</button>
                         </li>
                         <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="indu-tab" data-bs-toggle="tab" data-bs-target="#indu" type="button" role="tab" aria-controls="indu" aria-selected="false">Indumentaria</button>
+                            <button disabled={estadonav} className="nav-link" id="indu-tab" data-bs-toggle="tab" data-bs-target="#indu" type="button" role="tab" aria-controls="indu" aria-selected="false">Indumentaria</button>
                         </li>
                     </ul>
                     &nbsp;
@@ -412,7 +564,7 @@ class CV extends Component {
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="gene-civil">Estado civil:<span className="text-danger">*</span></label>
-                                    <select value={valCivil} ref={sel => this.selectCivil = sel} onChange={() => this.validateSex()} name="gene-civil" id="gene-civil" className="form-select dataRequerid">
+                                    <select value={valCivil} ref={sel => this.selectCivil = sel} onChange={() => this.validateSex()} name="gene-civil" id="gene-civil" className="form-select inputRequired ">
                                        <option value=""></option>
                                         {staCivil}
                                     </select>
@@ -430,7 +582,7 @@ class CV extends Component {
                             </div>
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => simulateClick('residencial-tab',0,'click')} className="btn btn-primary">Siguiente</button>
+                                    <button onClick={() => this.validateInputTabsIn('residencial-tab')} className="btn btn-primary">Siguiente</button>
                                 </div>
                             </div>
                        
@@ -441,28 +593,28 @@ class CV extends Component {
                             <div className="row">
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="country">Pa&iacute;s:<span className="text-danger">*</span></label>
-                                    <select  value={valCountry} ref={inputElement  => this.selectCountry = inputElement} name="country" id="country" className="form-select dataRequerid" onChange={() => this.loadDpto()  } >
+                                    <select value={valCountry}  ref={inputElement  => this.selectCountry = inputElement} name="country" id="country" className="form-select inputRequired" onChange={() => this.loadDpto()  } >
                                         <option value=""></option>
                                         {country}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="resi-dpto">Departamento:<span className="text-danger">*</span></label>
-                                    <select value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select dataRequerid" onChange={() => this.validateDpto()}>
+                                    <select value={valDpto} ref={inputElement  => this.selectDpto= inputElement} name="resi-dpto" id="resi-dpto" className="form-select inputRequired" onChange={() => this.validateDpto()}>
                                         <option value=""></option>
                                         {dpto}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label htmlFor="resi-city">Ciudad:<span className="text-danger">*</span></label>
-                                    <select value={valCity} ref={input => this.selectCity = input} onChange={() => this.validateCity()} name="resi-city" id="resi-city" className="form-select dataRequerid">
+                                    <select value={valCity} ref={input => this.selectCity = input} onChange={() => this.validateCity()} name="resi-city" id="resi-city" className="form-select inputRequired">
                                         <option value=""></option>
                                         {city}
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label className="form-label" htmlFor="resi-neighborhood">Barrio:<span className="text-danger">*</span></label>
-                                    <input ref={input => this.barrio = input} className="form-control dataRequerid" defaultValue={dataBasic.BARRIO_RESIDENCIA} id="resi-neighborhood" name="resi-neighborhood" type="text" ></input>
+                                    <input ref={input => this.barrio = input} className="form-control inputRequired" defaultValue={dataBasic.BARRIO_RESIDENCIA} id="resi-neighborhood" name="resi-neighborhood" type="text" ></input>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
                                     <label className="form-label" htmlFor="resi-locale">Localidad:</label>
@@ -568,51 +720,51 @@ class CV extends Component {
                             </div>
                             <div className="row">
                                 <label>&nbsp;</label>
-                                <label className=" d-flex justify-content-around-text bg-transparent removeBorder" >&#191;Su direcci&oacute;n es:&#63;<span className="text-danger">*</span></label>
+                                <label htmlFor="gene-addressFinal"  className=" d-flex justify-content-around-text bg-transparent removeBorder" >&#191;Su direcci&oacute;n es&#63;:<span className="text-danger">*</span></label>
                                     <div className=" d-flex justify-content-around mb-3">
                                         
-                                    <input readOnly type="text" defaultValue={dirFinal?dirFinal:''} className="form-control dataRequerid" id="gene-addressFinal" ref={el => this.inputAddressFinal = el}></input>&nbsp;
+                                    <input readOnly type="text" defaultValue={dirFinal?dirFinal:''} className="form-control inputRequired" name="gene-addressFinal" id="gene-addressFinal" ref={el => this.inputAddressFinal = el}></input>&nbsp;
                                     <span className=" d-flex justify-content-around-text bg-transparent removeBorder link-warning"  id="clearAddress" onClick={() => this.clearAddress()} >Borrar direcci&oacute;n</span>
 
                                 </div>
                             </div>
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-start">
-                                    <button onClick={() => simulateClick('general-tab',0,'click')} className="btn btn-primary">Atr&aacute;s</button>
+                                    <button onClick={() => this.vaidateBack('general-tab')} className="btn btn-primary">Atr&aacute;s</button>
                                 </div>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => simulateClick('corpo-tab',0,'click')} className="btn btn-primary">Siguiente</button>
+                                    <button onClick={() => this.validateInputTabsIn('corpo-tab')} className="btn btn-primary">Siguiente</button>
                                 </div>
                             </div>
                         </div>
                         <div className="tab-pane fade" id="corpo" role="tabpanel" aria-labelledby="corpo-tab">
                             <div className="row">
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>E-mail personal:<span className="text-danger">*</span></label>
-                                    <input value={mail_perso?mail_perso:''} onChange={() => this.changeValue() } className="form-control dataRequerid" id="corp-1" name="corp-1" ref={corp1 => this.corp1 = corp1}></input>
+                                    <label htmlFor="corp-1">E-mail personal:<span className="text-danger">*</span></label>
+                                    <input value={mail_perso?mail_perso:''} onChange={() => this.changeValue() } className="form-control inputRequired" id="corp-1" name="corp-1" ref={corp1 => this.corp1 = corp1}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>E-mail corporativo:</label>
+                                    <label >E-mail corporativo:</label>
                                     <input value={mail_corpo?mail_corpo:''} onChange={() => this.changeValue() }  className="form-control" id="corp-2" name="corp-2" ref={corp2 => this.corp2 = corp2}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>N&uacute;mero de tu celular:<span className="text-danger">*</span></label>
-                                    <input value={num_celular ?num_celular :''} className="form-control dataRequerid" onChange={() => this.changeValue() } id="corp-3" name="corp-3" ref={input => this.corp3 = input}></input>
+                                    <label htmlFor="corp-3">N&uacute;mero de tu celular:<span className="text-danger">*</span></label>
+                                    <input type="number" value={num_celular ?num_celular :''} className="form-control inputRequired" onChange={() => this.changeValue() } id="corp-3" name="corp-3" ref={input => this.corp3 = input}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
                                     <label>N&uacute;mero del celular corporativo:</label>
                                     <input value={num_celcorp ?num_celcorp :''} className="form-control" onChange={() => this.changeValue() } id="corp-4" name="corp-4" ref={input => this.corp4 = input}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Nombre nivel 2:</label>
+                                    <label>{this.state.nivel2bd}:</label>
                                     <input value={nivel2 ?nivel2 :''} readOnly className="form-control" id="corp-5" name="corp-5" ref={input => this.corp5 = input}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Nombre nivel 4:</label>
+                                    <label>{this.state.nivel4bd}:</label>
                                     <input value={nivel4 ?nivel4 :''} readOnly className="form-control" id="corp-6" name="corp-6" ref={input => this.corp6 = input}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Nombre nivel 5:</label>
+                                    <label>{this.state.nivel5bd}:</label>
                                     <input value={nivel5 ?nivel5 :''} readOnly className="form-control"  id="corp-7" name="corp-7" ref={input => this.corp7 = input}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
@@ -620,8 +772,8 @@ class CV extends Component {
                                     <input value={cargo ?cargo :''} className="form-control" readOnly id="corp-8" name="corp-8" ref={input => this.corp8 = input}></input>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Antiguedad en la empresa:<span className="text-danger">*</span></label>
-                                    <select value={antiguedad?antiguedad:''} className="form-select dataRequerid" id="corp-9" name="corp-9" ref={input => this.corp9 = input} onChange={(e) =>{
+                                    <label htmlFor="corp-9">Antiguedad en la empresa:<span className="text-danger">*</span></label>
+                                    <select value={antiguedad?antiguedad:''} className="form-select inputRequired" id="corp-9" name="corp-9" ref={input => this.corp9 = input} onChange={(e) =>{
                                         this.changeValue()
 
                                     } } >
@@ -630,79 +782,93 @@ class CV extends Component {
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label>&#191;Usted ha sido Plan Carrera&#63;<span className="text-danger">*</span></label>
+                                    <label htmlFor="plancarrera">&#191;Usted ha sido Plan Carrera&#63;:<span className="text-danger">*</span></label>
                                     <div className=" d-flex justify-content-around">
-                                                <input  onChange={e => {
-                                                    // this.setState({ plan:e.target.value}) 
-                                                    console.log(e.target.value)
-                                                    
-                                                    }} value="1" type="radio" name="plancarrera" className="btn-check" id="btn-check-outlined" autoComplete="off"></input>
-                                                <label className="btn btn-outline-primary" htmlFor="btn-check-outlined">SI</label>&nbsp;
-                                                <input  onChange={e =>{
-                                                    //  this.setState({ plan:e.target.value})
-                                                        console.log(e.target.value)
-                                                    } } value="0"  type="radio" name="plancarrera" className="btn-check" id="btn-check-outlined2" autoComplete="off"></input>
-                                                <label className="btn btn-outline-primary" htmlFor="btn-check-outlined2">NO</label>
+                                        <input  onChange={e => {
+                                            putInputRequerid('#corp-12','','add','corp-12')
+                                            this.changeValue()
+                                            }} value="1" type="radio" name="plancarrera" className="btn-check inputRequired" id="btn-check-outlined" autoComplete="off"></input>
+                                        <label className="btn btn-outline-primary" htmlFor="btn-check-outlined">SI</label>&nbsp;
+                                        <input  onChange={e =>{
+                                                putInputRequerid('#corp-12','','remove','corp-12')
+                                                this.changeValue()
+                                                document.querySelectorAll('.cargosLi button ').forEach(el =>  el.remove())
+                                                document.querySelectorAll('.smalldel ').forEach(el =>  el.setAttribute('hidden','hidden'))
+                                            } } value="0"  type="radio" name="plancarrera" className="btn-check" id="btn-check-outlined2" autoComplete="off"></input>
+                                        <label className="btn btn-outline-primary" htmlFor="btn-check-outlined2">NO</label>
                                     </div>
                                 </div>
+                                {/* <div hidden className="col-sm-4 col-md-4 pb-4">
+                                    <label htmlFor="corp-11">&#191;Cu&aacute;ntos cargos ha ocupado dentro de la organizaci&oacute;n siendo Plan Carrera&#63;:</label>
+                                    <input type="hidden" value={cargos} className="form-control " id="corp-11" name="corp-11" ref={input => this.corp11 = input} onChange={() => this.changeValue() }></input>
+                                </div>  */}
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>&#191;Cu&aacute;ntos cargos ha ocupado dentro de la organizaci&oacute;n siendo Plan Carrera&#63;<span className="text-danger">*</span></label>
-                                    <input type="number" value={cargos?cargos:''} className="form-control dataRequerid" id="corp-11" name="corp-11" ref={input => this.corp11 = input} onChange={() => this.changeValue() }></input>
-                                </div> 
+                                    <label htmlFor="corp-12">Mencione los cargos que ha ocupado:</label>
+                                    <input  className="form-control inputRequired" id="corp-12" name="corp-12" ref={input => this.corp12 = input}></input>
+                                    <small id="emailHelp" className="form-text text-muted">Ingrese cargo y presione enter para insertar</small>
+                                </div>
+
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Mencione los cargos que ha ocupado<span className="text-danger">*</span></label>
-                                    <input value={ocupaciones?ocupaciones:''} className="form-control dataRequerid" id="corp-12" name="corp-12" ref={input => this.corp12 = input} onChange={() => this.changeValue() }></input>
+                                    <label hidden htmlFor="corp-cargosingresados" className="smalldel">Estos son los cargos ingresados:</label>
+                                    <div className="cargosLi"></div>
+                                    <small hidden  className="form-text text-muted smalldel">Para eliminar un cargo da click encima de el</small>
+                                    {/* <ul className="list-group list-group-flush cargosLi"></ul> */}
                                 </div>
                             </div>
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-start">
-                                    <button onClick={() => simulateClick('residencial-tab',0,'click')} className="btn btn-primary">Atr&aacute;s</button>
+                                    <button onClick={() => this.vaidateBack('residencial-tab')} className="btn btn-primary">Atr&aacute;s</button>
                                 </div>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => simulateClick('indu-tab',0,'click')} className="btn btn-primary">Siguiente</button>
+                                    <button onClick={() => this.validateInputTabsIn('indu-tab')} className="btn btn-primary">Siguiente</button>
                                 </div>
                             </div>
+
+
+
+
                         </div>
                         <div className="tab-pane fade" id="indu" role="tabpanel" aria-labelledby="indu-tab">
                             <div className="row ">
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>&#191;Usas uniforme&#63;:<span className="text-danger">*</span></label>
+                                    <label htmlFor="uniform">&#191;Usas uniforme&#63;:<span className="text-danger">*</span></label>
                                     <div className=" d-flex justify-content-around">
-                                                <input value="1" type="radio" name="uniform" onChange={e => console.log({USA_UNIFORME:e.target.value})} className="btn-check" id="checkUsesUniform" autoComplete="off"></input>
+                                                <input value="1" type="radio" name="uniform" onChange={e => console.log({USA_UNIFORME:e.target.value})} className="btn-check inputRequired" id="checkUsesUniform" autoComplete="off"></input>
                                                 <label className="btn btn-outline-primary" htmlFor="checkUsesUniform">SI</label> &nbsp;
                                                 <input value="0" type="radio" name="uniform" onChange={e => console.log({USA_UNIFORME:e.target.value})} className="btn-check" id="checkUsesUniform2" autoComplete="off"></input>
                                                 <label className="btn btn-outline-primary" htmlFor="checkUsesUniform2">NO</label>
                                     </div>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Talla camisa:<span className="text-danger">*</span></label>
-                                    <select   ref={input => this.corp15 = input} value={TALLA_CAMISA?TALLA_CAMISA:''} onChange={e => this.setState({TALLA_CAMISA:e.target.value})} name="indu-camisa" id="indu-camisa" className="form-select dataRequerid">
+                                    <label htmlFor="indu-camisa">Talla camisa:<span className="text-danger">*</span></label>
+                                    <select   ref={input => this.corp15 = input} value={TALLA_CAMISA?TALLA_CAMISA:''} onChange={e => this.setState({TALLA_CAMISA:e.target.value})} name="indu-camisa" id="indu-camisa" className="form-select inputRequired">
                                         <option></option>
                                         {dataShirt}
                                     </select>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Talla pantal&oacute;n:<span className="text-danger">*</span></label>
-                                    <select  ref={input => this.corp16 = input} value={TALLA_PANTALON?TALLA_PANTALON:''} onChange={e => this.setState({TALLA_PANTALON:e.target.value})} name="indu-pantalon" id="indu-pantalon" className="form-select dataRequerid">
+                                    <label htmlFor="indu-pantalon">Talla pantal&oacute;n:<span className="text-danger">*</span></label>
+                                    <select  ref={input => this.corp16 = input} value={TALLA_PANTALON?TALLA_PANTALON:''} onChange={e => this.setState({TALLA_PANTALON:e.target.value})} name="indu-pantalon" id="indu-pantalon" className="form-select inputRequired">
                                         <option></option>
-                                        {dataJeanM}{dataJeanW}
+                                        {dataNewJean}
                                     </select>
                                 </div>
                                 <div className="col-sm-4 col-md-4 pb-4">
-                                    <label>Talla calzado:<span className="text-danger">*</span></label>
-                                    <select  ref={input => this.corp17 = input} value={TALLA_CALZADO?TALLA_CALZADO:''} onChange={e => this.setState({TALLA_CALZADO:e.target.value})} name="indu-calzado" id="indu-calzado" className="form-select dataRequerid">
+                                    <label htmlFor="indu-calzado">Talla calzado:<span className="text-danger">*</span></label>
+                                    <select  ref={input => this.corp17 = input} value={TALLA_CALZADO?TALLA_CALZADO:''} onChange={e => this.setState({TALLA_CALZADO:e.target.value})} name="indu-calzado" id="indu-calzado" className="form-select inputRequired">
                                         <option></option>
                                         {dataShoe}
                                     </select>
                                 </div>
 
                             </div>
+
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-start">
-                                    <button onClick={() => simulateClick('corpo-tab',0,'click')} className="btn btn-primary">Atr&aacute;s</button>
+                                    <button onClick={() => this.vaidateBack('corpo-tab')} className="btn btn-primary">Atr&aacute;s</button>
                                 </div>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.saveDataPrincipal()} className="btn btn-primary">Guardar</button>
+                                    <button onClick={() => this.saveDataPrincipal('indu-tab')} className="btn btn-primary">Guardar</button>
                                 </div>
                             </div>
                         </div>

@@ -107,4 +107,20 @@
     color:#1783EE;
   }
 
-  
+  .bg-CV{
+    background-color: #74E36B;
+    
+  }
+
+  .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .bg-CV{
+    padding-bottom: 100%;
+  }
+
+  .colorBackButton{
+    color: #0F4F80;
+    padding: 10px;
+  }
+
+  .navbarPaddingcv{
+    height:calc(100vh - 10.3125rem) !important ;
+  }

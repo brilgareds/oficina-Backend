@@ -65,7 +65,7 @@ export const DashboardRoutes = () => {
                             <div className="content">
                                 <Switch>
                                     <Route path='/cv'>
-                                        <h2>cv header</h2>
+                                        <Header menu={menu[1]} />
                                     </Route>
                                     <Route>
                                         <Header menu={menu[1]} />
