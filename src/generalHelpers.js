@@ -18,9 +18,13 @@ const getFetch = async ({ url, set }) => {
         return result;
 
     } catch (e) {
-        console.log(e.toString());
-    }
+        const error = e.toString();
 
+        if (error === 'Error: Request failed with status code 402') {
+
+        }
+        console.log(error);
+    }
 };
 
 
@@ -218,7 +222,13 @@ const capitalizarPalabras = (val) => {
         .split(' ')
         .map(v => v[0].toUpperCase() + v.substr(1))
         .join(' ');
-}
+};
+
+const upperFirtLetterText = (text='') => {
+    if (typeof text !== 'string' || !text.length) return text;
+
+    return text[0].toUpperCase() + text.slice(1).toLowerCase();
+};
 
 const getFullUser = () => {
     let user = {};
@@ -309,6 +319,7 @@ export {
     getFetchWithHeader,
     postFetch,
     overlay,
+    upperFirtLetterText,
     capitalizarPalabras,
     getFullNameUser,
     getDocumentIdUser,

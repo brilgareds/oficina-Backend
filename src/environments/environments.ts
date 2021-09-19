@@ -88,7 +88,7 @@ const files = {
 const api = {
     path: backendPath,
     resquestApprovalPresentationCard: `${backendPath}/presentationCard/resquestApproval/`,
-    getAllBranches: `${backendPath}/allBranches/`,
+    getAllBranches: `${backendPath}/branches/`,
     getAllCities: `${backendPath}/allCities/`,
     getCitiesForASpecificPerson: `${backendPath}/citiesForASpecificPerson/`,
     getAllMenu: `${backendPath}/navigator/`,

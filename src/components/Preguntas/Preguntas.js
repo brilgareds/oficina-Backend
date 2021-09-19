@@ -42,7 +42,7 @@ export const Preguntas = (props) => {
 
                 const isNumericField  = (['N','0.0'].includes(SELECCION)) || preguntaSinTildes.includes('numero') || preguntaSinTildes.includes('dias acumulados');
                 const isDateField     = (SELECCION === 'F');
-                const isTextField     = ((respuestas[0]?.RESPUESTA || '') === 'txt') && !isNumericField;
+                const isTextField     = (SELECCION === 'A' || ((respuestas[0]?.RESPUESTA || '') === 'txt')) && !isNumericField;
                 const isRadioField    = (SELECCION === 'U');
                 const isMultipleField = (SELECCION === 'M');
                 

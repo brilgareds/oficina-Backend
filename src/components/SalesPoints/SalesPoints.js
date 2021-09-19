@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { getSalesPoints } from '../../repositories/generalInfo';
 import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
 
-export const SalesPoints = ({filter, setForm, value}) => {
+export const SalesPoints = ({filter, setForm, value, multiple=true}) => {
 
     const [salesPoints, setSalesPoints] = useState([]);
     const [salesPoint,  setSalesPoint]  = useState([]);
@@ -31,7 +31,7 @@ export const SalesPoints = ({filter, setForm, value}) => {
     return (
         <div>
             <label>Punto de venta</label>
-            <Select isMulti closeMenuOnSelect={false} styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
+            <Select isMulti={multiple} closeMenuOnSelect={!multiple} styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
             <input
                 tabIndex={-1}
                 autoComplete="off"

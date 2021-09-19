@@ -24,7 +24,7 @@ export const PersonalCampo = ({ form, setForm }) => {
                     <Cities setForm={handleCityChange} />
                 </div>
                 <div className='offset-md-0 col-12 col-md-4 mb-3' style={{paddingRight: '1rem', marginBottom: '1rem'}}>
-                    <SalesPoints filter={(form?.city || '').toLowerCase()} setForm={handleSalesPointChange} />
+                    <SalesPoints multiple={false} filter={(form?.city || '').toLowerCase()} setForm={handleSalesPointChange} />
                 </div>
 
                 <div className='col-12 col-md-4' style={{ marginBottom: '1rem', paddingRight: '1rem'}}>

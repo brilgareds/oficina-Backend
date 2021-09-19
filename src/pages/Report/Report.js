@@ -4,11 +4,10 @@ import { routes } from '../../environments/environments';
 import { currentDate, getDocumentIdUser, getEmailUser, getFullNameUser, getGenderUser, getPhoneUser, getStatusUser } from '../../generalHelpers';
 import './report.css';
 
-export const Report = ({showButtonCheckIn, dataReport}) => {
-    const testId = dataReport.survey.ENC_CODIGO;
-    const fechaReg = dataReport.fechaReg || currentDate();
-    const nombreEmpresa = dataReport?.logo[0].EMP_NOMBRE;
-    const tipoDocumento = 'C';
+export const Report = ({showButtonCheckIn, dataReport={}}) => {
+    const testId = dataReport?.survey?.ENC_CODIGO;
+    const fechaReg = dataReport?.fechaReg || currentDate();
+    const nombreEmpresa = dataReport?.logo?.[0]?.EMP_NOMBRE;
 
     return (
         <div className='report-container'>
@@ -24,7 +23,6 @@ export const Report = ({showButtonCheckIn, dataReport}) => {
                 <div className='col-12 col-md-6 col-lg-4 mb-4'>
                     <h5  className='offset-1 col-10 offset-md-0 col-md-12 mb-3 p-0' style={{fontWeight: '100', color: '#1780e8' }}>Datos del colaborador</h5>
                     <div className='offset-1 col-10 offset-md-0 col-md-12 p-0'>Nombre: { getFullNameUser() }</div>
-                    <div className='offset-1 col-10 offset-md-0 col-md-12 p-0'>Tipo de documento: { tipoDocumento }</div>
                     <div className='offset-1 col-10 offset-md-0 col-md-12 p-0'>Documento: { getDocumentIdUser() }</div>
                     <div className='offset-1 col-10 offset-md-0 col-md-12 p-0'>Género: { getGenderUser() }</div>
                     <div className='offset-1 col-10 offset-md-0 col-md-12 p-0'>Email: { getEmailUser() }</div>
@@ -32,7 +30,7 @@ export const Report = ({showButtonCheckIn, dataReport}) => {
                 </div>
 
                 <div className='col-12 col-lg-5'>
-                    <div className='mb-3 mensaje-covid' style={{background: `rgb${dataReport.score[0]}`, color: `rgb${dataReport.score[1]}` }}>{dataReport.score[2]}</div>
+                    <div className='mb-3 mensaje-covid' style={{background: `rgb${dataReport?.score?.[0]}`, color: `rgb${dataReport?.score?.[1] || ''}` }}>{dataReport?.score?.[2] || ''}</div>
                     <div className='offset-1 col-10 mb-3 p-0 text-center'>
                         <Link to={ '/assets/documents/Recomendaciones_generales.pdf' } style={{ fontSize: '0.9rem' }} target='_blank'>Conoce aquí las recomendaciones asociadas al Covid-19</Link>
                     </div>
@@ -44,7 +42,6 @@ export const Report = ({showButtonCheckIn, dataReport}) => {
                         </Link>
                     )
                 }
-                
             </div>
         </div>
     )

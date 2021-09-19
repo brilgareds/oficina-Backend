@@ -20,7 +20,7 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         getSurveys({tipoEncuesta}).then(setEncuestas);
     }, [tipoEncuesta]);
 
-    const generarReporte = (response => {
+    const generarReporte = (({response}) => {
         setDataReport(response?.data);
         setFormularioEnviado(true);
     });
@@ -48,10 +48,15 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         
         const params = { answers: formatRespuestas(formEncuesta) };
         const data = { params, tipoEncuesta };
+        let response = {};
 
         saveSurveys(data)
-            .then(response => {
-                alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', () => { generarReporte(response) });
+            .then(async data => {
+                response = data;
+                return alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', ()=>{});
+            })
+            .then(() => {
+                return generarReporte({response,tipoEncuesta});
             })
             .catch(e => {
                 console.log('Error: ', e);

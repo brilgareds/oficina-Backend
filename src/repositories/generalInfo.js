@@ -1,13 +1,10 @@
 import { api } from '../environments/environments';
-import { getFetch } from '../generalHelpers';
+import { getFetch, upperFirtLetterText } from '../generalHelpers';
 
 const getAllBranches = async () => {
-    const branches = fakeBranches;
-    // const url = api.getAllBranches;
-    // const branches = await(await(url ? getFetch({ url }) : {}) || {});
-    const response = formatBranches(branches.data);
-
-    console.log('\nBranches: ', response);
+    const url = api.getAllBranches;
+    const branches = await(await(url ? getFetch({ url }) : []) || []);
+    const response = formatBranches(branches);
 
     return response;
 };
@@ -125,36 +122,6 @@ const fakeSalesPoints = {
     }
 };
 
-const fakeBranches = {
-    data: [
-        {
-            value: 'Cali',
-            label: 'Cali',
-            color: '#1780E8'
-        },
-        {
-            value: 'Medellin',
-            label: 'Medellin',
-            color: '#1780E8'
-        },
-        {
-            value: 'Palmira',
-            label: 'Palmira',
-            color: '#1780E8'
-        },
-        {
-            value: 'Tulua',
-            label: 'Tulua',
-            color: '#1780E8'
-        },
-        {
-            value: 'Bogota',
-            label: 'Bogota',
-            color: '#1780E8'
-        }
-    ]
-};
-
 const fakeCities = {
     data: [
         {
@@ -180,14 +147,7 @@ const fakeCities = {
     ]
 };
 
-const formatBranches = (branches) => {
-
-    return branches.map(({ value, label }) => ({
-        value: value,
-        label: label,
-        color: '#1780E8'
-    }));
-};
+const formatBranches = (branches) => branches.map(({ SED_CODIGO:value, SED_CIUDAD:label }) => ({ value, label: upperFirtLetterText(label.trim()), color: '#1780E8' }));
 
 const formatCities = (cities) => {
 
