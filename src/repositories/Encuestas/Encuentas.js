@@ -54,8 +54,6 @@ const getSurveys = async({tipoEncuesta=''}) => {
     const surveys = await(await(url ? getFetch({ url }) : {}) || {});
     const response = formatSurveys(surveys.data);
 
-    console.log('\nEncuesta: ', response);
-
     return response;
 };
 

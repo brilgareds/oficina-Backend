@@ -11,7 +11,7 @@ export const Numeric = (props) => {
 
     return (
         <div className='col-12 col-md-5'>
-            <input type='text' pattern="^\d*[,.]?\d+$" className='form-control fontFamilyToNumber' value={inputValue} onChange={handleNumericChange} required />
+            <input type='text' pattern="^\d*[,.]?\d+$" className='form-control fontFamilyToNumber' value={inputValue} disabled={!!props.init} onChange={handleNumericChange} required />
         </div>
     )
 }

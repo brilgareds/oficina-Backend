@@ -22,6 +22,14 @@ export const Preguntas = (props) => {
     let currentArray_0 = {};
     const { agregarPregunta, preguntas, handleSubmit } = usePreguntas(props);
 
+    const fieldNeedDocumentId = ({isNumericField=false, preguntaSinTildes=''}) => (
+        isNumericField && (
+            preguntaSinTildes.substr(preguntaSinTildes.length-14) === 'identificacion'
+            || 
+            preguntaSinTildes.includes('identificacion reportante')
+        )
+    );
+
     return (
         <form onSubmit={ handleSubmit }> {
 
@@ -48,7 +56,7 @@ export const Preguntas = (props) => {
                 
                 const initDateField     = '';
                 const initTextField     = '';
-                const initNumericField  = (isNumericField && preguntaSinTildes.substr(preguntaSinTildes.length-14) === 'identificacion') ? getDocumentIdUser() : '';
+                const initNumericField  = fieldNeedDocumentId({isNumericField, preguntaSinTildes}) ? getDocumentIdUser() : '';
                 const initRadioField    = '';
                 const initMultipleField = '';
 
