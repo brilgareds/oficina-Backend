@@ -1,6 +1,6 @@
 import {Component,Fragment} from 'react';
 import { baseUrl } from '../../config/config';
-import { postData,getData, simulateClick, validateInputSelect, validateRadioButtons } from '../../components/general/General';
+import { postData,getData, simulateClick, validateInputTabs, loadDataValidate } from '../../components/general/General';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 class Family extends Component{
@@ -25,7 +25,8 @@ class Family extends Component{
             dataActividad:'',
             valCountry:'',
             valDpto: '',
-            valCity:''
+            valCity:'',
+            estadonav:'disabled'
         }
     }
 
@@ -33,7 +34,6 @@ class Family extends Component{
         // 
         document.getElementById('root').className = 'cv';
 
-       this.loadDataPrincipal()
 
         // consultar tipo documento
         const tipoDocu = `${baseUrl}/v1/informacionBasica/consultarTipDocumento`;
@@ -97,21 +97,20 @@ class Family extends Component{
             
         });
 
-        
-        
+        this.loadDataPrincipal()
     }
 
     validarState = (result) =>{
         
 
         if(!result){
-            this.props.history.push('/cv/DATOS_ADICIONALES');
+            this.props.history.push('/cv/datos_adicionales');
         }else{
             this.setState({seeView:result})
 
             setTimeout(() =>{  
                 simulateClick('registers-tab',0,'click')
-            },500)
+            },0)
             
         }
     }
@@ -122,6 +121,7 @@ class Family extends Component{
        this.setState({
            valCountry:codCountry,
         });
+        if(codCountry){
         // consultar departamento
         const urlDpto = `${baseUrl}/v1/informacionBasica/consultaDepartamentos`;
         postData(urlDpto,datos).then(result =>{
@@ -129,6 +129,7 @@ class Family extends Component{
             let option = result.map((value,x) => <option  key={x} value={value["cod_dpto"]}>{value["nom_mpio"]}</option>);
             this.setState({dpto:option});             
          });
+        }
     }
 
     clearAddress = () => {
@@ -151,12 +152,14 @@ class Family extends Component{
 
     validateDpto = () => {
         this.setState({valDpto:this.selectDpto.value})
-        const datos = { codDepartamento:parseInt(this.selectDpto.value) };
-        const url = `${baseUrl}/v1/informacionBasica/consultarCiudades`;
-        postData(url,datos).then(result => {
-            let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
-            this.setState({city:option});
-        })
+            if(this.selectDpto.value){
+            const datos = { codDepartamento:parseInt(this.selectDpto.value),codPais:parseInt(this.selectCountry.value) };
+            const url = `${baseUrl}/v1/informacionBasica/consultarCiudades`;
+            postData(url,datos).then(result => {
+                let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
+                this.setState({city:option});
+            })
+        }
     }  
 
     loadAddress = () =>{
@@ -179,8 +182,8 @@ class Family extends Component{
     }
 
     calculaEdad = (fecha,fecha_nac) => {
-        var a = moment(fecha);
-        var b = moment(fecha_nac);
+        var a = moment.utc(fecha);
+        var b = moment.utc(fecha_nac);
         var years = a.diff(b, 'year');
         b.add(years, 'years');
         document.getElementById("iden-age").value = years;
@@ -201,12 +204,12 @@ class Family extends Component{
             this.campos3.value = data.TIP_IDEN
             this.campos4.value = data.COD_FAMI
             this.campos4.setAttribute("readonly",'readonly')
-            this.campos5.value = moment(data.FEC_NACI).format('yyyy-MM-DD')
+            this.campos5.value = moment.utc(data.FEC_NACI).format('yyyy-MM-DD')
 
-            this.calculaEdad(moment(),moment(data.FEC_NACI));
+            this.calculaEdad(moment.utc(),moment.utc(data.FEC_NACI));
 
             this.campos7.value = data.GRA_ESCO?data.GRA_ESCO:''
-            this.campos8.value = data.TIP_RELA
+            this.campos8.value = data.TIP_RELA?data.TIP_RELA:''
 
             if(data.FAM_DEPE === 'S'){
                 document.getElementById('econo1').checked = true
@@ -216,6 +219,7 @@ class Family extends Component{
 
             if(data.FAMILIAR_IN_HOME === 'S'){
                 document.getElementById('livewith1').checked = true
+                this.loadDirFromUserPrincipal(true)
             }else if(data.FAMILIAR_IN_HOME === 'N'){
                 document.getElementById('livewith2').checked = true
             }
@@ -246,14 +250,25 @@ class Family extends Component{
                 document.getElementById('contactEmergy2').checked = true
             }
 
-            this.setState({
-                valCountry:data.PAI_FAMI,
-                valDpto: data.DTO_FAMI,
-                valCity:data.MPI_FAMI
-            })
-            simulateClick(this.selectCountry.id,0,'change')
-            simulateClick(this.selectDpto.id,1000,'change')
-            simulateClick(this.selectCity.id,2000,'change')
+
+            if(data.PAI_FAMI){
+                this.setState({
+                    valCountry:data.PAI_FAMI,
+                    valDpto: data.DTO_FAMI,
+                    valCity:data.MPI_FAMI
+                })
+                simulateClick(this.selectCountry.id,0,'change')
+    
+                setTimeout(() => {
+                    simulateClick(this.selectDpto.id,0,'change')
+                    setTimeout(() => {
+                        simulateClick(this.selectCity.id,0,'change')
+                    }, 500);
+                }, 500);
+            }
+
+            
+
 
             this.inputAddressFinal.value = data.DIR_FAMI
 
@@ -269,10 +284,6 @@ class Family extends Component{
               }).then((result) => {
                 if (result.isConfirmed) {
                     const datos = {COD_FAMI:parseInt(data.COD_FAMI)}
-
-                    console.log(datos)
-                    console.log(result)
-
                     const urlSave =  `${baseUrl}/v1/familiar/eliminarFamiliaresIndividual`;
                     postData(urlSave,datos).then(result => {
                         if(result.ok){
@@ -285,9 +296,6 @@ class Family extends Component{
                                 confirmButtonText: 'Cerrar'
                             })
                             this.loadDataPrincipal();
-                            // document.getElementById('saveButton').style = 'display:block';
-                            // this.setState({setHidden:'hidden'})
-                            // document.querySelector(".inputHiddenEdit").innerHTML = '';
                         }
                     })
                 }
@@ -297,6 +305,7 @@ class Family extends Component{
     }
     
     loadDataPrincipal = () =>{
+        loadDataValidate()
         const dataUser = JSON.parse( localStorage.getItem("d_u"));
         const cedula = parseInt(dataUser['cedula'])
         const empresa = parseInt(dataUser['empresa'])
@@ -348,25 +357,7 @@ class Family extends Component{
     }
 
     saveDataFamily = ()  =>{
-        const validateData = validateInputSelect('famlilyRequired')
-        const validaContactEmergy = validateRadioButtons('contactEmergy')
-        const validaDepende = validateRadioButtons('discapacidad')
-        const validaSexo = validateRadioButtons('options')
-        // const validaLife = validateRadioButtons('life')
-        const validaEconoDepnde = validateRadioButtons('econo')
-        const validaViveWith = validateRadioButtons('livewith')
-        const validaParticipa = validateRadioButtons('play')
-
-        if(validateData > 0  || validaContactEmergy  === 0 || validaDepende === 0 || validaSexo === 0 ||  validaEconoDepnde  === 0 || validaViveWith === 0 || validaParticipa === 0){
-            Swal.fire({
-                title: '',
-                text: "Validar campos obligatorios",
-                icon: 'error',
-                showCancelButton: false,
-                confirmButtonColor: '#2c7be5',
-                confirmButtonText: 'Cerrar'
-            })
-        }else{
+        if(!validateInputTabs()){
             const campos1 = this.campos1.value?this.campos1.value:'';
             const campos2 = this.campos2.value?this.campos2.value:'';
             const campos3 = this.campos3.value?this.campos3.value:'';
@@ -388,7 +379,7 @@ class Family extends Component{
             const viveconel = document.querySelector('input[name=livewith]:checked').value
             const presentadiscapacidad = document.querySelector('input[name=discapacidad]:checked').value
             const play = document.querySelector('input[name=play]:checked').value
-            const tipoDiscapaci = parseInt(this.campos14.value?this.campos14.value:0)
+            const tipoDiscapaci = this.campos14.value?parseInt(this.campos14.value):0
     
             const selectCountry = this.selectCountry.value?this.selectCountry.value:''
             const selectDpto = this.selectDpto.value?this.selectDpto.value:''
@@ -397,7 +388,6 @@ class Family extends Component{
             const dataUser = JSON.parse( localStorage.getItem("d_u"));
             const cedula = parseInt(dataUser['cedula'])
             const empresa = parseInt(dataUser['empresa'])
-    
             const beneficiarioEPS = document.getElementById("checkEPS").checked?'S':'N';
             const beneficiarioCaja = document.getElementById("checkcAJA").checked?'S':'N';
     
@@ -451,12 +441,80 @@ class Family extends Component{
         }
     }
 
+    validateInputTabsIn = (tab) => {
+        let valtab =  validateInputTabs(tab)
+        if(valtab === ''){
+            this.setState({estadonav:''})
+            simulateClick(tab,0,'click')
+            setTimeout(() => {
+                this.setState({estadonav:'disabled'})
+            }, 500);
+        }
+    }
+
+    vaidateBack =(tabidentificador) =>{
+        this.setState({estadonav:''})
+        simulateClick(tabidentificador,0,'click')
+        setTimeout(() => {
+            this.setState({estadonav:'disabled'})
+        }, 500);
+    }
+
+    loadDirFromUserPrincipal = (validardata) =>{
+        const dataUser = JSON.parse( localStorage.getItem("d_u"));
+        const cedula = parseInt(dataUser['cedula'])
+        const empresa = parseInt(dataUser['empresa'])
+
+
+        if(validardata){
+
+            // consultar datos basicos
+            const datos = { cedula:cedula,empresa:empresa };
+            const url = `${baseUrl}/v1/informacionBasica/consultaDatos`;
+            postData(url,datos).then(result =>{
+                const data = result[0];
+
+                console.log(data);
+
+                if(data.PAI_RESI){
+                    this.setState({
+                        valCountry:data.PAI_RESI,
+                        valDpto: data.DEPARTAMENTO_RESIDENCIA,
+                        valCity:data.CIUDAD_RESIDENCIA
+                    })
+                    simulateClick(this.selectCountry.id,0,'change')
+        
+                    setTimeout(() => {
+                        simulateClick(this.selectDpto.id,0,'change')
+                        setTimeout(() => {
+                            simulateClick(this.selectCity.id,0,'change')
+                        }, 500);
+                    }, 500);
+                }
+                this.inputAddressFinal.value = data.DIRECCION_COMPLETA
+
+            })
+           
+        }else{
+            this.setState({
+                valCountry:'',
+                valDpto: '',
+                valCity:'',
+                dpto:'',
+                city:''
+            })
+            this.inputAddressFinal.value = ''
+        }
+
+
+    }
+
 
     render(){
         
         const {
             seeView,tipDocu,dataStudy,country,dpto,nomenclaturaStreet,nomenclaturaBis,nomenclaturaCardinalidad,nomenclaturaComplemento,
-            city,dataRelationship,typeIncapa,dataFamiliy,dataActividad,valCountry,valDpto,valCity} = this.state;
+            city,dataRelationship,typeIncapa,dataFamiliy,dataActividad,valCountry,valDpto,valCity,estadonav} = this.state;
         let data = '';
 
         const alphabet = this.state.alphabet.map((value,x) =><option key={x} value={value}>{value}</option> );
@@ -468,12 +526,12 @@ class Family extends Component{
                     <div className=" d-flex justify-content-around">
                         
                         <div className="row">
-                            <h4>&#191;Deseas agregar familiares&#63;</h4>
+                            <h4 className="text-white">&#191;Deseas agregar familiares&#63;</h4>
                             <div className="col-sm">
                                 <input type="radio" name="uniform" className="btn-check " id="btn-check-outlined" autoComplete="off"></input>
                                 <label className="btn backGreen" htmlFor="btn-check-outlined" onClick={() =>{this.validarState(true)}}>SI</label> &nbsp;
                                 <input type="radio" name="uniform" className="btn-check backGreen" id="btn-check-outlined2" autoComplete="off"></input>
-                                <label className="btn backGreen" htmlFor="btn-check-outlined2" onClick={() => this.validarState(false)}>No</label>
+                                <label className="btn backGreen" htmlFor="btn-check-outlined2" onClick={() => this.validarState(false)}>NO</label>
                             </div>
                            
                         </div>                                       
@@ -494,13 +552,13 @@ class Family extends Component{
                                         <button className="nav-link" id="registers-tab" data-bs-toggle="tab" data-bs-target="#registers" type="button" role="tab" aria-controls="registers" aria-selected="true">Familiares registrados</button>
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <button className="nav-link " active id="identity-tab" data-bs-toggle="tab" data-bs-target="#identity" type="button" role="tab" aria-controls="identity" aria-selected="true">Identidad del familiar</button>
+                                        <button className="nav-link"  id="identity-tab" data-bs-toggle="tab" data-bs-target="#identity" type="button" role="tab" aria-controls="identity" aria-selected="true">Identidad del familiar</button>
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <button className="nav-link " id="parent-tab" data-bs-toggle="tab" data-bs-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="true">Parentesco</button>
+                                        <button className="nav-link" disabled={estadonav}  id="parent-tab" data-bs-toggle="tab" data-bs-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="true">Parentesco</button>
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <button className="nav-link " id="report-tab" data-bs-toggle="tab" data-bs-target="#report" type="button" role="tab" aria-controls="report" aria-selected="true">Reporte de salud</button>
+                                        <button className="nav-link " disabled={estadonav}  id="report-tab" data-bs-toggle="tab" data-bs-target="#report" type="button" role="tab" aria-controls="report" aria-selected="true">Reporte de salud</button>
                                     </li>
                                 </ul>
                                 &nbsp;
@@ -511,18 +569,18 @@ class Family extends Component{
                                     <div className="tab-pane fade" id="identity" role="tabpanel" aria-labelledby="identity-tab">
                                         <div className="row">
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label >Nombres:<span className="text-danger">*</span></label>
-                                                    <input ref={input =>this.campos1 = input} type="text" className="form-control famlilyRequired" id="iden-nombre" name="iden-nombre"></input>
+                                                <label htmlFor="iden-nombre">Nombres:<span className="text-danger">*</span></label>
+                                                    <input ref={input =>this.campos1 = input} type="text" className="form-control inputRequired" id="iden-nombre" name="iden-nombre"></input>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label >Apellidos:<span className="text-danger">*</span></label>
-                                                <input ref={input =>this.campos2 = input} type="text" className="form-control famlilyRequired" id="iden-apellido" name="iden-apellido"></input>
+                                                <label htmlFor="iden-apellido">Apellidos:<span className="text-danger">*</span></label>
+                                                <input ref={input =>this.campos2 = input} type="text" className="form-control inputRequired" id="iden-apellido" name="iden-apellido"></input>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
 
                                                 <label htmlFor="options">Sexo:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
-                                                    <input  type="radio"  value='F' className="btn-check input-hidden " name="options" id="option1" ></input>
+                                                    <input  type="radio"  value='F' className="btn-check input-hidden inputRequired " name="options" id="option1" ></input>
                                                     <label className="btn btn-outline-primary" htmlFor="option1">Femenino</label>&nbsp;
                                                     <input  type="radio"  value='M' className="btn-check input-hidden" name="options" id="option2"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="option2">Masculino</label>
@@ -531,20 +589,20 @@ class Family extends Component{
 
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label htmlFor="iden-tipodocu">Tipo documento:<span className="text-danger">*</span></label>
-                                                <select ref={input =>this.campos3 = input} name="iden-tipodocu" id="iden-tipodocu" className="form-select">
+                                                <select ref={input =>this.campos3 = input} name="iden-tipodocu" id="iden-tipodocu" className="form-select inputRequired">
                                                     <option value=""></option>
                                                     {tipDocu}
                                                 </select>
                                             </div>
 
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label >Identificaci&oacute;n:<span className="text-danger">*</span></label>
-                                                <input ref={input =>this.campos4 = input} type="number" className="form-control famlilyRequired" id="iden-identi" name="iden-identi"></input>
+                                                <label htmlFor="iden-identi">Identificaci&oacute;n:<span className="text-danger">*</span></label>
+                                                <input ref={input =>this.campos4 = input} type="number" className="form-control inputRequired" id="iden-identi" name="iden-identi"></input>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label htmlFor="gene-numdocu">Fecha de nacimiento:<span className="text-danger">*</span></label>
-                                                <input ref={input =>this.campos5 = input} max={moment().format('yyyy-MM-DD')} type="date" className="form-control" id="iden-birth" name="iden-birth" onChange={(e) =>{
-                                                    this.calculaEdad(moment(),moment(e.target.value))
+                                                <label htmlFor="iden-birth">Fecha de nacimiento:<span className="text-danger">*</span></label>
+                                                <input ref={input =>this.campos5 = input} max={moment().utc().format('yyyy-MM-DD')} type="date" className="form-control inputRequired" id="iden-birth" name="iden-birth" onChange={(e) =>{
+                                                    this.calculaEdad(moment().utc(),moment.utc(e.target.value))
                                                 }}></input>
                                             </div>
 
@@ -563,75 +621,34 @@ class Family extends Component{
                                         </div>
                                         <div className="row pb-4 flex">
                                             <div className="col d-flex flex-wrap justify-content-end">
-                                                <button onClick={() => simulateClick('parent-tab',0,'click')} className="btn btn-primary">Siguiente</button>
+                                                <button onClick={() => this.validateInputTabsIn('parent-tab')} className="btn btn-primary">Siguiente</button>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="tab-pane fade" id="parent" role="tabpanel" aria-labelledby="parent-tab">
                                         <div className="row">
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label htmlFor="">Tipo de relaci&oacute;n:<span className="text-danger">*</span></label>
-                                                <select ref={input =>this.campos8 = input} className="form-select famlilyRequired" id="iden-rela" name="iden-rela">
+                                                <label htmlFor="iden-rela">Tipo de relaci&oacute;n:<span className="text-danger">*</span></label>
+                                                <select ref={input =>this.campos8 = input} className="form-select inputRequired" id="iden-rela" name="iden-rela">
                                                     <option value=""></option>
                                                     {dataRelationship}
                                                 </select>
                                             </div>
-                                            {/* <div className="col-sm-12 col-md-4 pb-4">
-                                                <label htmlFor="life">&#191;Vive actualmente&#63;<span className="text-danger">*</span></label>
-                                                <div className=" d-flex justify-content-around">
-                                                            <input  type="radio"  value='S' className="btn-check input-hidden famlilyRequiredCheck" name="life" id="life1" onChange={() => {     
-                                                                document.getElementById("econo2").checked = false
-                                                                document.getElementById("livewith2").checked = false
-                                                                document.getElementById("play2").checked = false
-                                                                document.getElementById("iden-dedica").removeAttribute('disabled')
-                                                                document.getElementById("iden-dedica").value = ''
-                                                                document.getElementById("iden-acti").removeAttribute('readOnly')
-                                                                document.getElementById("iden-acti").value = ''
-                                                                document.getElementById("checkEPS").removeAttribute('disabled')
-                                                                document.getElementById("checkEPS").checked= false;
-                                                                document.getElementById("checkcAJA").removeAttribute('disabled')
-                                                                document.getElementById("checkcAJA").checked= false;
-
-
-                                                                // document.getElementById("iden-bene").removeAttribute('readOnly')
-                                                                // document.getElementById("iden-bene").value = ''                                                         
-                                                              }} />
-                                                            <label className="btn btn-outline-primary" htmlFor="life1">SI</label>&nbsp;
-                                                            <input  type="radio"  value='N' className="btn-check input-hidden" name="life" id="life2" onChange={() => {     
-                                                                document.getElementById("econo2").checked = true
-                                                                document.getElementById("livewith2").checked = true
-                                                                document.getElementById("play2").checked = true
-                                                                document.getElementById("iden-dedica").setAttribute('disabled','disabled')
-                                                                document.getElementById("iden-dedica").value = ''
-                                                                document.getElementById("iden-acti").setAttribute('readOnly','readOnly')
-                                                                document.getElementById("iden-acti").value = ''
-                                                                // document.getElementById("iden-bene").setAttribute('readOnly','readOnly')
-                                                                // document.getElementById("iden-bene").value = ''
-                                                                document.getElementById("checkEPS").checked= false;
-                                                                document.getElementById("checkcAJA").checked= false;
-                                                                document.getElementById("checkEPS").setAttribute('disabled','disabled')
-                                                                document.getElementById("checkcAJA").setAttribute('disabled','disabled')
-
-                                                                
-                                                              }} />
-                                                            <label className="btn btn-outline-primary" htmlFor="life2">NO</label>
-                                                </div>
-                                            </div> */}
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label htmlFor="econo">&#191;Depende economicamente de usted&#63;:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
-                                                    <input  type="radio"  value='S' className="btn-check input-hidden famlilyRequiredCheckEconomy" name="econo" id="econo1" ></input>
+                                                    <input  type="radio"  value='S' className="btn-check input-hidden inputRequired" name="econo" id="econo1" ></input>
                                                     <label className="btn btn-outline-primary" htmlFor="econo1">SI</label>&nbsp;
-                                                    <input  type="radio"  value='N' className="btn-check input-hidden famlilyRequiredCheckEconomy" name="econo" id="econo2"></input>
+                                                    <input  type="radio"  value='N' className="btn-check input-hidden " name="econo" id="econo2"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="econo2">NO</label>
                                                 </div>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label htmlFor="livewith">&#191;Vive con usted&#63;:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
-                                                    <input  type="radio"  value='S' className="btn-check input-hidden famlilyRequiredCheckViveconUsted" name="livewith" id="livewith1" />
+                                                    <input  type="radio"  value='S' className="btn-check input-hidden inputRequired" name="livewith" id="livewith1"  onClick={() => this.loadDirFromUserPrincipal(true)} />
                                                     <label className="btn btn-outline-primary" htmlFor="livewith1">SI</label>&nbsp;
-                                                    <input  type="radio"  value='N' className="btn-check input-hidden famlilyRequiredCheckViveconUsted" name="livewith" id="livewith2" />
+                                                    <input  type="radio"  value='N' className="btn-check input-hidden " name="livewith" id="livewith2" onClick={() =>this.loadDirFromUserPrincipal(false)} />
                                                     <label className="btn btn-outline-primary" htmlFor="livewith2">NO</label>
                                                 </div>
                                             </div>
@@ -645,9 +662,9 @@ class Family extends Component{
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label htmlFor="play">&#191;Desea su familiar participe en las actividades:&#63;:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
-                                                    <input  type="radio"  value='S' className="btn-check input-hidden famlilyRequiredCheckParticipe" name="play" id="play1" ></input>
+                                                    <input  type="radio"  value='S' className="btn-check input-hidden inputRequired" name="play" id="play1" ></input>
                                                     <label className="btn btn-outline-primary" htmlFor="play1">SI</label>&nbsp;
-                                                    <input  type="radio"  value='N' className="btn-check input-hidden famlilyRequiredCheckParticipe" name="play" id="play2"></input>
+                                                    <input  type="radio"  value='N' className="btn-check input-hidden " name="play" id="play2"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="play2">NO</label>
                                                 </div>
                                             </div>
@@ -658,14 +675,12 @@ class Family extends Component{
 
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label>Beneficiario de:</label>
-                                                {/* <input  ref={input =>this.campos11 = input} type="text" className="form-control" id="iden-bene" name="iden-bene"></input> */}
-
                                                 <div className="form-check">
                                                     <input ref={check => this.eps = check}  className="form-check-input checkServices"  type="checkbox" id={`checkEPS`}  value={`checkEPS`} />
                                                     <label className="form-check-label" htmlFor={`checkEPS`}>{`EPS`}</label>
                                                 </div>
                                                 <div className="form-check">
-                                                    <input ref={check => this.caja = check} className="form-check-input checkServices"  type="checkbox" id={`checkcAJA`}  value={`checkcAJA`} />
+                                                    <input ref={check => this.caja = check} className="form-check-input checkServices"  type="checkbox" id={`checkcAJA`}  value={`checkcAJA`}  />
                                                     <label className="form-check-label" htmlFor={`checkcAJA`}>{`CAJA`}</label>
                                                 </div>
 
@@ -675,10 +690,10 @@ class Family extends Component{
                                         </div>
                                         <div className="row pb-4 flex">
                                             <div className="col d-flex flex-wrap justify-content-start">
-                                                <button onClick={() => simulateClick('identity-tab',0,'click')} className="btn btn-primary">Atr&aacute;s</button>
+                                                <button onClick={() => this.vaidateBack('identity-tab')} className="btn btn-primary">Atr&aacute;s</button>
                                             </div>
                                             <div className="col d-flex flex-wrap justify-content-end">
-                                                <button onClick={() => simulateClick('report-tab',0,'click')} className="btn btn-primary">Siguiente</button>
+                                                <button onClick={() => this.validateInputTabsIn('report-tab')} className="btn btn-primary">Siguiente</button>
                                             </div>
                                         </div>
                                     </div>
@@ -687,11 +702,11 @@ class Family extends Component{
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label htmlFor="discapacidad">&#191;Presenta alguna discapcidad&#63;:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
-                                                    <input   type="radio"  value='S' className="btn-check input-hidden famlilyRequiredCheckPresenDiscapa" name="discapacidad" id="discapacidad1" onChange={() =>{
+                                                    <input   type="radio"  value='S' className="btn-check input-hidden inputRequired" name="discapacidad" id="discapacidad1" onChange={() =>{
                                                         document.getElementById('typeIncapa').removeAttribute('disabled')
                                                     }} />
                                                     <label className="btn btn-outline-primary" htmlFor="discapacidad1">SI</label>&nbsp;
-                                                    <input  type="radio"  value='N' className="btn-check input-hidden famlilyRequiredCheckPresenDiscapa" name="discapacidad" id="discapacidad2" onChange={() =>{
+                                                    <input  type="radio"  value='N' className="btn-check input-hidden " name="discapacidad" id="discapacidad2" onChange={() =>{
                                                         document.getElementById('typeIncapa').setAttribute('disabled','disabled')
                                                         document.getElementById('typeIncapa').value = ''
                                                     }} />
@@ -700,29 +715,23 @@ class Family extends Component{
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label htmlFor="typeIncapa">Tipo de discapcidad:<span className="text-danger">*</span></label>
-                                                <select ref={input =>this.campos14 = input}   disabled name="typeIncapa" id="typeIncapa" className="form-select famlilyRequired" >
+                                                <select ref={input =>this.campos14 = input}   disabled name="typeIncapa" id="typeIncapa" className="form-select inputRequired" >
                                                     <option value=""></option>
                                                     {typeIncapa}
                                                 </select>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label>Es tu contacto de emergencia: <span className="text-danger">*</span></label>
+                                                <label htmlFor="contactEmergy">Es tu contacto de emergencia: <span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
-                                                    <input  type="radio"  value='S' className="btn-check input-hidden famlilyRequiredCheckContactEmergy" name="contactEmergy" id="contactEmergy1" onChange={() =>{
-                                                        this.campos13.removeAttribute('readOnly')
-                                                    }}></input>
+                                                    <input  type="radio"  value='S' className="btn-check input-hidden inputRequired" name="contactEmergy" id="contactEmergy1"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="contactEmergy1">SI</label>&nbsp;
-                                                    <input  type="radio"  value='N' className="btn-check input-hidden famlilyRequiredCheckContactEmergy" name="contactEmergy" id="contactEmergy2" onChange={() =>{
-                                                        this.campos13.setAttribute('readOnly','readOnly')
-                                                        this.campos13.value=''
-
-                                                    }}></input>
+                                                    <input  type="radio"  value='N' className="btn-check input-hidden " name="contactEmergy" id="contactEmergy2"></input>
                                                     <label className="btn btn-outline-primary" htmlFor="contactEmergy2">NO</label>
                                                 </div>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
                                                 <label>Tel&eacute;fono:</label>
-                                                <input readOnly ref={input =>this.campos13 = input} className="form-control loadDir" type="text" id="report-telefono" name="report-telefono" ></input>
+                                                <input  ref={input =>this.campos13 = input} className="form-control loadDir" type="text" id="report-telefono" name="report-telefono" ></input>
                                             </div>
 
                                         </div>
@@ -856,7 +865,7 @@ class Family extends Component{
                         
                                         <div className="row pb-4 flex">
                                             <div className="col d-flex flex-wrap justify-content-start">
-                                                <button onClick={() => simulateClick('parent-tab',0,'click')} className="btn btn-primary">Atr&aacute;s</button>
+                                                <button onClick={() => this.vaidateBack('parent-tab')} className="btn btn-primary">Atr&aacute;s</button>
                                             </div>
                                             <div className="col d-flex flex-wrap justify-content-end">
                                                 <button onClick={() => this.saveDataFamily()} className="btn btn-primary">Guardar</button>

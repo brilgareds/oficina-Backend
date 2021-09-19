@@ -4,3 +4,4 @@ dotenv.config({
 });
 
 export const baseUrl = process.env.REACT_APP_URL_BACK;
+export const urlAzure = process.env.REACT_APP_URL_AZURE;

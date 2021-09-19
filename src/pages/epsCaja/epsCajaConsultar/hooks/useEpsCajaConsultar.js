@@ -147,7 +147,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                     <td>${(data.RECHAZO !== null) ? data.RECHAZO : ""}</td>
                     <td>${data.ARCH_ESTADO}</td>
                     <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-info" >Descargar</button> </a></td>
-                    <td><input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" style="width: 18rem;"></td>
+                    <td><input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;"></td>
                 </tr>`
                 ;
 
@@ -208,12 +208,28 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
     const [filesState, setFilesState] = useState([]);
     const onChangeInputFileHandle = (event) => {
 
-        filesState.push({
-            file: event.target.files[0],
-            codigoArchivo: event.target.dataset.target,
-        });
+        if (event.target.files[0].type === "application/pdf") {
+            filesState.push({
+                file: event.target.files[0],
+                codigoArchivo: event.target.dataset.target,
+            });
 
-        setFilesState(filesState);
+            setFilesState(filesState);
+
+        } else {
+            document.getElementById(event.target.id).value = "";
+
+            alertify.warning(`
+                <div className="row">
+                    <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
+                        Error.
+                    </div>
+                    <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                        Solo se permiten subir archivos tipo pdf
+                    </div>
+                </div>
+            `).delay(7);
+        }
     };
 
 

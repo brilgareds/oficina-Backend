@@ -1,7 +1,7 @@
 import {Component} from 'react';
 import {React} from 'react-dom';
 import Swal from 'sweetalert2';
-import { getData, postData, validateInputSelect, validateRadioButtons } from '../../components/general/General';
+import { getData, loadDataValidate, postData, validateInputTabs } from '../../components/general/General';
 import { baseUrl } from '../../config/config';
 
 class LivingPlace extends Component{
@@ -58,18 +58,8 @@ class LivingPlace extends Component{
 
 
     saveLivingPlace = () =>{
-        const valida =  this.validatInputRequired();
 
-        if(!valida){
-            Swal.fire({
-                title: '',
-                text: "Validar campos obligatorios",
-                icon: 'error',
-                showCancelButton: false,
-                confirmButtonColor: '#2c7be5',
-                confirmButtonText: 'Cerrar'
-            })
-        }else{
+        if(!validateInputTabs()){
 
             const dataUser = JSON.parse( localStorage.getItem("d_u"));
             const cedula = parseInt(dataUser['cedula']);
@@ -125,6 +115,7 @@ class LivingPlace extends Component{
         const empresa = parseInt(dataUser['empresa'])
         const datos = { NRO_DOCUMENTO:cedula,EMP_CODIGO:empresa };
         const url = `${baseUrl}/v1/vivienda/consultarDatosVivienda`;
+        loadDataValidate()
         postData(url,datos).then(result =>{
             const dataNew = result[0];
             this.setState({
@@ -162,6 +153,10 @@ class LivingPlace extends Component{
         getData(urlServices).then(result =>{
             let option = result.map((value,x) => {   
             let valSer = false
+        
+            console.log(this.state.SERVICIOS);
+
+
             if(this.state.SERVICIOS){
                 valSer = this.state.SERVICIOS.indexOf(value["TIP_NOMBRE"]) > -1 ? true:false
             }
@@ -176,21 +171,6 @@ class LivingPlace extends Component{
         });
     }
 
-
-    validatInputRequired = () =>{
-        let stringServi = validateRadioButtons("credit");
-        let stringServi3 = validateRadioButtons("creditActual");
-        // let checks = validateCheckButtons('checkServices')
-        let stringServi2 = validateInputSelect("inputRequiredForm"); 
-        if(stringServi2 > 0 || stringServi === 0  || stringServi3 === 0 ){
-            return false
-        }else{
-            return true
-        }
-    }
-
-
-
     render(){
         const {dataTypeLivinPlace,dataPerimeter,dataStratum,TIPO_VIVIENDA,PERIMETRO,ESTRATO,BENEFICIARIO_CREDITO_VIVIENDA,CREDITO_VIVIENDA_VIGENTE,HABITANTES_VIVIENDA,dataServices} = this.state;
 
@@ -200,51 +180,51 @@ class LivingPlace extends Component{
             </div>
             &nbsp;
             <div className="card">
-                <div className="card-body">
+                <div className="card-body active">
                     <div className="row">
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>Tipo de vivienda:<span className="text-danger">*</span></label>
-                            <select value={TIPO_VIVIENDA} onChange={e => this.setState({TIPO_VIVIENDA:e.target.value})} ref={el => this.campo1 = el} className="form-select inputRequiredForm" name="typeLyving"  id="typeLyving" >
+                            <label htmlFor="typeLyving">Tipo de vivienda:<span className="text-danger">*</span></label>
+                            <select value={TIPO_VIVIENDA} onChange={e => this.setState({TIPO_VIVIENDA:e.target.value})} ref={el => this.campo1 = el} className="form-select inputRequired" name="typeLyving"  id="typeLyving" >
                                 <option value=""></option>
                                 {dataTypeLivinPlace}
                             </select>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>Per&iacute;metro:<span className="text-danger">*</span></label>
-                            <select value={PERIMETRO} onChange={e => this.setState({PERIMETRO:e.target.value})} ref={el => this.campo2 = el} className="form-select inputRequiredForm" name="typePerimeter"  id="typePerimeter" >
+                            <label htmlFor="typePerimeter">Per&iacute;metro:<span className="text-danger">*</span></label>
+                            <select value={PERIMETRO} onChange={e => this.setState({PERIMETRO:e.target.value})} ref={el => this.campo2 = el} className="form-select inputRequired" name="typePerimeter"  id="typePerimeter" >
                                 <option value=""></option>
                                 {dataPerimeter}
                             </select>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>Estrato:<span className="text-danger">*</span></label>
-                            <select value={ESTRATO} onChange={e => this.setState({ESTRATO:e.target.value})} ref={el => this.campo3 = el} className="form-select inputRequiredForm" name="typeStratum"  id="typeStratum" >
+                            <label htmlFor="typeStratum">Estrato:<span className="text-danger">*</span></label>
+                            <select value={ESTRATO} onChange={e => this.setState({ESTRATO:e.target.value})} ref={el => this.campo3 = el} className="form-select inputRequired" name="typeStratum"  id="typeStratum" >
                                 <option value=""></option>
                                 {dataStratum}
                             </select>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4 ">
-                            <label>&#191;Es beneficiario de cr&eacute;dito de vivienda&#63;<span className="text-danger">*</span></label>
+                            <label htmlFor="credit">&#191;Es beneficiario de cr&eacute;dito de vivienda&#63;<span className="text-danger">*</span></label>
                         <div className=" d-flex justify-content-around">
-                                        <input type="radio" name="credit" value="S" checked={BENEFICIARIO_CREDITO_VIVIENDA === 'S'?true:false}  ref={el => this.campo4 = el} onChange={e => this.setState({BENEFICIARIO_CREDITO_VIVIENDA:e.target.value})} className="form-check btn-check inputRequiredFormRadio" id="radiocredit" autoComplete="off"></input>
+                                        <input type="radio" name="credit" value="S" checked={BENEFICIARIO_CREDITO_VIVIENDA === 'S'?true:false}  ref={el => this.campo4 = el} onChange={e => this.setState({BENEFICIARIO_CREDITO_VIVIENDA:e.target.value})} className="form-check btn-check inputRequired" id="radiocredit" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="radiocredit">SI</label>&nbsp;
-                                        <input type="radio" name="credit"  value="N" checked={BENEFICIARIO_CREDITO_VIVIENDA === 'N'?true:false}  ref={el => this.campo4 = el} onChange={e => this.setState({BENEFICIARIO_CREDITO_VIVIENDA:e.target.value})}  className="form-check btn-check inputRequiredFormRadio" id="radiocredit2" autoComplete="off"></input>
+                                        <input type="radio" name="credit"  value="N" checked={BENEFICIARIO_CREDITO_VIVIENDA === 'N'?true:false}  ref={el => this.campo4 = el} onChange={e => this.setState({BENEFICIARIO_CREDITO_VIVIENDA:e.target.value})}  className="form-check btn-check " id="radiocredit2" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="radiocredit2">No</label>
                             </div>                                      
                         </div>
 
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>&#191;Alg&uacute;n cr&eacute;dito de vivienda vigente&#63;<span className="text-danger">*</span></label>
+                            <label htmlFor="creditActual">&#191;Alg&uacute;n cr&eacute;dito de vivienda vigente&#63;<span className="text-danger">*</span></label>
                             <div className=" d-flex justify-content-around ">
-                                        <input type="radio" name="creditActual" checked={CREDITO_VIVIENDA_VIGENTE === 'S'?true:false}  value="S" ref={el => this.campo5 = el} onChange={e => this.setState({CREDITO_VIVIENDA_VIGENTE:e.target.value})} className="btn-check inputRequiredFormRadio" id="radiocreditActual" autoComplete="off"></input>
+                                        <input type="radio" name="creditActual" checked={CREDITO_VIVIENDA_VIGENTE === 'S'?true:false}  value="S" ref={el => this.campo5 = el} onChange={e => this.setState({CREDITO_VIVIENDA_VIGENTE:e.target.value})} className="btn-check inputRequired" id="radiocreditActual" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="radiocreditActual">SI</label>&nbsp;
-                                        <input type="radio" name="creditActual" checked={CREDITO_VIVIENDA_VIGENTE === 'N'?true:false}  value="N" ref={el => this.campo5 = el} onChange={e => this.setState({CREDITO_VIVIENDA_VIGENTE:e.target.value})} className="btn-check inputRequiredFormRadio" id="radiocreditActual2" autoComplete="off"></input>
+                                        <input type="radio" name="creditActual" checked={CREDITO_VIVIENDA_VIGENTE === 'N'?true:false}  value="N" ref={el => this.campo5 = el} onChange={e => this.setState({CREDITO_VIVIENDA_VIGENTE:e.target.value})} className="btn-check " id="radiocreditActual2" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="radiocreditActual2">NO</label>
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-4 pb-4">
-                            <label>&#191;Cu&aacute;ntas personas habitan la vivienda&#63;<span className="text-danger">*</span></label>
-                            <input value={HABITANTES_VIVIENDA} onChange={e => this.setState({HABITANTES_VIVIENDA:e.target.value}) } type="number" className="form-control inputRequiredForm" ref={el => this.campo6 = el} id="peopleinHome" name="peopleinHome"></input>
+                            <label htmlFor="peopleinHome">&#191;Cu&aacute;ntas personas habitan la vivienda&#63;<span className="text-danger">*</span></label>
+                            <input value={HABITANTES_VIVIENDA} onChange={e => this.setState({HABITANTES_VIVIENDA:e.target.value}) } type="number" className="form-control inputRequired" ref={el => this.campo6 = el} id="peopleinHome" name="peopleinHome"></input>
                         </div>
 
                         <div className="col-sm-12 col-md-4 pb-4">

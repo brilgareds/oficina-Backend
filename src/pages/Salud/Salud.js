@@ -1,9 +1,10 @@
 import {Component,Fragment} from 'react';
-import { getData, postData, simulateClick, validateInputSelect, validateRadioButtons } from '../../components/general/General';
+import { getData, loadDataValidate, postData, putInputRequerid, simulateClick, validateInputTabs } from '../../components/general/General';
 import fotoW from '../../assets/img/cv/reporte-embarazo.jpg';
 import { baseUrl } from '../../config/config';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import { postFetch } from '../../generalHelpers';
 
 class Salud extends Component{
     constructor(props){
@@ -69,27 +70,26 @@ class Salud extends Component{
     }   
 
     seePregnancyTab = (response) =>{
+        this.setState({estadonav:''})
         if(response){
-            this.setState({estadonav:''})
             simulateClick('pregnancy-tab',0,'click')
             setTimeout(() => {
                 this.setState({estadonav:'disabled'})
             }, 500);
-            this.putInputRequerid('input[name=haveDangerPregnancyF]','','add','haveDangerPregnancyF')
-            this.putInputRequerid(`#${this.dateexam.id}`,'','add',this.dateexam.id)
-            this.putInputRequerid(`#${this.tiempogesta.id}`,'','add',this.tiempogesta.id)
-            this.putInputRequerid(`#${this.dateprobably.id}`,'','add',this.dateprobably.id)
+            putInputRequerid('input[name=haveDangerPregnancyF]','','add','haveDangerPregnancyF')
+            putInputRequerid(`#${this.dateexam.id}`,'','add',this.dateexam.id)
+            putInputRequerid(`#${this.tiempogesta.id}`,'','add',this.tiempogesta.id)
+            putInputRequerid(`#${this.dateprobably.id}`,'','add',this.dateprobably.id)
             this.setState({seePregnancy:''})
             simulateClick('pregnancy-tab',0,'click');
         }else{
-            this.setState({estadonav:''})
             this.setState({seePregnancy:'hidden'})
-            this.putInputRequerid('input[name=haveDangerPregnancyF]','','remove','haveDangerPregnancyF')
-            this.putInputRequerid(`#${this.dateexam.id}`,'','remove',this.dateexam.id)
-            this.putInputRequerid(`#${this.tiempogesta.id}`,'','remove',this.tiempogesta.id)
-            this.putInputRequerid(`#${this.dateprobably.id}`,'','remove',this.dateprobably.id)
+            putInputRequerid('input[name=haveDangerPregnancyF]','','remove','haveDangerPregnancyF')
+            putInputRequerid(`#${this.dateexam.id}`,'','remove',this.dateexam.id)
+            putInputRequerid(`#${this.tiempogesta.id}`,'','remove',this.tiempogesta.id)
+            putInputRequerid(`#${this.dateprobably.id}`,'','remove',this.dateprobably.id)
             simulateClick('characteristic-tab',0,'click');
-            setTimeout(() => {
+             setTimeout(() => {
                 this.setState({estadonav:'disabled'})
             }, 500);
         }
@@ -97,45 +97,47 @@ class Salud extends Component{
 
     saveDataPrincipal = () =>{
 
-        if(validateInputSelect('inputRequired') > 0 || validateRadioButtons('gruposanguineo') === 0 || validateRadioButtons('datosfactor') === 0){
-            this.validateInputTabs()
-        }else{
-            const dataUser = JSON.parse( localStorage.getItem("d_u"));
-            const cedula = parseInt(dataUser['cedula'])
-            const empresa = parseInt(dataUser['empresa'])        
-            const datos = {
-                "EMPRESA": empresa,
-                "NRO_DOCUMENTO": cedula,
-                "GRUPO_SANGUINEO": document.querySelector('input[name=gruposanguineo]:checked')? document.querySelector('input[name=gruposanguineo]:checked').value.trim():'',
-                "FACTOR": document.querySelector('input[name=datosfactor]:checked')? document.querySelector('input[name=datosfactor]:checked').value.trim():'',
-                "ESTATURA": this.estatura.value.toString().trim(),
-                "PESO": this.peso.value.toString().trim(),
-                "RAZA": this.raza.value.trim(),
-                "FUMADOR": document.querySelector('input[name=smoke]:checked')? document.querySelector('input[name=smoke]:checked').value.trim():'',
-                "BEBEDOR": document.querySelector('input[name=licor]:checked')? document.querySelector('input[name=licor]:checked').value.trim():'',
-                "ANTEOJOS": document.querySelector('input[name=anteojosF]:checked')? document.querySelector('input[name=anteojosF]:checked').value.trim():'',
-                "ENFERMEDADES": this.sicks.value.trim(),
-                "RESTRICCIONES_MEDICAS": this.restri.value.trim(),
-                "FRECUENCIA_ASISTENCIA_MEDICA": this.fredocotr.value.trim(),
-                "SUFRE_ALERGIAS": document.querySelector('input[name=typeAlergyF]:checked')? document.querySelector('input[name=typeAlergyF]:checked').value:'',
-                "ALERGIAS": this.alergias.value.trim(),
-                "CONTACTO_EMERGENCIA":this.contact.value.trim(),
-                "NUMERO_CONTACTO_EMERGENCIA": this.numbercontact.value.trim(),
-                "ENFERMEDAD_LABORAL": document.querySelector('input[name=sickCalificateF]:checked')? document.querySelector('input[name=sickCalificateF]:checked').value:'',
-                "PERDIDA_CAPACIDAD_SALUD": this.percent.value?parseInt(this.percent.value):null,
-                "PLAN_SALUD_NO_EPS": document.querySelector('input[name=planSalud]:checked')? document.querySelector('input[name=planSalud]:checked').value:'',
-                "PLAN_SALUD": this.planhave.value,
-                "PLAN_SALUD_OTROS":this.planhaveother.value,
-                "ENTIDAD_OTROS": this.entity.value,
-                "EMBARAZO_ALTO_RIESGO": document.querySelector('input[name=haveDangerPregnancyF]:checked')? parseInt(document.querySelector('input[name=haveDangerPregnancyF]:checked').value):null,
-                "FECHA_EXAMEN_EMBARAZO": this.dateexam.value,
-                "TIEMPO_GESTACION": this.tiempogesta.value?parseInt(this.tiempogesta.value):null,
-                "FECHA_PARTO": this.dateprobably.value,
-                "OBSERVACION": this.observa.value.trim()
-              }
-    
+        if(!validateInputTabs()){
+          
+                const dataUser = JSON.parse( localStorage.getItem("d_u"));
+                const cedula = parseInt(dataUser['cedula'])
+                const empresa = parseInt(dataUser['empresa'])  
+            
+                let formData = new FormData();
+                formData.append("EMPRESA", empresa)
+                formData.append("NRO_DOCUMENTO", cedula)
+                formData.append("GRUPO_SANGUINEO", document.querySelector('input[name=gruposanguineo]:checked')? document.querySelector('input[name=gruposanguineo]:checked').value.trim():'')
+                formData.append("FACTOR", document.querySelector('input[name=datosfactor]:checked')? document.querySelector('input[name=datosfactor]:checked').value.trim():'')
+                formData.append("ESTATURA", this.estatura.value.toString().trim())
+                formData.append("PESO", this.peso.value.toString().trim())
+                formData.append("RAZA", this.raza.value.trim())
+                formData.append("FUMADOR", document.querySelector('input[name=smoke]:checked')? document.querySelector('input[name=smoke]:checked').value.trim():'')
+                formData.append("BEBEDOR", document.querySelector('input[name=licor]:checked')? document.querySelector('input[name=licor]:checked').value.trim():'')
+                formData.append("ANTEOJOS", document.querySelector('input[name=anteojosF]:checked')? document.querySelector('input[name=anteojosF]:checked').value.trim():'')
+                formData.append("ENFERMEDADES", this.sicks.value.trim())
+                formData.append("RESTRICCIONES_MEDICAS", this.restri.value.trim())
+                formData.append("FRECUENCIA_ASISTENCIA_MEDICA", this.fredocotr.value.trim())
+                formData.append("SUFRE_ALERGIAS", document.querySelector('input[name=typeAlergyF]:checked')? document.querySelector('input[name=typeAlergyF]:checked').value:'')
+                formData.append("ALERGIAS", this.alergias.value.trim())
+                formData.append("CONTACTO_EMERGENCIA",this.contact.value.trim())
+                formData.append("NUMERO_CONTACTO_EMERGENCIA", this.numbercontact.value.trim())
+                formData.append("ENFERMEDAD_LABORAL", document.querySelector('input[name=sickCalificateF]:checked')? document.querySelector('input[name=sickCalificateF]:checked').value:'')
+                formData.append("PERDIDA_CAPACIDAD_SALUD", this.percent.value?parseInt(this.percent.value):null)
+                formData.append("PLAN_SALUD_NO_EPS", document.querySelector('input[name=planSalud]:checked')? document.querySelector('input[name=planSalud]:checked').value:'')
+                formData.append("PLAN_SALUD", this.planhave.value)
+                formData.append("PLAN_SALUD_OTROS",this.planhaveother.value)
+                formData.append("ENTIDAD_OTROS", this.entity.value)
+                formData.append("EMBARAZO_ALTO_RIESGO", document.querySelector('input[name=haveDangerPregnancyF]:checked')? parseInt(document.querySelector('input[name=haveDangerPregnancyF]:checked').value):null)
+                formData.append("FECHA_EXAMEN_EMBARAZO", this.dateexam.value)
+                formData.append("TIEMPO_GESTACION", this.tiempogesta.value?parseInt(this.tiempogesta.value):null)
+                formData.append("FECHA_PARTO", this.dateprobably.value)
+                formData.append("OBSERVACION", this.observa.value.trim())
+                formData.append('file',this.file.files[0]?this.file.files[0]:{})
+
+
+
                 const urlSave =  `${baseUrl}/v1/salud/crearRegistroSalud`;
-                postData(urlSave,datos).then(result => {
+                postFetch({url:urlSave,params:formData}).then(result => {
                     console.log(result);
                 if(result.ok){
                     Swal.fire({
@@ -153,6 +155,7 @@ class Salud extends Component{
     }
 
     loadDataPrincipal = () => {
+        
         const dataUser = JSON.parse( localStorage.getItem("d_u"));
         const cedula = parseInt(dataUser['cedula'])
         const empresa = parseInt(dataUser['empresa']) 
@@ -165,8 +168,9 @@ class Salud extends Component{
 
         const urlSave =  `${baseUrl}/v1/salud/buscarDatos`;
         postData(urlSave,datos).then(result => {
+            console.log(result)
             result.forEach(element => {
-
+                
                 this.estatura.value = element.ESTATURA?element.ESTATURA.trim():''
                 this.peso.value = element.PESO?element.PESO.trim():''
                 this.raza.value = element.RAZA?element.RAZA.trim():''
@@ -181,24 +185,44 @@ class Salud extends Component{
                 this.planhaveother.value = element.PLAN_SALUD_OTROS?element.PLAN_SALUD_OTROS.trim():''
                 this.entity.value = element.ENTIDAD_OTROS?element.ENTIDAD_OTROS.trim():''
                 
-                this.dateexam.value = moment(element.FECHA_EXAMEN_EMBARAZO).format('yyyy-MM-DD') 
+                this.dateexam.value = moment.utc(element.FECHA_EXAMEN_EMBARAZO).format('yyyy-MM-DD') 
                 this.tiempogesta.value = element.TIEMPO_GESTACION
-                this.dateprobably.value = moment(element.FECHA_PARTO).format('yyyy-MM-DD') 
+                this.dateprobably.value = moment.utc(element.FECHA_PARTO).format('yyyy-MM-DD') 
                 this.observa.value = element.OBSERVACION
+
+
                 if(element.EMBARAZO_ALTO_RIESGO != null){
-                    element.EMBARAZO_ALTO_RIESGO === 1 ?document.getElementById('radiohaveDangerPregnancy').checked = true:document.getElementById('radiohaveDangerPregnancy2').checked = true
+                    this.setState({seePregnancy:''})
+                    document.getElementById('radioPregnancy').checked = true
+                   if( element.EMBARAZO_ALTO_RIESGO === 1 ){
+                    document.getElementById('radiohaveDangerPregnancy').checked = true
+                   }else{
+                    document.getElementById('radiohaveDangerPregnancy2').checked = true
+
+                   }
+                }else{
+                    document.getElementById('radioPregnancy2').checked = true
                 }
 
                 if(element.SUFRE_ALERGIAS != null){
-                    element.SUFRE_ALERGIAS === 'S' ?document.getElementById('radiotypeAlergy').checked = true:document.getElementById('radiotypeAlergy2').checked = true
-                    this.alergias.removeAttribute('readOnly')
+                    if( element.SUFRE_ALERGIAS === 'S' ){ 
+                        document.getElementById('radiotypeAlergy').checked = true
+                        putInputRequerid('#diag-allergy','','add','diag-allergy')
+                    }else{
+                        document.getElementById('radiotypeAlergy2').checked = true
+                    }
+                    
                 }
                 if(element.ANTEOJOS != null){
                     element.ANTEOJOS === 'S' ?document.getElementById('radioanteojos').checked = true:document.getElementById('radioanteojos2').checked = true
                 }
                 if(element.ENFERMEDAD_LABORAL != null){
-                    element.ENFERMEDAD_LABORAL === 'S' ?document.getElementById('radiosickCalificate').checked = true:document.getElementById('radiosickCalificate2').checked = true
-                    this.percent.removeAttribute('readOnly')
+                    if(element.ENFERMEDAD_LABORAL === 'S'){
+                        document.getElementById('radiosickCalificate').checked = true
+                        putInputRequerid('#diag-percent','','add','diag-percent')
+                       }else{
+                        document.getElementById('radiosickCalificate2').checked = true
+                    }
                 }
                 if(element.BEBEDOR != null){
                     element.BEBEDOR === 'S' ?document.getElementById('radioLicor').checked = true:document.getElementById('radioLicor2').checked = true
@@ -207,17 +231,30 @@ class Salud extends Component{
                     element.FUMADOR === 'S' ?document.getElementById('radiosmoke').checked = true:document.getElementById('radiosmoke2').checked = true
                 }
 
+                if(element.PLAN_SALUD != null){
+                    putInputRequerid('#diag-entity','','add','diag-entity')
+                    putInputRequerid('#comp-planHave','','add','comp-planHave')
+                    if(element.PLAN_SALUD_OTROS != null){
+                        this.planhaveother.value = element.PLAN_SALUD_OTROS
+                        putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
+                    }
+
+                    if(element.PLAN_SALUD_NO_EPS === null){
+                        document.getElementById('radioPlansalud').checked = true
+                    }
+                }
+
+
                 if(element.PLAN_SALUD_NO_EPS != null){
                     if(element.PLAN_SALUD_NO_EPS === 'S') {
                         document.getElementById('radioPlansalud').checked = true
-                        this.planhave.removeAttribute('disabled')
+                        putInputRequerid('#diag-entity','','add','diag-entity')
+                        putInputRequerid('#comp-planHave','','add','comp-planHave')
 
                         if(element.PLAN_SALUD_OTROS != null){
                             this.planhaveother.value = element.PLAN_SALUD_OTROS
-                            this.planhaveother.removeAttribute('readOnly')
+                            putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
                         }
-
-                        this.entity.removeAttribute('readOnly')
                     }else{
                         document.getElementById('radioPlansalud2').checked = true
                     }
@@ -238,198 +275,29 @@ class Salud extends Component{
                         }
                     });
                 }
+
             });
+
+            loadDataValidate()
   
         })
 
     }
 
-    putInputRequerid = (identificador,tipo,accion,label) =>{
-       const campo =  document.querySelector(identificador)
-       const labelCampo = document.querySelector(`label[for=${label}]`)
-       console.log(labelCampo);
-       console.log(campo.type)
-       console.log(tipo)
-       console.log(identificador)
-       switch (campo.type) {
-                case 'text':
-                    if(accion === 'add'){
-                        campo.classList.add('inputRequired')
-                        // labelCampo.classList.add('text-danger')
-                        campo.removeAttribute('readOnly')
-                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
-                    }else  if(accion === 'remove'){
-                        campo.classList.remove('inputRequired')
-                        campo.setAttribute('readOnly','readOnly')
-                        campo.value= ''
-                        if(labelCampo.getElementsByTagName('span').length){
-                            labelCampo.getElementsByTagName('span')[0].remove()
-                            // labelCampo.classList.remove('text-danger')
-
-                        }
-                    }
-               break;
-
-                case 'number':
-                    if(accion === 'add'){
-                        campo.classList.add('inputRequired')
-                        // labelCampo.classList.add('text-danger')
-                        campo.removeAttribute('readOnly')
-                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
-                    }else  if(accion === 'remove'){
-                        campo.classList.remove('inputRequired')
-                        campo.setAttribute('readOnly','readOnly')
-                        campo.value= ''
-                        if(labelCampo.getElementsByTagName('span').length){
-                            labelCampo.getElementsByTagName('span')[0].remove()
-                            // labelCampo.classList.remove('text-danger')
-
-                        }
-                    }
-               break;
-
-                case 'select-one':
-                if(accion === 'add'){
-                    campo.classList.add('inputRequired')
-                    // labelCampo.classList.add('text-danger')
-                    campo.removeAttribute('disabled')
-                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
-                }else  if(accion === 'remove'){
-                    campo.classList.remove('inputRequired')
-                    campo.setAttribute('disabled','disabled')
-                    campo.value= ''
-                    if(labelCampo.getElementsByTagName('span').length){
-                        labelCampo.getElementsByTagName('span')[0].remove()
-                        // labelCampo.classList.remove('text-danger')
-
-                    }
-                }
-
-               break;
-
-                case 'radio':
-                if(accion === 'add'){
-                    campo.classList.add('inputRequired')
-                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
-                }else  if(accion === 'remove'){
-                    campo.classList.remove('inputRequired')
-                    campo.value= ''
-                    if(labelCampo.getElementsByTagName('span').length){
-                        labelCampo.getElementsByTagName('span')[0].remove()
-                    }
-                }
-
-                break;
-
-                case 'date':
-                    if(accion === 'add'){
-                        campo.classList.add('inputRequired')
-                        // labelCampo.classList.add('text-danger')
-                        campo.removeAttribute('readOnly')
-                        labelCampo.innerHTML += '<span class="text-danger">*</span>'
-                    }else  if(accion === 'remove'){
-                        campo.classList.remove('inputRequired')
-                        campo.setAttribute('readOnly','readOnly')
-                        campo.value= ''
-                        if(labelCampo.getElementsByTagName('span').length){
-                            labelCampo.getElementsByTagName('span')[0].remove()
-                            // labelCampo.classList.remove('text-danger')
-
-                        }
-                    }
-               break;
-       
-           default:
-               break;
-       }
-       
-    }
-
-    validateInputTabs = (tabidentificador) =>{
-
-
-        let labelValidate = ''
-
-        document.querySelectorAll('.active .inputRequired').forEach(element =>{
-            const type = element.type
-            const val = element.value.trim()
-            const id = element.id
-            let label =''
-            const name = element.name
-
-
-            if(type === 'radio'){
-                label = document.querySelector(`label[for=${name}]`)
-            }else{
-                label = document.querySelector(`label[for=${id}]`)
-            }
-
-            switch (type) {
-                case 'text':
-                    if(val === ''){
-                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
-                    }
-                break;
-                case 'number':
-                    if(!val){
-                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
-                    }
-                break;
-                case 'select-one':
-
-                    if(val === '' ){
-                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
-                    }
-
-                break;
-                case 'select-multiple':
-                
-                break;
-
-                case 'radio':
-                  const vali =  document.querySelector(`input[name=${name}]:checked`)? document.querySelector(`input[name=${name}]:checked`).value.trim():''
-                  if(vali === ''){
-                    labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
-                  }
-                break;
-                case 'date':
-                    if(val === ''){
-                        labelValidate += `<li class="list-group-item border-0">${label.textContent }</li>`
-                    }
-                break;
-            
-                default:
-                    break;
-            }
-        })
-
-        if(labelValidate){
-            let list = `<ul class="list-group list-group-flush">
-                            ${labelValidate}
-                        </ul>`
-                Swal.fire({
-                    title: "Validar las siguientes preguntas",
-                    html: list,
-                    showCancelButton: false,
-                    showConfirmButton: true,
-                    confirmButtonColor: '#2c7be5',
-                    confirmButtonText: 'Cerrar'
-                });
-               
-        }else{
+    validateInputTabsIn = (tab) => {
+        let valtab =  validateInputTabs(tab)
+        if(valtab === ''){
             this.setState({estadonav:''})
-        //    document.getElementById(tabidentificador).removeAttribute('disabled')
-           simulateClick(tabidentificador,0,'click')
-        //    document.getElementById(tabidentificador).setAttribute('disabled','')
+            simulateClick(tab,0,'click')
             setTimeout(() => {
                 this.setState({estadonav:'disabled'})
             }, 500);
-
-
         }
-
-    
     }
+
+
+
+   
 
     vaidateBack =(tabidentificador) =>{
         this.setState({estadonav:''})
@@ -490,12 +358,12 @@ class Salud extends Component{
                                         <div className=" d-flex justify-content-around ">
  
                                             <input type="radio" value="S" onChange={() => {
-                                                this.putInputRequerid('#diag-allergy','textselectdate','add','diag-allergy')
+                                                putInputRequerid('#diag-allergy','textselectdate','add','diag-allergy')
                                             
                                             }}  name="typeAlergyF" className="btn-check" id="radiotypeAlergy" autoComplete="off"></input>
                                             <label className="btn btn-outline-primary" htmlFor="radiotypeAlergy">SI</label>&nbsp;
                                             <input type="radio" value="N" onChange={() => {
-                                                                            this.putInputRequerid('#diag-allergy','textselectdate','remove','diag-allergy')
+                                                                            putInputRequerid('#diag-allergy','textselectdate','remove','diag-allergy')
                                                                         }}
                                                     name="typeAlergyF" className="btn-check" id="radiotypeAlergy2" autoComplete="off"></input>
                                             <label className="btn btn-outline-primary" htmlFor="radiotypeAlergy2">No</label>
@@ -515,10 +383,10 @@ class Salud extends Component{
                                         <label>&#191;Tiene una enfermedad laboral calificada&#63;</label>
                                         <div className=" d-flex justify-content-around">
                                           
-                                            <input type="radio" value="S" onChange={() => this.putInputRequerid('#diag-percent','textselectdate','add','diag-percent') }  name="sickCalificateF" className="btn-check" id="radiosickCalificate" autoComplete="off"></input>
+                                            <input type="radio" value="S" onChange={() => putInputRequerid('#diag-percent','textselectdate','add','diag-percent') }  name="sickCalificateF" className="btn-check" id="radiosickCalificate" autoComplete="off"></input>
                                             <label className="btn btn-outline-primary" htmlFor="radiosickCalificate">SI</label>&nbsp;
                                             <input type="radio" value="N" onChange={() => {
-                                                this.putInputRequerid('#diag-percent','textselectdate','remove','diag-percent')
+                                                putInputRequerid('#diag-percent','textselectdate','remove','diag-percent')
                                                                      
                                                                         }} name="sickCalificateF" className="btn-check" id="radiosickCalificate2" autoComplete="off"></input>
                                             <label className="btn btn-outline-primary" htmlFor="radiosickCalificate2">NO</label>
@@ -526,7 +394,7 @@ class Salud extends Component{
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label htmlFor="diag-percent" >&#37; de p&eacute;rdida de capacidad  de salud</label>
+                                        <label htmlFor="diag-percent" >&#37; de p&eacute;rdida de capacidad laboral</label>
                                         <input  ref={inp => this.percent = inp} readOnly type="number" min="0" max="100" className="form-control" id="diag-percent" name="diag-percent"></input>
                                     </div>
 
@@ -543,7 +411,7 @@ class Salud extends Component{
                                 </div>
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button   onClick={() => this.validateInputTabs('complementary-tab')     } className="btn btn-primary">Siguiente</button>
+                                        <button   onClick={() => this.validateInputTabsIn('complementary-tab')     } className="btn btn-primary">Siguiente</button>
                                         {/* <button   onClick={() => simulateClick('parent-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
                                     </div>
                                 </div>
@@ -557,16 +425,16 @@ class Salud extends Component{
                                         <label>&#191;Plan de salud diferente a la EPS&#63;</label>
                                         <div className=" d-flex justify-content-around">
                                                     <input value="S" type="radio" onChange={() => {
-                                                                        this.putInputRequerid('#diag-entity','textselectdate','add','diag-entity')
-                                                                        this.putInputRequerid('#comp-planHave','textselectdate','add','comp-planHave')
+                                                                        putInputRequerid('#diag-entity','textselectdate','add','diag-entity')
+                                                                        putInputRequerid('#comp-planHave','textselectdate','add','comp-planHave')
 
                                                                             }} name="planSalud" className="btn-check" id="radioPlansalud" autoComplete="off" />
                                                     <label className="btn btn-outline-primary" htmlFor="radioPlansalud">SI</label>&nbsp;
                                                     <input value="N" type="radio" name="planSalud" className="btn-check" id="radioPlansalud2" autoComplete="off" onChange={() => {
 
-                                                                                    this.putInputRequerid('#diag-entity','textselectdate','remove','diag-entity')
-                                                                                    this.putInputRequerid('#comp-planHave','textselectdate','remove','comp-planHave')
-                                                                                    this.putInputRequerid('#diag-other','textselectdate','remove','diag-other')
+                                                                                    putInputRequerid('#diag-entity','textselectdate','remove','diag-entity')
+                                                                                    putInputRequerid('#comp-planHave','textselectdate','remove','comp-planHave')
+                                                                                    putInputRequerid(`#${this.planhaveother.id}`,'','remove',this.planhaveother.id)
                                                                                     
                                                                                 }} />
                                                     <label className="btn btn-outline-primary" htmlFor="radioPlansalud2">NO</label>
@@ -578,9 +446,9 @@ class Salud extends Component{
                                                                                     const input = e.target.value
                                                                                     if(input === 'O'){
                                                                                         this.planhaveother.removeAttribute('readOnly')
-                                                                                        this.putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
+                                                                                        putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
                                                                                     }else{
-                                                                                        this.putInputRequerid(`#${this.planhaveother.id}`,'','remove',this.planhaveother.id)
+                                                                                        putInputRequerid(`#${this.planhaveother.id}`,'','remove',this.planhaveother.id)
                                                                                     }
                                                                                         }} >
                                             <option value=""></option>
@@ -631,7 +499,7 @@ class Salud extends Component{
                                     <div className="col d-flex flex-wrap justify-content-end">
                                         <button onClick={() => {
                                             let seePreg = !seePregnancy? 'pregnancy-tab':'characteristic-tab'
-                                            this.validateInputTabs(seePreg) 
+                                            this.validateInputTabsIn(seePreg) 
                                             }} className="btn btn-primary">Siguiente</button>
                                         {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
                                     </div>
@@ -667,7 +535,12 @@ class Salud extends Component{
 
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Resultado de la prueba de embarazo</label>
-                                        <input ref={inp => this.file = inp} type="file" className="form-control" id="diag-fileExamen" name="diag-fileExamen"></input>
+                                        <label htmlFor="file-upload" className="custom-file-upload">
+                                            <i className="text-danger far fa-file-pdf"></i> Subir archivo
+                                        </label>
+                                        <input ref={el => this.file = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
+
+
                                     </div>
 
 
@@ -678,8 +551,7 @@ class Salud extends Component{
                                         <button onClick={() => this.vaidateBack('complementary-tab')} className="btn btn-primary">Atr&aacute;s</button>
                                     </div>
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button onClick={() => this.validateInputTabs('characteristic-tab') } className="btn btn-primary">Siguiente</button>
-                                        {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
+                                        <button onClick={() => this.validateInputTabsIn('characteristic-tab') } className="btn btn-primary">Siguiente</button>
                                     </div>
                                 </div>
                             </div>

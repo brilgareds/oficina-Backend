@@ -68,7 +68,7 @@ export const MiBilletera = () => {
                             </div>
                             <div className="col-12 col-lg-12 mb-4 text-center">
                                 <span className="form-label texto2rio" htmlFor="valorGasto">valor: </span>
-                                <input onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="number" />
+                                <input onKeyDown={event => { return event.keyCode !== 69 }} onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="number" />
                             </div>
 
                             <div className="col-12 col-lg-12 mb-4 text-left">

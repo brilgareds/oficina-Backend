@@ -1,4 +1,8 @@
-async function postData(url = '', data = {}) {  
+import axios from "axios";
+import Swal from "sweetalert2";
+import { baseUrl } from "../../config/config";
+
+    async function postData(url = '', data = {}) {  
         const response = await fetch(url, {
         method: 'POST', 
         mode: 'cors', 
@@ -32,7 +36,7 @@ async function postData(url = '', data = {}) {
 
 
      function simulateClick(id,tiempo,evento) {
-       console.log(id)
+         console.log(id)
         let event = new Event(evento, {bubbles: true});
         let elem = document.getElementById(id); 
         setTimeout(() =>{           
@@ -41,87 +45,242 @@ async function postData(url = '', data = {}) {
       }
 
 
-      function validateRadioButtons (name){
-        let crediActual = document.getElementsByName(name);
-        let stringServi3 = 0; 
-        for(let v = 0; v < crediActual.length; v++)
-        {
-            if (crediActual[v].checked)
-                {
-               
-                stringServi3++
+
+    function putInputRequerid(identificador,tipo,accion,label){
+      const campo =  document.querySelector(identificador)
+      const labelCampo = document.querySelector(`label[for=${label}]`)
+      if(labelCampo.getElementsByTagName('span').length){
+        labelCampo.getElementsByTagName('span')[0].remove()
+      }
+      switch (campo.type) {
+               case 'text':
+                   if(accion === 'add'){
+                       campo.classList.add('inputRequired')
+                       campo.removeAttribute('readOnly')
+                       labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                   }else  if(accion === 'remove'){
+                       campo.classList.remove('inputRequired')
+                       campo.setAttribute('readOnly','readOnly')
+                       campo.value= ''
+                   }
+              break;
+
+               case 'number':
+                   if(accion === 'add'){
+                       campo.classList.add('inputRequired')
+                       campo.removeAttribute('readOnly')
+                       labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                   }else  if(accion === 'remove'){
+                       campo.classList.remove('inputRequired')
+                       campo.setAttribute('readOnly','readOnly')
+                       campo.value= ''
+                   }
+                break;
+
+               case 'select-one':
+                if(accion === 'add'){
+                    campo.classList.add('inputRequired')
+                    // labelCampo.classList.add('text-danger')
+                    campo.removeAttribute('disabled')
+                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                }else  if(accion === 'remove'){
+                    campo.classList.remove('inputRequired')
+                    campo.setAttribute('disabled','disabled')
+                    campo.value= ''
+                    
                 }
+
+                break;
+
+               case 'radio':
+                if(accion === 'add'){
+                    campo.classList.add('inputRequired')
+                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                }else  if(accion === 'remove'){
+                    campo.classList.remove('inputRequired')
+                    campo.value= ''
+                }
+
+               break;
+
+               case 'date':
+                if(accion === 'add'){
+                    campo.classList.add('inputRequired')
+                    campo.removeAttribute('readOnly')
+                    labelCampo.innerHTML += '<span class="text-danger">*</span>'
+                }else  if(accion === 'remove'){
+                    campo.classList.remove('inputRequired')
+                    campo.setAttribute('readOnly','readOnly')
+                    campo.value= ''
+                   
+                }
+              break;
+      
+          default:
+              break;
+      }
+      
+   }
+
+    function validateInputTabs(tabidentificador){
+    let labelValidate = ''
+    document.querySelectorAll('.active .inputRequired').forEach(element =>{
+        const type = element.type
+        const val = element.value.trim()
+        const id = element.id
+        let label =''
+        const name = element.name
+
+
+        if(type === 'radio'){
+            label = document.querySelector(`label[for=${name}]`)
+        }else{
+            label = document.querySelector(`label[for=${id}]`)
         }
+        let labelast = label.textContent.substring(0, label.textContent.lastIndexOf("*"));
 
-        // if(stringServi3 === 0){
-        //     for(var i = 0; i < crediActual.length; i++)
-        //     {
-        //         let selector = 'label[for=' + crediActual[i].id + ']';
-        //         let label = document.querySelector(selector);
-        //         label.classList.remove('btn-outline-primary')
-        //         label.classList.add('btn-outline-danger')
+        switch (type) {
+            case 'text':
+                if(val === ''){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
+            break;
+            case 'number':
+                if(!val){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
+            break;
+            case 'select-one':
 
-        //     }
-        // }else{
-        //     for(let x = 0; x < crediActual.length; x++)
-        //     {
-        //         let selector = 'label[for=' + crediActual[x].id + ']';
-        //         let label = document.querySelector(selector);
-        //         label.classList.add('btn-outline-primary')
-        //         label.classList.remove('btn-outline-danger')
+                if(val === '' ){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
 
-        //     }
-        // }
-
-        return stringServi3;
-
-    }
-
-
-    function validateCheckButtons(name){
-        // var thingToRemove = document.querySelectorAll('.'+name);
-        // thingToRemove.forEach(element => element.classList.remove('is-invalid'));
-
-        
-        let els = document.getElementsByClassName(name);
-        let stringServi = 0; 
-        for(let i = 0; i < els.length; i++)
-        {
-            if(els[i].checked){
-                stringServi++;
-            }
-        }
-
-        // if(stringServi === 0){
-        //     for(let i = 0; i < els.length; i++)
-        //     {
-        //         els[i].classList.add('is-invalid')
-        //     }
-        // }
-        return stringServi
-    }
-
-    function  validateInputSelect(name){
-
-        // var thingToRemove = document.querySelectorAll(".invalid-feedback");
-        // thingToRemove.forEach(element => element.remove());
-
-        let inputs = document.getElementsByClassName(name);
-        let cont = 0; 
-        for(var x = 0; x < inputs.length; x++)
-        {
-            // const parent =  inputs[x].parentNode;
+            break;
+            case 'select-multiple':
             
-            if (!inputs[x].value){
-                cont++;
-              //  inputs[x].classList.add('is-invalid')
-               // parent.innerHTML += '<div class="invalid-feedback">Campo obligatorio</div>'
-            }else{
-              //  inputs[x].classList.remove('is-invalid')
+            break;
+
+            case 'radio':
+              const vali =  document.querySelector(`input[name=${name}]:checked`)? document.querySelector(`input[name=${name}]:checked`).value.trim():''
+              if(vali === ''){
+                labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+              }
+            break;
+            case 'date':
+                if(val === ''){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
+            break;
+        
+            default:
+                break;
             }
+        })
+
+        // console.log(labelValidate);
+
+        if(labelValidate){
+            let list = `<ul class="list-group list-group-flush inline-flex">
+                            ${labelValidate}
+                        </ul>`
+                Swal.fire({
+                    title: "<h5>Validar las siguientes preguntas</h5>",
+                    html: list,
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#2c7be5',
+                    confirmButtonText: 'Cerrar'
+                });
+            
         }
 
-        return cont;
+        return labelValidate;
+
     }
+
+    function loadDataValidate(){
+        const url = `${baseUrl}/v1/menuOV/formulariosCompletados`;
+        const dataUser = JSON.parse( localStorage.getItem("d_u"));
+        const cedula = parseInt(dataUser['cedula'])
+        const empresa = parseInt(dataUser['empresa'])
+        const datos = { NRO_DOCUMENTO:cedula,CODIGO_EMPRESA:empresa };
+
+        postData(url,datos).then(element =>{
+            const ele = element[0]
+    
+            setTimeout(() => {
+                if(ele.INFORMACION_BASICA_CODIGO){
+                    document.getElementById('colorCheck1').classList.remove('checkGrey')
+                    document.getElementById('colorCheck1').classList.add('checkGreen')
+                }else{
+                    document.getElementById('colorCheck1').classList.add('checkGrey')
+                }
+                if(ele.EDUCACION_CODIGO){
+                    document.getElementById('colorCheck2').classList.remove('checkGrey')
+                    document.getElementById('colorCheck2').classList.add('checkGreen')
+                }else{
+                    document.getElementById('colorCheck2').classList.add('checkGrey')
+    
+                }
+                if(ele.FAMILIARES_CODIGO){
+                    document.getElementById('colorCheck3').classList.remove('checkGrey')
+                    document.getElementById('colorCheck3').classList.add('checkGreen')
+                }else{
+                    document.getElementById('colorCheck3').classList.add('checkGrey')
+    
+                }
+                if(ele.DATOS_ADICIONALES_CODIGO){
+                    document.getElementById('colorCheck4').classList.remove('checkGrey')
+                    document.getElementById('colorCheck4').classList.add('checkGreen')
+                }else{
+                    document.getElementById('colorCheck4').classList.add('checkGrey')
+    
+                }
+                if(ele.SALUD_CODIGO){
+                    document.getElementById('colorCheck5').classList.remove('checkGrey')
+                    document.getElementById('colorCheck5').classList.add('checkGreen')
+                }else{
+                    document.getElementById('colorCheck5').classList.add('checkGrey')
+    
+                }
+                if(ele.VIVIENDA_CODIGO){
+                    document.getElementById('colorCheck6').classList.remove('checkGrey')
+                    document.getElementById('colorCheck6').classList.add('checkGreen')
+                }else{
+                    document.getElementById('colorCheck6').classList.add('checkGrey')
+    
+                }
+            }, 500);
+           
+
+
+        })
+
+      }
+
+    async  function getFileFromAzure(url){
+        axios({
+            method: 'get',
+            url: url, // blob url eg. blob:http://127.0.0.1:8000/e89c5d87-a634-4540-974c-30dc476825cc
+            responseType: 'blob',
+            headers: {
+                'Content-Type': 'application/file'
+              },
+        }).then(function(response){
+             var reader = new FileReader();
+             reader.readAsDataURL(response.data); 
+             reader.onloadend = function() {
+                 var base64data = reader.result;
+                 return base64data
+             }
+    
+        })
+
+      }
+
+
+
+
         
-    export {postData,getData,simulateClick,validateCheckButtons,validateRadioButtons,validateInputSelect}
+    export {postData,getData,simulateClick,putInputRequerid,validateInputTabs,loadDataValidate,getFileFromAzure}

@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 import { api } from '../../../../environments/environments';
-import { getFetchWithHeader, overlay, postFetch } from '../../../../generalHelpers';
+import { advertenciaFormularioVacio, getFetchWithHeader, overlay, postFetch } from '../../../../generalHelpers';
 
 export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
-    // const exprRegTelefono = /^[0-9+() -?]+$/;                                                //Expresion regular para validar el formato de un teléfono
-    // const exprRegEmail = /^([a-zA-Z0-9_.-]+)@([\da-zA-Z0-9.-]+)\.([a-z.]{2,6})$/;        //Expresion regular para validar los correos electronicos
-    // const exprRegTexto = /^([\w\s\d\nÑñáéíóúÁÉÍÓÚ.,\-_@?¿%<>]){1,990}$/;                      //Expresion regular para validar texto largos de 1000 caracteres
+    const exprRegNumeros = /^[0-9+]+$/;                                                 //Expresion regular para validar el formato de solo numeros
+    const exprRegTelefono = /^[0-9+() -?]+$/;                                           //Expresion regular para validar el formato de un teléfono
+    const exprRegEmail = /^([a-zA-Z0-9_.-]+)@([\da-zA-Z0-9.-]+)\.([a-z.]{2,6})$/;       //Expresion regular para validar los correos electronicos
+    const exprRegSoloLetras = /^[a-zA-ZÑñáéíóúÁÉÍÓÚÄËÏÖÜäëïöü\s+]+$/;                   //Expresion regular para validar solo letras
 
     useEffect(() => {
         document.getElementById('root').className = 'incapacidadRadicar';
@@ -136,30 +137,22 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
     const [filesState, setFilesState] = useState();
     const onChangeInputFileHandle = ({ tipoArchivo, documento, target }) => {
 
-        // formValue.files.push({
-        //     fileInfo: target.target.files[0],
-        //     tipoDocumento: documento
-        // });
+        if (target.target.files[0].type === "application/pdf") {
+            filesState.files.push({
+                fileInfo: target.target.files[0],
+                tipoDocumento: documento,
+                codigoTipoArchivo: tipoArchivo,
+            });
 
-        filesState.files.push({
-            fileInfo: target.target.files[0],
-            tipoDocumento: documento,
-            codigoTipoArchivo: tipoArchivo,
-        });
-
-        // setStateForm({
-        //     ...formValue,
-        //     files: formValue.files
-        // });
-
-        setFilesState({
-            ...filesState,
-            files: filesState.files
-        });
-
-
-
-
+            setFilesState({ ...filesState, files: filesState.files });
+        } else {
+            document.getElementById(target.target.id).value = "";
+            Swal.fire({
+                icon: 'error',
+                title: 'Solo se permiten subir archivos tipo pdf',
+                confirmButtonText: 'Cerrar',
+            });
+        }
     }
 
     const [rowsTable, setRowsTable] = useState(formValue.rowsDataTable);
@@ -218,36 +211,44 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
             },
         };
 
-        const dataForm = new FormData();
-        dataForm.append("allData", JSON.stringify(allData));
 
-        filesState.files.forEach(file => {
-            dataForm.append("file", file.fileInfo);
-            dataForm.append("filesNames", file.tipoDocumento);
-            dataForm.append("filesCodigos", file.codigoTipoArchivo);
-        });
+        if (!validarDatosFormulario(allData)) {
+            advertenciaFormularioVacio();
+        } else {
 
-        postFetch({
-            url: api.postSaveDisabilityFiling,
-            params: dataForm
-        })
-            .then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Datos guardados correctamente.',
-                    confirmButtonText: 'Ok',
-                }).then((result) => {
-                    window.location.reload();
-                })
-            })
-            .catch(() => {
+            const dataForm = new FormData();
+            dataForm.append("allData", JSON.stringify(allData));
 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Hubo un error en la inserción, por favor revisa el formulario.',
-                    confirmButtonText: 'Cerrar',
-                });
+            filesState.files.forEach(file => {
+                dataForm.append("file", file.fileInfo);
+                dataForm.append("filesNames", file.tipoDocumento);
+                dataForm.append("filesCodigos", file.codigoTipoArchivo);
             });
+
+            postFetch({
+                url: api.postSaveDisabilityFiling,
+                params: dataForm
+            })
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Datos guardados correctamente.',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        window.location.reload();
+                    })
+                })
+                .catch(() => {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hubo un error en la inserción, por favor revisa el formulario.',
+                        confirmButtonText: 'Cerrar',
+                    });
+                });
+
+        }
+
     }
 
 
@@ -277,6 +278,53 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formValue.fechaFin, formValue.fechaInicio]);
+
+
+    const validarDatosFormulario = (allData) => {
+
+        const { correoElectronico, telefono } = allData.dataUser;
+        const { otraEntidad, rangoFechas, tipoIncapacidad } = allData.dataForm;
+        const { fechaFin, fechaInicio } = rangoFechas;
+
+        if (
+            exprRegTelefono.test(telefono) &&
+            exprRegEmail.test(correoElectronico) &&
+            exprRegNumeros.test(tipoIncapacidad) &&
+            validarfechas(fechaInicio, fechaFin) &&
+            filesState.files.length !== 0
+        ) {
+            if (otraEntidad.status === true) {
+                return (exprRegNumeros.test(otraEntidad.value)) ? true : false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    function validarfechas(fechaInicial, fechaFinal) {
+
+        var arrFechaInicial = fechaInicial.split("-");
+        var arrFechaFinal = fechaFinal.split("-");
+
+        var yearIni = arrFechaInicial[0];
+        var mesIni = arrFechaInicial[1];
+        var diaIni = arrFechaInicial[2];
+
+        var yearFin = arrFechaFinal[0];
+        var mesFin = arrFechaFinal[1];
+        var diaFin = arrFechaFinal[2];
+
+        var fechaIni = yearIni + mesIni + diaIni;
+        var fechaFin = yearFin + mesFin + diaFin;
+
+        if (fechaIni > fechaFin) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
     return ({

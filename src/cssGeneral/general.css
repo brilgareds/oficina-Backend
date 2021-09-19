@@ -1,7 +1,7 @@
 
 .cv{
-    background-image: none !important;
-    background-color: #ffffff;
+  background-image: url("../assets/img/vumOfficeImgs/background-form-1.png");
+    /* background-color: #ffffff; */
   }
 
   .cv .card{
@@ -107,4 +107,24 @@
     color:#1783EE;
   }
 
-  
+  .bg-CV{
+    background-color: #74E36B;
+    
+  }
+
+  .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .bg-CV{
+    padding-bottom: 100%;
+  }
+
+  .colorBackButton{
+    color: #0F4F80;
+    padding: 10px;
+  }
+
+  .navbarPaddingcv{
+    height:calc(100vh - 10.3125rem) !important ;
+  }
+
+  .navbar-vertical .navbar-vertical-label{
+    font-size: 14px;
+  }
