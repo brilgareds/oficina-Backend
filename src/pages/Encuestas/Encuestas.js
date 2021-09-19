@@ -1,15 +1,17 @@
 import React from 'react';
 import { Tabs, Tab, TabPanel, TabList } from 'react-tabs';
+import { Redirect } from 'react-router-dom';
 import 'react-tabs/style/react-tabs.css';
 import './encuestas.css';
 import { useEncuestas } from './useEncuestas';
 import { Report } from '../Report/Report';
 import { Preguntas } from '../../components/Preguntas/Preguntas';
+import { routes } from '../../environments/environments';
 
 export const Encuestas = ({ tipoEncuesta= '' }) => {
 
     const {
-        encuestas, tabIndex, setTabIndex, currentQuestions, setCurrentQuestions,
+        encuestas, tabIndex, currentQuestions, setCurrentQuestions,
         existeProximoTab, nextTab, formEncuesta, setFormEncuesta,
         formularioEnviado, dataReport
     } = useEncuestas({tipoEncuesta});
@@ -46,7 +48,7 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
                         <div className="row">
                             <div className="col-12 mt-3 mb-3" id="container-questions">{
                                 (!formularioEnviado) ? 
-                                    <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+                                    <Tabs selectedIndex={tabIndex} onSelect={() => (()=>{})}>
                                         <TabList style={{ borderBottom: '0px' }}>
                                             { encuestas.map(({ COD_EC, EC_NOMBRE }) => <Tab key={COD_EC}>{EC_NOMBRE}</Tab>) }
                                         </TabList>
@@ -64,7 +66,10 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
                                         </div>
                                     </Tabs>
                                     :
-                                    <Report showButtonCheckIn={showButtonCheckIn} dataReport={dataReport} />}
+                                (tipoEncuesta === 'riesgoCovid') ?
+                                    <Report showButtonCheckIn={showButtonCheckIn} dataReport={dataReport} />
+                                    :
+                                    <Redirect to={routes.home.url} />}
                             </div>
                         </div>
                     </div>

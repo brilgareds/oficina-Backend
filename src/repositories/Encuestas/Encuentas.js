@@ -25,6 +25,11 @@ const formatSurveys = (questions) => {
                     }
                 });
 
+                pregunta.responses.sort((a, b) => ((
+                    (a.PUNTOS < b.PUNTOS) ?  1 :
+                    (a.PUNTOS > b.PUNTOS) ? -1 : 0
+                )));
+
                 newQuestion[pregunta.ID] = pregunta;
             });
     
