@@ -18,7 +18,7 @@ export const Rrhh = () => {
             <div className="col-md-12 cabeceraRRhh paddingRRHH">
                 <h3 className="tituloBienvenidoRrhh">
                     Bienvenido a
-                    <img className="logoVumBienvenido" src="/assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
+                    <img className="logoVumBienvenido" src="/assets/img/icono-vum-office-home.png" alt="icono-vum-office-home" />
                 </h3>
             </div>
 
@@ -37,7 +37,7 @@ export const Rrhh = () => {
                     </button>
                 </Link>
                 <Link to={{ pathname: routes.rrhh.subPages.formRrhh.url, params: { typeForm: "talkToUs" } }}>
-                    <button className=" btns-rrhh zoomBtn mb-4" type="button">
+                    <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         {/* <img className="imgbtnRrhh" src="/assets/img/rrhh/icono-talk-to-you.svg" alt="icono-estamos-para-ti" /> */}
                         <i className="bi bi-chat-left-text"></i> &nbsp;&nbsp;
                         Talk to us

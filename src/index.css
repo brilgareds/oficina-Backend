@@ -89,6 +89,14 @@
     color: #1780E8;
 }
 
+.nombreUsuarioDesktop{
+    display: list-item;
+}
+
+.nombreUsuarioRespoonsive,.divisorResponsive{
+    display: none;
+}
+
 @media (min-width: 1200px) {
     .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-collapse {
         width: 100% !important;
@@ -133,9 +141,19 @@
     .navbarPadding {
         max-height: 500px !important;
     }
+    .nombreUsuarioDesktop{
+        display: none;
+    }
     .textoMigaDePan {
         text-align: center;
     }
+    .nombreUsuarioDesktop{
+        display: none;
+    }
+    .nombreUsuarioRespoonsive,.divisorResponsive{
+        display: block;
+    }
+
 }
 
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
@@ -167,5 +185,11 @@
     }
     .textoMigaDePan {
         text-align: center;
+    }
+    .nombreUsuarioDesktop{
+        display: none;
+    }
+    .nombreUsuarioRespoonsive,.divisorResponsive{
+        display: block;
     }
 }

@@ -60,10 +60,10 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
     const [optionsOtherEntity, setOptionsOtherEntity] = useState({});
     const loadOtherEntenty = () => {
 
-        getFetchWithHeader({
+        postFetch({
             url: api.getEpsIncapacidad,
-            headers: {
-                'accept': '*/*',
+            params: {
+                codigoEmpresaUsuario: dataUser.empresa
             }
         })
             .then((responseGetEpsIncapacidad) => {
@@ -202,7 +202,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 prorroga: formValue?.prorroga || false,
                 otraEntidad: {
                     status: Boolean(!stateOtraEntidadCheck),
-                    value: formValue?.otraEntidad?.value || "null",
+                    value: formValue?.otraEntidad?.label || "null",
                 },
                 rangoFechas: {
                     fechaInicio: formValue.fechaInicio,
@@ -294,7 +294,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
             filesState.files.length !== 0
         ) {
             if (otraEntidad.status === true) {
-                return (exprRegNumeros.test(otraEntidad.value)) ? true : false;
+                return (exprRegSoloLetras.test(otraEntidad.label)) ? true : false;
             }
             return true;
         } else {

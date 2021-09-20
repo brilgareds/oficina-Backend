@@ -47,7 +47,7 @@ class MenuCV extends Component{
 
                                 <div className="navbar-brand">
                                     <div className="d-flex align-items-center py-3">
-                                        <img className="me-2" src="/assets/img/logo-vum-login.svg" alt="" width="80" />
+                                        <img className="me-2" src="/assets/img/logo-vum-login.png" alt="" width="80" />
                                     </div>
                                 </div>
                             </Link>

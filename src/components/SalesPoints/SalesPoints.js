@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { getSalesPoints } from '../../repositories/generalInfo';
 import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
 
-export const SalesPoints = ({filter, setForm, value, multiple=true}) => {
+export const SalesPoints = ({ filter, setForm, value }) => {
 
     const [salesPoints, setSalesPoints] = useState([]);
-    const [salesPoint,  setSalesPoint]  = useState([]);
+    const [salesPoint, setSalesPoint] = useState([]);
 
     const handleSalesPointUpdate = (e) => {
         setSalesPoint(e || []);
         setForm(e || []);
     };
 
-    useEffect(()=> {
+    useEffect(() => {
 
         if (filter) {
             handleSalesPointUpdate();
@@ -31,7 +31,7 @@ export const SalesPoints = ({filter, setForm, value, multiple=true}) => {
     return (
         <div>
             <label>Punto de venta</label>
-            <Select isMulti={multiple} closeMenuOnSelect={!multiple} styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
+            <Select isMulti closeMenuOnSelect={false} styles={ColourStyles} onChange={handleSalesPointUpdate} value={salesPoint} options={salesPoints} />
             <input
                 tabIndex={-1}
                 autoComplete="off"
@@ -41,9 +41,9 @@ export const SalesPoints = ({filter, setForm, value, multiple=true}) => {
                     height: 0,
                     position: "absolute"
                 }}
-                onChange={ ()=>{} }
+                onChange={() => { }}
                 value={salesPoint}
-                // required='required'
+            // required='required'
             />
         </div>
     )
