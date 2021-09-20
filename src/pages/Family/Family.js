@@ -1,6 +1,6 @@
 import {Component,Fragment} from 'react';
 import { baseUrl } from '../../config/config';
-import { postData,getData, simulateClick, validateInputTabs, loadDataValidate } from '../../components/general/General';
+import { postData,getData, simulateClick, validateInputTabs, loadDataValidate, putInputRequerid } from '../../components/general/General';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 class Family extends Component{
@@ -238,6 +238,7 @@ class Family extends Component{
                 document.getElementById('discapacidad1').checked = true
                 this.campos14.removeAttribute('disabled');
                 this.campos14.value = data.TIP_DISC?data.TIP_DISC:''
+                putInputRequerid(`#${this.campos14.id}`,'','add',this.campos14.id)
             }else if(data.EST_DISC === 'N'){
                 document.getElementById('discapacidad2').checked = true
             }
@@ -306,6 +307,8 @@ class Family extends Component{
     
     loadDataPrincipal = () =>{
         loadDataValidate()
+        this.setState({dataFamiliy:''});  
+       
         const dataUser = JSON.parse( localStorage.getItem("d_u"));
         const cedula = parseInt(dataUser['cedula'])
         const empresa = parseInt(dataUser['empresa'])
@@ -328,8 +331,8 @@ class Family extends Component{
                                 <td className="text-nowrap">{value.NOM_FAMI} {value.APE_FAMI}</td>
                                 <td className="text-nowrap">{value.TEL_FAMI}</td>
                                 <td className="text-center">
-                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,1)  }><i  className="far fa-edit text-primary fs-1" /> </button> 
-                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,2)  }><i  className="far fa-trash-alt text-danger fs-1" /> </button>
+                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,1)  }><i className="fas fa-pen-square colorSquare"></i> </button> 
+                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,2)  }><i className="fas fa-trash colorTrash"></i> </button>
                                 </td>
                             </tr>
                         </Fragment>
@@ -435,6 +438,7 @@ class Family extends Component{
                         confirmButtonText: 'Cerrar'
                     })
                     this.loadDataPrincipal()
+                    this.cleanInputs()
                 }
             })
     
@@ -505,6 +509,20 @@ class Family extends Component{
             })
             this.inputAddressFinal.value = ''
         }
+
+
+    }
+
+    cleanInputs = () =>{
+        document.querySelectorAll('input , select').forEach(element => {                
+            if(element.type === 'text' || element.type === 'number' || element.type === 'date' || element.type === 'select-one'){
+                element.value = ''        
+            }
+             if(element.type === 'radio'  || element.type === 'checkbox'){
+                element.checked = false
+            }
+        })
+        this.campos4.removeAttribute('readOnly')
 
 
     }
@@ -703,19 +721,19 @@ class Family extends Component{
                                                 <label htmlFor="discapacidad">&#191;Presenta alguna discapcidad&#63;:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
                                                     <input   type="radio"  value='S' className="btn-check input-hidden inputRequired" name="discapacidad" id="discapacidad1" onChange={() =>{
-                                                        document.getElementById('typeIncapa').removeAttribute('disabled')
+                                                        putInputRequerid(`#${this.campos14.id}`,'','add',this.campos14.id)
                                                     }} />
                                                     <label className="btn btn-outline-primary" htmlFor="discapacidad1">SI</label>&nbsp;
                                                     <input  type="radio"  value='N' className="btn-check input-hidden " name="discapacidad" id="discapacidad2" onChange={() =>{
-                                                        document.getElementById('typeIncapa').setAttribute('disabled','disabled')
-                                                        document.getElementById('typeIncapa').value = ''
+                                                        putInputRequerid(`#${this.campos14.id}`,'','remove',this.campos14.id)
+
                                                     }} />
                                                     <label className="btn btn-outline-primary" htmlFor="discapacidad2">NO</label>
                                                 </div>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label htmlFor="typeIncapa">Tipo de discapcidad:<span className="text-danger">*</span></label>
-                                                <select ref={input =>this.campos14 = input}   disabled name="typeIncapa" id="typeIncapa" className="form-select inputRequired" >
+                                                <label htmlFor="typeIncapa">Tipo de discapcidad:</label>
+                                                <select ref={input =>this.campos14 = input}   disabled name="typeIncapa" id="typeIncapa" className="form-select" >
                                                     <option value=""></option>
                                                     {typeIncapa}
                                                 </select>

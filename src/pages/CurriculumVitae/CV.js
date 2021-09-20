@@ -494,6 +494,8 @@ class CV extends Component {
     }
  
     render() {
+
+ 
         const {age,dataBasic,tipDocu,staCivil,country,dpto,nomenclaturaStreet,nomenclaturaBis,nomenclaturaCardinalidad,nomenclaturaComplemento,valCivil,valCountry,valDpto,city,valCity,dirFinal,mail_perso,mail_corpo,num_celular,num_celcorp,nivel2,nivel4,nivel5,cargo,antiguedad,dataAntiguedad,dataShirt,dataJeanM,dataJeanW,dataShoe ,TALLA_CAMISA ,TALLA_PANTALON,TALLA_CALZADO,estadonav} = this.state
         const alphabet = this.state.alphabet.map((value,x) =><option key={x} value={value}>{value}</option> );
         let  dataNewJean =''
@@ -779,7 +781,7 @@ class CV extends Component {
                                     </select>
                                 </div>
                                 <div className="col-sm-12 col-md-4 pb-4">
-                                    <label htmlFor="plancarrera">&#191;Usted ha sido Plan Carrera&#63;:<span className="text-danger">*</span></label>
+                                    <label htmlFor="plancarrera">&#191;Usted ha sido Plan Carrera&#63;:<span className="text-danger">*</span> </label>
                                     <div className=" d-flex justify-content-around">
                                         <input  onChange={e => {
                                             putInputRequerid('#corp-12','','add','corp-12')
@@ -794,6 +796,7 @@ class CV extends Component {
                                             } } value="0"  type="radio" name="plancarrera" className="btn-check" id="btn-check-outlined2" autoComplete="off"></input>
                                         <label className="btn btn-outline-primary" htmlFor="btn-check-outlined2">NO</label>
                                     </div>
+                                    <i className="fas fa-info-circle text-primary fa-1x" data-bs-toggle="tooltip" data-bs-placement="top" title="El plan carrera es un proyecto de formaci&oacute;n individual de un trabajor, cuyo prop&oacute;sito es trazar el curso de su carrera y desarrollo profesional dentro de la organizaci&oacute;n."></i>
                                 </div>
                                 {/* <div hidden className="col-sm-4 col-md-4 pb-4">
                                     <label htmlFor="corp-11">&#191;Cu&aacute;ntos cargos ha ocupado dentro de la organizaci&oacute;n siendo Plan Carrera&#63;:</label>
@@ -808,7 +811,7 @@ class CV extends Component {
                                 <div className="col-sm-4 col-md-4 pb-4">
                                     <label hidden htmlFor="corp-cargosingresados" className="smalldel">Estos son los cargos ingresados:</label>
                                     <div className="cargosLi"></div>
-                                    <small hidden  className="form-text text-muted smalldel">Para eliminar un cargo da click encima de el</small>
+                                    <small hidden  className="form-text text-muted smalldel">Para eliminar da click encima del cargo ingresado</small>
                                     {/* <ul className="list-group list-group-flush cargosLi"></ul> */}
                                 </div>
                             </div>
