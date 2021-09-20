@@ -319,7 +319,7 @@ class Education extends Component{
                 const tbodyData = result.map((value,x) =>{
                     let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('L'):''
                     let dataFin = value.FECHA_FINALIZACION != null ? moment.utc(value.FECHA_FINALIZACION).format('L'):''
-                    let icon = value.URL? 'fas fa-file-pdf text-danger fs-1':'fas fa-file-pdf text-muted fs-1'
+                    let icon = value.URL? 'fas fa-file-pdf text-dangerpdf fs-1':'fas fa-file-pdf text-muted fs-1'
                     let disabled = value.URL? false:true
 
                     return  <tr key={x} >
@@ -332,8 +332,8 @@ class Education extends Component{
                                     <button disabled={disabled} className="btn"  onClick={e  =>this.updateLoadPrincipal(value.URL,3) }><i className={icon}></i></button>
                                 </td>
                                 <td className="text-center">
-                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,1)  }><i  className="far fa-edit text-primary fs-1" /> </button> 
-                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,2)  }><i  className="far fa-trash-alt text-danger fs-1" /> </button>
+                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,1)  }><i className="fas fa-pen-square colorSquare"></i> </button> 
+                                    <button className="btn"  onClick={ () => this.updateLoadPrincipal(value,2)  }><i className="fas fa-trash colorTrash"></i> </button>
                                 </td>
                             </tr>
                 })
@@ -479,7 +479,7 @@ render(){
                                 <div className="col-sm-12 col-md-4 pb-4 addinputFile">
                                     <label htmlFor="">Certificado de estudio (PDF):</label>
                                     <label htmlFor="file-upload" className="custom-file-upload">
-                                        <i className="text-danger far fa-file-pdf"></i> Subir archivo
+                                        Subir archivo
                                     </label>
                                     <input ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
                                 </div> 

@@ -33,7 +33,7 @@ class MenuCV extends Component{
         const { dataPrincipal } = this.state;
 
         return <>
-                    <nav className="navbar navbar-light bg-white navbar-vertical navbar-expand-xl nabvarcv" style={{ marginLeft: '0rem', marginRight: '0rem' }}>
+                    <nav className="navbar navbar-light navbar-vertical navbar-expand-xl nabvarcv bg-white" style={{ marginLeft: '0rem', marginRight: '0rem' }}>
 
                         <div className="d-flex align-items-center" style={{ paddingLeft: "5%" }}>
                             <div className="toggle-icon-wrapper">
