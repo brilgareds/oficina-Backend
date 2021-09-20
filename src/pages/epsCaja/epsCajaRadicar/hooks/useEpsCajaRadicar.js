@@ -232,10 +232,6 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
 
         getFetchWithHeader({
             url: api.getTipoDocumentoBeneficiario,
-            headers: {
-                'accept': '*/*',
-                'Content-Type': 'application/json'
-            }
         })
             .then((resGetTipoDocumentoBeneficiario) => {
 

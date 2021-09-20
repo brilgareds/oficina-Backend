@@ -125,7 +125,7 @@ export const IncapacidadRadicar = () => {
                                 <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5>
                             </div>
 
-                            <DataTabla title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={columnsDataTable} data={rowsTable} />
+                            <DataTabla title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={columnsDataTable} data={rowsTable}  />
 
                             <div className="col-12 col-lg-12 mt-4 mb-3">
                                 <div className="row">

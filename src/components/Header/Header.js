@@ -11,7 +11,7 @@ export const Header = ({ menu }) => {
             <Link to={{ pathname: routes.home.url }}>
 
                 <div className="navbar-brand me-1 me-sm-3">
-                    <div className="d-flex align-items-center"><img className="me-2" src="/assets/img/logo-vum-login.svg" alt="" width="90" />
+                    <div className="d-flex align-items-center"><img className="me-2" src="/assets/img/logo-vum-login.png" alt="" width="90" />
                     </div>
                 </div>
             </Link>

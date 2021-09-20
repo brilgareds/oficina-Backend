@@ -199,9 +199,9 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
             case '1':
                 response = {
                     estado: "RADICADO",
-                    habilitado: '',
-                    clase: '',
-                    trDeshabilitadoClase: '',
+                    habilitado: 'disabled',
+                    clase: 'estadoInhabilitado',
+                    trDeshabilitadoClase: 'trDesahbilitado',
                 };
                 break;
             case '2':
@@ -233,7 +233,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
     const desplegarModalActualizarDatos = (dataIncapacityObj) => {
 
 
-
+        console.log("dataIncapacityObj", dataIncapacityObj);
 
         const { dataIncapacity, documentsIncapacity } = dataIncapacityObj;
 
@@ -297,7 +297,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                             </div>
                             <div class="col-12 col-lg-4">
                                 <label class="form-label" htmlFor="eps">Eps:</label>
-                                <input value="${dataIncapacity[0].INCAP_EMAIL}" id="eps" name="eps" class="form-control" type="text" disabled />
+                                <input value="${dataIncapacity[0].INCAP_EPS}" id="eps" name="eps" class="form-control" type="text" disabled />
                             </div>
                             <div class="col-12 col-lg-4 mb-4">
                                 <label class="form-label" htmlFor="otraEntidad">Otra Entidad:</label>
@@ -311,12 +311,12 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                                 <input value="${dataIncapacity[0].TIP_NOMBRE}" id="tipoIncapacidad" name="tipoIncapacidad" class="form-control" type="text" disabled />
                             </div>
                             <div class="col-12 col-lg-4 mb-4">
-                                <label class="form-label" htmlFor="fechaInicio">Ficha Inicio:</label>
-                                <input value="${dataIncapacity[0].INCAP_FECHA_INI}" id="fechaInicio" name="fechaInicio" class="form-control" type="text" disabled />
+                                <label class="form-label" htmlFor="fechaInicio">Fecha Inicio:</label>
+                                <input value="${casterFecha(dataIncapacity[0].INCAP_FECHA_INI)}" id="fechaInicio" name="fechaInicio" class="form-control" type="text" disabled />
                             </div>
                             <div class="col-12 col-lg-4 mb-4">
-                                <label class="form-label" htmlFor="fechaFin">Ficha Fin:</label>
-                                <input value="${dataIncapacity[0].INCAP_FECHA_FIN}" id="fechaFin" name="fechaFin" class="form-control" type="text" disabled />
+                                <label class="form-label" htmlFor="fechaFin">Fecha Fin:</label>
+                                <input value="${casterFecha(dataIncapacity[0].INCAP_FECHA_FIN)}" id="fechaFin" name="fechaFin" class="form-control" type="text" disabled />
                             </div>
 
                             <div className="card-header">
@@ -371,7 +371,9 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
     }
 
-
+    const casterFecha = (data) => {
+        return data.split("T")[0];
+    }
 
     const [filesState, setFilesState] = useState([]);
     const onChangeInputFileHandle = (event) => {
@@ -401,7 +403,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         if (filesState.length !== 0) {
             overlay(true);
-            
+
             const dataForm = new FormData();
             dataForm.append("numeroIncapacidad", numerIncapacidad);
             dataForm.append("correoUsuario", dataUser.mail);

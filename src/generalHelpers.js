@@ -1,17 +1,17 @@
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/dist/sweetalert2.css';
+import { routes } from './environments/environments';
 
 const getFetch = async ({ url, set }) => {
 
     try {
-        const token = localStorage.getItem('a_t');
         const headers = {
-            'Authorization': (token) ? `Bearer ${token}` : '',
+            'Authorization': (!localStorage.getItem('a_t')) ? '' : `Bearer ${localStorage.getItem('a_t')}`,
             'accept': '*/*',
             'Content-Type': 'application/json'
-        };
-        const result = await(await axios.get(url, { headers })).data;
+        }
+        const result = await (await axios.get(url, { headers })).data;
 
         if (typeof set === 'function') set(result);
 
@@ -49,12 +49,12 @@ const definirPropiedadesLink = (menu, k, first) => {
 
 
 const getDotOrCommaPosition = (value) => {
-    const dotPosition   = value.indexOf('.');
+    const dotPosition = value.indexOf('.');
     const commaPosition = value.indexOf(',');
 
     const response = (
-        (dotPosition   >= 0) ? dotPosition   :
-        (commaPosition >= 0) ? commaPosition : -1
+        (dotPosition >= 0) ? dotPosition :
+            (commaPosition >= 0) ? commaPosition : -1
     );
 
     return response;
@@ -68,7 +68,7 @@ const changeCommaToDot = text => text.replaceAll(',', '.').replaceAll(/[.]+/gm, 
 const formatDecimals = text => changeCommaToDot(removeNotNumber(text));
 
 
-const specificDecimals = (value=0, quantityDecimals=0) => {
+const specificDecimals = (value = 0, quantityDecimals = 0) => {
 
     if (quantityDecimals) quantityDecimals++;
 
@@ -78,38 +78,38 @@ const specificDecimals = (value=0, quantityDecimals=0) => {
         value = (quantityDecimals) ? `0${value}` : value.substring(1);
     }
 
-    const maxQuantityCharacters = (dotOrCommaPosition && value[dotOrCommaPosition]) ? parseFloat(dotOrCommaPosition)+quantityDecimals : value.length;
+    const maxQuantityCharacters = (dotOrCommaPosition && value[dotOrCommaPosition]) ? parseFloat(dotOrCommaPosition) + quantityDecimals : value.length;
     value = formatDecimals(value.substring(0, maxQuantityCharacters)); // value[value.length-1]).toString();
 
     return value;
 };
 
 
-const getTwoLastCharacters = text => text.substring(text.length-2);
+const getTwoLastCharacters = text => text.substring(text.length - 2);
 
 
-const currentDate = (obj={}) => {
+const currentDate = (obj = {}) => {
 
-    const { format='spanish', withTime=true } = obj;
+    const { format = 'spanish', withTime = true } = obj;
 
     const dateNow = new Date();
-    const year    = dateNow.getFullYear();
-    const month   = getTwoLastCharacters(`0${dateNow.getMonth()+1}`);
-    const day     = getTwoLastCharacters(`0${dateNow.getDate()}`);
-    const hour    = getTwoLastCharacters(`0${dateNow.getHours()}`);
+    const year = dateNow.getFullYear();
+    const month = getTwoLastCharacters(`0${dateNow.getMonth() + 1}`);
+    const day = getTwoLastCharacters(`0${dateNow.getDate()}`);
+    const hour = getTwoLastCharacters(`0${dateNow.getHours()}`);
     const minutes = getTwoLastCharacters(`0${dateNow.getMinutes()}`);
     const seconds = getTwoLastCharacters(`0${dateNow.getSeconds()}`);
-    const time    = `${hour}:${minutes}:${seconds}`;
+    const time = `${hour}:${minutes}:${seconds}`;
 
     const englishDate = `${year}-${month}-${day}`;
     const spanishDate = `${day}/${month}/${year}`;
 
     const date = (
         (format === 'english') ? englishDate :
-        (format === 'spanish') ? spanishDate : ''
+            (format === 'spanish') ? spanishDate : ''
     );
 
-    const fullDate = `${date} ${ (withTime) ? ` ${time}` : '' }`;
+    const fullDate = `${date} ${(withTime) ? ` ${time}` : ''}`;
 
     return fullDate;
 }
@@ -132,6 +132,8 @@ const postFetch = async ({
 
         return responseApi;
     } catch (error) {
+
+        (error.message.includes("402")) && (logOutHelper());
         return error;
     }
 
@@ -139,7 +141,11 @@ const postFetch = async ({
 
 const getFetchWithHeader = async ({
     url,
-    headers,
+    headers = {
+        'Authorization': (!localStorage.getItem('a_t')) ? '' : `Bearer ${localStorage.getItem('a_t')}`,
+        'accept': '*/*',
+        'Content-Type': 'application/json'
+    }
 }) => {
 
     let responseApi = null;
@@ -149,6 +155,7 @@ const getFetchWithHeader = async ({
 
         return responseApi;
     } catch (error) {
+        (error.message.includes("402")) && (logOutHelper());
         console.error(error);
     }
 
@@ -169,7 +176,7 @@ const overlay = (show = false) => {
 
 const makeWarningAlert = (props) => {
 
-    const { errors=[], title='Advertencia', subTitle='Revisa el formulario con las siguientes indicaciones:' } = props;
+    const { errors = [], title = 'Advertencia', subTitle = 'Revisa el formulario con las siguientes indicaciones:' } = props;
 
     Swal.fire({
         title,
@@ -178,10 +185,9 @@ const makeWarningAlert = (props) => {
                 <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
                     ${subTitle}
                 </div>
-                <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">${
-                    errors.map(({description}) => {
-                        return `◉ ${description}<br/>`
-                    })}
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">${errors.map(({ description }) => {
+            return `◉ ${description}<br/>`
+        })}
                 </div>
             </div>
              <br/>
@@ -261,14 +267,14 @@ const getCities = () => {
     return cities;
 }
 
-const getEmailUser      = () => ( getFullUser().mail || '');
-const getGenderUser     = () => ( getFullUser().genero || '');
-const getStatusUser     = () => ( getFullUser().estado || '');
-const getDocumentIdUser = () => ( getFullUser().cedula || '');
-const getNameUser       = () => ( getFullUser().nombres || '').trim();
-const getLastNameUser   = () => ( getFullUser().apellidos || '').trim();
-const getPhoneUser      = () => ( getFullUser().numeroCelular || '' ).trim();
-const getFullNameUser   = () => ( capitalizarPalabras(`${getNameUser()} ${getLastNameUser()}`) );
+const getEmailUser = () => (getFullUser().mail || '');
+const getGenderUser = () => (getFullUser().genero || '');
+const getStatusUser = () => (getFullUser().estado || '');
+const getDocumentIdUser = () => (getFullUser().cedula || '');
+const getNameUser = () => (getFullUser().nombres || '').trim();
+const getLastNameUser = () => (getFullUser().apellidos || '').trim();
+const getPhoneUser = () => (getFullUser().numeroCelular || '').trim();
+const getFullNameUser = () => (capitalizarPalabras(`${getNameUser()} ${getLastNameUser()}`));
 
 const getDateToday = () => {
 
@@ -282,7 +288,7 @@ const getDateToday = () => {
 }
 
 
-const changeMinutes = ({time, operator, minutesToChange}) => {
+const changeMinutes = ({ time, operator, minutesToChange }) => {
     const itsSum = (operator === '+');
     const itsSubtraction = (operator === '-');
 
@@ -298,18 +304,22 @@ const changeMinutes = ({time, operator, minutesToChange}) => {
     date.setSeconds('00');
 
     const newTime = (
-        (itsSum)         ? `${date.getMinutes()+minutesToChange}` :
-        (itsSubtraction) ? `${date.getMinutes()-minutesToChange}` : ''
+        (itsSum) ? `${date.getMinutes() + minutesToChange}` :
+            (itsSubtraction) ? `${date.getMinutes() - minutesToChange}` : ''
     );
 
     date.setMinutes(newTime);
 
-    const newHour    = getTwoLastCharacters(`0${date.getHours()}`);
+    const newHour = getTwoLastCharacters(`0${date.getHours()}`);
     const newMinutes = getTwoLastCharacters(`0${date.getMinutes()}`);
 
     return `${newHour}:${newMinutes}`;
 };
 
+const logOutHelper = () => {
+    localStorage.clear();
+    window.location.href = routes.login.url;
+}
 
 export {
     changeMinutes,

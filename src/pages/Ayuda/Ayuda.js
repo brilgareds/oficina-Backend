@@ -16,7 +16,7 @@ export const Ayuda = () => {
             <div className="col-md-12 cabeceraAyuda paddingAyuda">
                 <h1 className="tituloBienvenidoAyuda">
                     Bienvenido a
-                    <img className="logoVumBienvenido" src="./assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
+                    <img className="logoVumBienvenido" src="./assets/img/icono-vum-office-home.png" alt="icono-vum-office-home" />
                 </h1>
             </div>
 

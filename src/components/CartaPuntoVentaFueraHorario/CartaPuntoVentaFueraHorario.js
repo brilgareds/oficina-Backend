@@ -1,4 +1,3 @@
-import React from 'react';
 import { changeMinutes, makeWarningAlert } from '../../generalHelpers';
 
 export const CartaPuntoVentaFueraHorario = ({ form, setForm }) => {
