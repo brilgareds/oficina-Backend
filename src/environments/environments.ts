@@ -85,6 +85,38 @@ const files = {
     novedadesEmpresariales: { url: `${frontendPath}/assets/documents/novedades_empresariales.pdf` }
 };
 
+const direccionesPorEmpresa = {
+    tercerizar: {
+        modulos: {
+            desarrollo: {
+                yaEstasListo: "https://www.listos.com.co/ListosWeb/vista/zonaCandidatosVista/zonaCandidatosVista.php",
+                novedadesEnRed: "https://www.listos.com.co/ListosWeb/vista/zonaCandidatosVista/zonaCandidatosVista.php",
+            },
+            reglamentoTrabajo: "https://www.listos.com.co/oficinaVirtual/temporales/reglamento/Reglamento%20Interno%20de%20Trabajo%20Tercerizar_SF.pdf",
+
+        }
+    },
+    visionYMarketing: {
+        modulos: {
+            desarrollo: {
+                yaEstasListo: "https://www.visionymarketing.com.co/#Trabaja",
+                novedadesEnRed: "https://www.visionymarketing.com.co/#Trabaja",
+            },
+            reglamentoTrabajo: "https://www.listos.com.co/oficinaVirtual/temporales/reglamento/Reglamento%20Interno%20de%20Trabajo%20V&M_SF.pdf",
+        }
+    },
+    listos: {
+        modulos: {
+            desarrollo: {
+                yaEstasListo: "https://www.listos.com.co/ListosWeb/vista/zonaCandidatosVista/zonaCandidatosVista.php",
+                novedadesEnRed: "https://www.listos.com.co/ListosWeb/vista/zonaCandidatosVista/zonaCandidatosVista.php",
+            },
+            reglamentoTrabajo: "https://www.listos.com.co/oficinaVirtual/temporales/reglamento/Reglamento%20Interno%20De%20Trabajo%20Listos_SF.pdf",
+        }
+    },
+
+}
+
 const api = {
     path: backendPath,
     resquestApprovalPresentationCard: `${backendPath}/presentationCard/resquestApproval/`,
@@ -135,5 +167,6 @@ export {
     api,
     files,
     frontendPath,
-    backendPath
+    backendPath,
+    direccionesPorEmpresa
 }

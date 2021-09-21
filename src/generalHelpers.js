@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/dist/sweetalert2.css';
-import { routes } from './environments/environments';
+import { api, direccionesPorEmpresa, routes } from './environments/environments';
 
 const getFetch = async ({ url, set }) => {
 
@@ -18,12 +18,10 @@ const getFetch = async ({ url, set }) => {
         return result;
 
     } catch (e) {
-        const error = e.toString();
 
-        if (error === 'Error: Request failed with status code 402') {
+        validateError(url, e);
 
-        }
-        console.log(error);
+        console.log(e);
     }
 };
 
@@ -133,8 +131,9 @@ const postFetch = async ({
         return responseApi;
     } catch (error) {
 
-        (error.message.includes("402")) && (logOutHelper());
-        return error;
+        validateError(url, error);
+
+        console.error(error);
     }
 
 }
@@ -155,7 +154,7 @@ const getFetchWithHeader = async ({
 
         return responseApi;
     } catch (error) {
-        (error.message.includes("402")) && (logOutHelper());
+        validateError(url, error);
         console.error(error);
     }
 
@@ -230,7 +229,7 @@ const capitalizarPalabras = (val) => {
         .join(' ');
 };
 
-const upperFirtLetterText = (text='') => {
+const upperFirtLetterText = (text = '') => {
     if (typeof text !== 'string' || !text.length) return text;
 
     return text[0].toUpperCase() + text.slice(1).toLowerCase();
@@ -316,9 +315,48 @@ const changeMinutes = ({ time, operator, minutesToChange }) => {
     return `${newHour}:${newMinutes}`;
 };
 
-const logOutHelper = () => {
-    localStorage.clear();
-    window.location.href = routes.login.url;
+
+const validateError = (url, error) => {
+
+    if (url !== api.getTokenPath && url !== api.getUserInfoPath) {
+        if (error.message.includes("402")) {
+            localStorage.clear();
+            window.location.href = routes.login.url;
+        }
+    }
+}
+
+
+const getRutasPorEmpresa = () => {
+
+    const rutasEstablecidas = direccionesPorEmpresa;
+    let response = {};
+
+    switch (JSON.parse(localStorage.getItem('d_u')).empresa) {
+        case "1":   //listos
+            response = {
+                modulos: rutasEstablecidas.listos.modulos
+            }
+            break;
+        case "2":   //tercerizar
+            response = {
+                modulos: rutasEstablecidas.tercerizar.modulos
+            }
+            break;
+        case "3":   //vision y marketing
+            response = {
+                modulos: rutasEstablecidas.visionYMarketing.modulos
+            }
+            break;
+
+        default:
+            response = {
+                modulos: rutasEstablecidas.listos.modulos
+            }
+            break;
+    }
+
+    return response;
 }
 
 export {
@@ -343,5 +381,7 @@ export {
     specificDecimals,
     getDateToday,
     getBranches,
-    getCities
+    getCities,
+    getRutasPorEmpresa,
+
 }
