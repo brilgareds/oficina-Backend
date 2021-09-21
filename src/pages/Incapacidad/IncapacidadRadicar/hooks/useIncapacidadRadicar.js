@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 import { api } from '../../../../environments/environments';
-import { advertenciaFormularioVacio, getFetchWithHeader, overlay, postFetch } from '../../../../generalHelpers';
+import { advertenciaFormularioVacio, overlay, postFetch } from '../../../../generalHelpers';
 
 export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
