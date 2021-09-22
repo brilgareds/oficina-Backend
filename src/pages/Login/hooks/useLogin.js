@@ -112,6 +112,7 @@ export const useLogin = (formInitialState = {}) => {
                         showCancelButton: false,
                         showConfirmButton: true,
                         allowOutsideClick: true,
+                        confirmButtonColor: "#1783EE",
                         confirmButtonText: "Ingresar",
 
                     }).then((result) => {
@@ -142,6 +143,7 @@ export const useLogin = (formInitialState = {}) => {
                 `,
                     icon: 'warning',
                     confirmButtonText: 'Cerrar',
+                    confirmButtonColor: "#A6A6A6",
                 });
 
                 document.querySelector('#divContratistas').style.display = 'unset';
@@ -174,6 +176,7 @@ export const useLogin = (formInitialState = {}) => {
                 `,
                 icon: 'warning',
                 confirmButtonText: 'Cerrar',
+                confirmButtonColor: "#A6A6A6",
             });
         }
 
@@ -290,7 +293,7 @@ export const useLogin = (formInitialState = {}) => {
                         </div>
 
                         <div class="col-12 col-lg-12 mt-3" style="text-align: right;">
-                            <button id="btnEnviarModalContratistas" type="button" class="btn btn-info">Enviar</button>
+                            <button id="btnEnviarModalContratistas" type="button" class="btn succesButton">Enviar</button>
                         </div>
                     </div>
                          

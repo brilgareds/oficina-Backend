@@ -45,6 +45,22 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
 
                     resConsultarBeneficiarios.forEach((element, key) => {
 
+                        // rowsDTable.push({
+                        //     consecutivo: element.BENEF_CODIGO,
+                        //     cedulaIncapacidad: element.BENEF_NUMERO_DOCUMENTO,
+                        //     nombre: `${element.BENEF_NOMBRES.toUpperCase()} ${element.BENEF_APELLIDOS.toUpperCase()}`,
+                        //     parentesco: element.TIP_NOMBRE,
+                        //     eps: (Number(element.BENEF_EPS) === 1) ? "SI" : "NO",
+                        //     cajaCompensacion: (Number(element.BENEF_CAJA) === 1) ? "SI" : "NO",
+                        //     estado: validarEstadoPeticion(Number(element.ESTADO)),
+                        //     documentos:
+                        //         <button className="btn btn-link"
+                        //             value={String(element.BENEF_CODIGO)}
+                        //             onClick={event => { onClickActualizarIncapacidad({ event }) }}
+                        //         >
+                        //             actualizar
+                        //         </button>,
+                        // });
                         rowsDTable.push({
                             consecutivo: element.BENEF_CODIGO,
                             cedulaIncapacidad: element.BENEF_NUMERO_DOCUMENTO,
@@ -54,10 +70,13 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                             cajaCompensacion: (Number(element.BENEF_CAJA) === 1) ? "SI" : "NO",
                             estado: validarEstadoPeticion(Number(element.ESTADO)),
                             documentos:
-                                <button className="btn btn-success"
+                                <img
+                                    className="imgDeleteGasto"
+                                    alt="trash-fill-orange"
+                                    src="/assets/img/actualizar-flecha.png"
                                     value={String(element.BENEF_CODIGO)}
-                                    onClick={event => { onClickActualizarIncapacidad({ event }) }}
-                                >Actualizar</button>,
+                                    onClick={event => { onClickActualizarIncapacidad(element.BENEF_CODIGO) }}
+                                />,
                         });
 
                     });
@@ -106,13 +125,43 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
     }
 
 
+    const validarEstadoPeticionDocumentosBeneficiario = (estado) => {
 
-    const onClickActualizarIncapacidad = ({ event }) => {
+        try {
+
+            let response = ``;
+
+            switch (Number(estado)) {
+                case 1:
+                    response = `RADICADO`;
+                    break;
+                case 2:
+                    response = `APROBADO`;
+                    break;
+                case 3:
+                    response = `RECHAZADO`;
+                    break;
+                default:
+                    response = ``;
+                    break;
+            }
+
+            return response;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+
+    }
+
+
+
+    const onClickActualizarIncapacidad = (event) => {
+
         overlay(true);
 
         postFetch({
             url: api.consultarArchivosBenefactor,
-            params: { codigoBenefactor: event.target.value }
+            params: { codigoBenefactor: event }
         })
             .then((resconsultarArchivosBenefactor) => {
                 overlay(false);
@@ -121,6 +170,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
 
             });
     }
+
 
 
     const desplegarModalDatos = (dataApi) => {
@@ -141,15 +191,45 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
         let tdBody = ``;
         dataApi.forEach((data, key) => {
 
+            if (data.ARCH_RUTA.includes('../../temporales/archivosBeneficiarios')) {
+                data.ARCH_RUTA = data.ARCH_RUTA.replace('../../', 'http://www.listos.com.co:8080/oficinaVirtualPrueba/');
+            }
+
+            // tdBody +=
+            //     `<tr>
+            //         <td>${key + 1}</td>
+            //         <td>${(data.RECHAZO !== null) ? data.RECHAZO : ""}</td>
+            //         <td>${data.ARCH_ESTADO}</td>
+            //         <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-link" >Descargar</button> </a></td>
+            //         <td><input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;"></td>
+            //     </tr>`
+            //     ;
+
+
+            //     <img
+            //     className="imgDeleteGasto"
+            //     alt="trash-fill-orange"
+            //     src="/assets/img/actualizar-flecha.png"
+            //     value={String(element.BENEF_CODIGO)}
+            //     onClick={event => { onClickActualizarIncapacidad(element.BENEF_CODIGO) }}
+            // />,
+
+            <img className="imgDeleteGasto" alt="trash-fill-orange" src="/assets/img/actualizar-flecha.png"/>
+
             tdBody +=
                 `<tr>
                     <td>${key + 1}</td>
-                    <td>${(data.RECHAZO !== null) ? data.RECHAZO : ""}</td>
-                    <td>${data.ARCH_ESTADO}</td>
-                    <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-info" >Descargar</button> </a></td>
-                    <td><input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;"></td>
+                    <td>${(data.RECHAZO !== null) ? data.RECHAZO : "N/A"}</td>
+                    <td>${validarEstadoPeticionDocumentosBeneficiario(data.ARCH_ESTADO)}</td>
+                    <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-link" ><img class="imgDeleteGasto" alt="download-to-storage-drive" src="/assets/img/download-to-storage-drive.png"/> </button> </a></td>
+                    <td>
+                        <label for="inputFile_${key}" class="btn fileButton"> Subir archivo </label>
+                        <input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" style="display:none" type="file" accept=".pdf">
+                    </td>
                 </tr>`
                 ;
+                
+
 
         });
 
@@ -157,29 +237,29 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
             width: '900px',
             title: 'Documentos Relacionados',
             html: `
-            <div class="row" style="text-align: left; margin: 10px;">
-                <div class="table-responsive scrollbar">
-                    <table class="table">
-                        <thead class="headersDataTableModal">
-                            <tr>
-                                ${thHeader}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tdBody}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-12 col-lg-12 mb-4" style="text-align: right;">
-                    <div class="d-grid gap-2 d-md-block">
-                        <button id="btnModalGuardar" class="btn btn-success" type="button">Guardar</button>
-                        <button id="btnModalCerrar" class="btn btn-secondary" type="button">Cerrar</button>
+                <div class="row" style="text-align: left; margin: 10px; overflow-x: auto; white-space: nowrap;">
+                    <div class="table-responsive scrollbar">
+                        <table class="table">
+                            <thead class="headersDataTableModal">
+                                <tr>
+                                    ${thHeader}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tdBody}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 col-lg-12" style="text-align: right;">
+                        <div class="d-grid gap-2 d-md-block">
+                            <button id="btnModalGuardar" class="btn succesButton" type="button">Guardar</button>
+                            <button id="btnModalCerrar" class="btn closeButton" type="button">Cerrar</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <br />
-            `,
+                <br />
+                `,
             showCancelButton: false,
             showConfirmButton: false,
             didOpen: () => {
@@ -220,15 +300,15 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
             document.getElementById(event.target.id).value = "";
 
             alertify.warning(`
-                <div className="row">
-                    <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
-                        Error.
-                    </div>
-                    <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                        Solo se permiten subir archivos tipo pdf
-                    </div>
-                </div>
-            `).delay(7);
+                                    <div className="row">
+                                        <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
+                                            Error.
+                                        </div>
+                                        <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                                            Solo se permiten subir archivos tipo pdf
+                                        </div>
+                                    </div>
+                                    `).delay(7);
         }
     };
 
@@ -256,7 +336,8 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                     Swal.fire({
                         icon: 'success',
                         title: 'Datos actualizados correctamente.',
-                        confirmButtonText: 'Ok',
+                        confirmButtonText: 'Continuar',
+                        confirmButtonColor: "#1783EE",
                     }).then((result) => {
                         window.location.reload();
                     })
@@ -267,6 +348,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                         icon: 'error',
                         title: 'Hubo un error en la actualización, por favor revisa el formulario.',
                         confirmButtonText: 'Cerrar',
+                        confirmButtonColor: "#A6A6A6",
                     });
                 });
         } else {

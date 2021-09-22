@@ -97,6 +97,32 @@
     display: none;
 }
 
+.succesButton{
+    background-color: #1783EE !important;
+    border-color: #1783EE !important;
+    color: white !important;
+}
+
+.closeButton{
+    background-color: #A6A6A6 !important;
+    border-color: #A6A6A6 !important;
+    color: white !important;
+}
+
+.fileButton {
+    background-color: #26546f  !important;
+    border-color: #26546f  !important;
+    color: white !important;
+
+}
+
+.iconoParaTabla{
+    width: 20px;
+}
+
+
+
+
 @media (min-width: 1200px) {
     .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl .navbar-collapse {
         width: 100% !important;

@@ -189,7 +189,7 @@ import { baseUrl } from "../../config/config";
                     html: list,
                     showCancelButton: false,
                     showConfirmButton: true,
-                    confirmButtonColor: '#2c7be5',
+                    confirmButtonColor: "#A6A6A6",
                     confirmButtonText: 'Cerrar'
                 });
             

@@ -92,7 +92,7 @@ export const Preguntas = (props) => {
     }   
             <div className="div-form-check">
                 <div className="text-end" style={{ marginTop: '3rem' }}>
-                    <button type='submit' className="btn btn-primary" style={{ width: 'min(16rem, 100%)', marginTop: '1rem' }} >
+                    <button type='submit' className="btn succesButton" style={{ width: 'min(16rem, 100%)', marginTop: '1rem' }} >
                         { (existeProximoTab) ? 'Siguiente' : 'Enviar Respuestas'}
                     </button>
                 </div>

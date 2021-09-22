@@ -111,7 +111,7 @@ class CV extends Component {
                         text: result.error,
                         icon: 'error',
                         showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
+                        confirmButtonColor: "#A6A6A6",
                         confirmButtonText: 'Cerrar'
                     })
                 }
@@ -209,7 +209,7 @@ class CV extends Component {
                     text: "Se registro con éxito",
                     icon: 'success',
                     showCancelButton: false,
-                    confirmButtonColor: '#2c7be5',
+                    confirmButtonColor: "#A6A6A6",
                     confirmButtonText: 'Cerrar'
                 })
                 this.loadDataPrincipal()
@@ -581,7 +581,7 @@ class CV extends Component {
                             </div>
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.validateInputTabsIn('residencial-tab')} className="btn btn-primary">Siguiente</button>
+                                    <button onClick={() => this.validateInputTabsIn('residencial-tab')} className="btn succesButton">Siguiente</button>
                                 </div>
                             </div>
                        
@@ -729,10 +729,10 @@ class CV extends Component {
                             </div>
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-start">
-                                    <button onClick={() => this.vaidateBack('general-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                    <button onClick={() => this.vaidateBack('general-tab')} className="btn succesButton">Atr&aacute;s</button>
                                 </div>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.validateInputTabsIn('corpo-tab')} className="btn btn-primary">Siguiente</button>
+                                    <button onClick={() => this.validateInputTabsIn('corpo-tab')} className="btn succesButton">Siguiente</button>
                                 </div>
                             </div>
                         </div>
@@ -817,10 +817,10 @@ class CV extends Component {
                             </div>
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-start">
-                                    <button onClick={() => this.vaidateBack('residencial-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                    <button onClick={() => this.vaidateBack('residencial-tab')} className="btn succesButton">Atr&aacute;s</button>
                                 </div>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.validateInputTabsIn('indu-tab')} className="btn btn-primary">Siguiente</button>
+                                    <button onClick={() => this.validateInputTabsIn('indu-tab')} className="btn succesButton">Siguiente</button>
                                 </div>
                             </div>
 
@@ -865,10 +865,10 @@ class CV extends Component {
 
                             <div className="row pb-4 flex">
                                 <div className="col d-flex flex-wrap justify-content-start">
-                                    <button onClick={() => this.vaidateBack('corpo-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                    <button onClick={() => this.vaidateBack('corpo-tab')} className="btn succesButton">Atr&aacute;s</button>
                                 </div>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.saveDataPrincipal('indu-tab')} className="btn btn-primary">Guardar</button>
+                                    <button onClick={() => this.saveDataPrincipal('indu-tab')} className="btn succesButton">Guardar</button>
                                 </div>
                             </div>
                         </div>

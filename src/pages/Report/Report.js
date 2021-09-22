@@ -37,7 +37,7 @@ export const Report = ({showButtonCheckIn, dataReport={}}) => {
                 </div>
                 {
                     showButtonCheckIn && (
-                        <Link to={ routes.ingreso.url } className='btn btn-primary offset-2 offset-md-5 offset-xl-8 col-8 col-md-6 col-xl-3 mt-3 pl-0 pr-0'>
+                        <Link to={ routes.ingreso.url } className='btn succesButton offset-2 offset-md-5 offset-xl-8 col-8 col-md-6 col-xl-3 mt-3 pl-0 pr-0'>
                             Realizar ingreso <i className='bi bi-box-arrow-in-right'></i>
                         </Link>
                     )

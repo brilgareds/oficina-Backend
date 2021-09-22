@@ -279,8 +279,8 @@ class Family extends Component{
                 text: "¿Desea eliminar el familiar?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#2c7be5',
-                cancelButtonColor: '#2c7be5',
+                confirmButtonColor: "#1783EE",
+                cancelButtonColor: "#A6A6A6",
                 confirmButtonText: 'Eliminar!'
               }).then((result) => {
                 if (result.isConfirmed) {
@@ -293,7 +293,7 @@ class Family extends Component{
                                 text: "Se elimino con éxito",
                                 icon: 'success',
                                 showCancelButton: false,
-                                confirmButtonColor: '#2c7be5',
+                                confirmButtonColor: "#A6A6A6",
                                 confirmButtonText: 'Cerrar'
                             })
                             this.loadDataPrincipal();
@@ -434,7 +434,7 @@ class Family extends Component{
                         text: "Se registro con éxito",
                         icon: 'success',
                         showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
+                        confirmButtonColor: "#A6A6A6",
                         confirmButtonText: 'Cerrar'
                     })
                     this.loadDataPrincipal()
@@ -639,7 +639,7 @@ class Family extends Component{
                                         </div>
                                         <div className="row pb-4 flex">
                                             <div className="col d-flex flex-wrap justify-content-end">
-                                                <button onClick={() => this.validateInputTabsIn('parent-tab')} className="btn btn-primary">Siguiente</button>
+                                                <button onClick={() => this.validateInputTabsIn('parent-tab')} className="btn succesButton">Siguiente</button>
                                             </div>
                                         </div>
                                     </div>
@@ -708,10 +708,10 @@ class Family extends Component{
                                         </div>
                                         <div className="row pb-4 flex">
                                             <div className="col d-flex flex-wrap justify-content-start">
-                                                <button onClick={() => this.vaidateBack('identity-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                                <button onClick={() => this.vaidateBack('identity-tab')} className="btn succesButton">Atr&aacute;s</button>
                                             </div>
                                             <div className="col d-flex flex-wrap justify-content-end">
-                                                <button onClick={() => this.validateInputTabsIn('report-tab')} className="btn btn-primary">Siguiente</button>
+                                                <button onClick={() => this.validateInputTabsIn('report-tab')} className="btn succesButton">Siguiente</button>
                                             </div>
                                         </div>
                                     </div>
@@ -883,10 +883,10 @@ class Family extends Component{
                         
                                         <div className="row pb-4 flex">
                                             <div className="col d-flex flex-wrap justify-content-start">
-                                                <button onClick={() => this.vaidateBack('parent-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                                <button onClick={() => this.vaidateBack('parent-tab')} className="btn succesButton">Atr&aacute;s</button>
                                             </div>
                                             <div className="col d-flex flex-wrap justify-content-end">
-                                                <button onClick={() => this.saveDataFamily()} className="btn btn-primary">Guardar</button>
+                                                <button onClick={() => this.saveDataFamily()} className="btn succesButton">Guardar</button>
                                             </div>
                                         </div>
                                                             

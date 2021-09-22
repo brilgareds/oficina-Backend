@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '../components/Header/Header';
 import { Navbar } from '../components/Navbars/MainNavBar/Navbar';
 import { getAllMenu } from '../repositories/Menu/Menu';
