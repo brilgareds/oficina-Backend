@@ -112,7 +112,25 @@ const currentDate = (obj={}) => {
     const fullDate = `${date} ${ (withTime) ? ` ${time}` : '' }`;
 
     return fullDate;
-}
+};
+
+
+const makeModal = ({title='', text='', html='', icon='success', showCancelButton=false, cancelButtonText='Cancelar', confirmButtonText='Confirmar', successAnswerFunction=()=>{}, cancelAnswerFunction=()=>{}}) => (
+    Swal.fire({
+       title,
+       text,
+       html,
+       icon,
+       showCancelButton,
+       cancelButtonText,
+       confirmButtonText,
+       cancelButtonColor: '#A6A6A6',
+       confirmButtonColor: '#1783EE'
+   }).then((result) => {
+    if (result.isConfirmed) successAnswerFunction();
+    else cancelAnswerFunction();
+  }).catch(err => { console.warning(err); cancelAnswerFunction(); })
+);
 
 
 const postFetch = async ({
@@ -132,7 +150,7 @@ const postFetch = async ({
 
         return responseApi;
     } catch (error) {
-        return error;
+        throw new Error(error.message);
     }
 
 }
@@ -189,6 +207,8 @@ const makeWarningAlert = (props) => {
         `,
         icon: 'warning',
         confirmButtonText: 'Cerrar',
+        cancelButtonColor: '#A6A6A6',
+        confirmButtonColor: '#1783EE'
     });
 };
 
@@ -220,7 +240,17 @@ const capitalizarPalabras = (val) => {
     return val.toLowerCase()
         .trim()
         .split(' ')
-        .map(v => v[0].toUpperCase() + v.substr(1))
+        .map(v => {
+            if (v === 'de' || v === 'del' || v === 'la' || v === 'las' || v === 'los') return v;
+
+            const positionToChange = parseFloat(v.search(/[a-z]/i));
+
+            const firstPart  = v.substring(0, positionToChange);
+            const secondPart = v.substring(positionToChange, positionToChange+1).toUpperCase();
+            const thirdPart  = v.substring(positionToChange+1);
+
+            return firstPart + secondPart + thirdPart;
+        })
         .join(' ');
 };
 
@@ -313,6 +343,7 @@ const changeMinutes = ({time, operator, minutesToChange}) => {
 
 export {
     changeMinutes,
+    makeModal,
     makeWarningAlert,
     getFetch,
     definirPropiedadesLink,

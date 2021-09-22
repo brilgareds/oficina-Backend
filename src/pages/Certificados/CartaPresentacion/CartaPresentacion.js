@@ -69,7 +69,7 @@ export const CartaPresentacion = () => {
 
         const params = formatRequestBody(formPresentationCard);
 
-        console.log('\nParams: ', params)
+        console.log('\nParams: ', params);
 
         ResquestApproval({params})
             .then(response => {
@@ -124,8 +124,8 @@ export const CartaPresentacion = () => {
                         <div className='offset-1 col-10 mt-5'>
                             <div className='input-group containerCardsFilter mb-5' style={{ marginBottom: '1rem' }}>
                                 <Cities setForm={handleCityChange} />
-                                <SalesPoints filter={(formPresentationCard?.city || '').toLowerCase()} setForm={handleSalesPointChange} value={formPresentationCard?.salesPoints || []} />
-                                <UnrelatedSalesPoints filter={(formPresentationCard?.city || '').toLowerCase()} setForm={handleUnrelatedSalesPointChange} value={formPresentationCard?.unrelatedsalesPoints || []} />
+                                <SalesPoints filter={(formPresentationCard?.city)} setForm={handleSalesPointChange} value={formPresentationCard?.salesPoints || []} />
+                                <UnrelatedSalesPoints filter={(formPresentationCard?.city)} setForm={handleUnrelatedSalesPointChange} value={formPresentationCard?.unrelatedsalesPoints || []} />
                             </div>{
                             (typeCard === 'cartaPuntoVenta')             ? <CartaPuntoVenta form={formPresentationCard} setForm={setFormPresentationCard} /> :
                             (typeCard === 'cartaIngresoMateriales')      ? <CartaIngresoMateriales form={formPresentationCard} setForm={setFormPresentationCard} /> : 
