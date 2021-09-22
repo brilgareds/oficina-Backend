@@ -1,38 +1,24 @@
-import React,{Component} from 'react';
+import React,{ useEffect, useState} from 'react';
 import { routes } from '../../../environments/environments';
 import { Link } from 'react-router-dom';
 import { baseUrl } from '../../../config/config';
 import { getData, loadDataValidate } from '../../general/General';
 import { ToggleIcon } from '../../toggleIcon/ToggleIcon';
 
-class MenuCV extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-          dataPrincipal: []
-        };
-      }
+const MenuCV= () => {
+      const [dataPrincipal, setDataPrincipal] = useState(null)
+      const [dataClose, setdataClose] = useState(true)
 
-      componentDidMount() {
+      useEffect(() => {
         const url = `${baseUrl}/v1/menuOV`;
-        getData(url)
-            .then(data => {
-              if(data){
-                this.setState({
-                    dataPrincipal: data
-                });
-                
-              }
-              loadDataValidate()
-            });
-            
-        
-      }
-     
-
-      render(){
-        const { dataPrincipal } = this.state;
-
+        getData(url).then(data => {
+            if(data){
+                setDataPrincipal(data)   
+                setdataClose(false)           
+            }
+            loadDataValidate()
+          });
+      }, [dataClose])
         return <>
                     <nav className="navbar navbar-light navbar-vertical navbar-expand-xl nabvarcv bg-white" style={{ marginLeft: '0rem', marginRight: '0rem' }}>
 
@@ -56,7 +42,7 @@ class MenuCV extends Component{
                                 <ul className="list-group  navbar-nav flex-column mb-2" id="navbarVerticalNav" style={{ minHeight: '100%', padding: '0 0 13px 0', paddingTop: '0px' }}>
                                      {/* <ul class="list-group list-group-flush"> */}
                                     {
-                                    dataPrincipal.map((value,x) => 
+                                    !dataPrincipal?[]: dataPrincipal.map((value,x) => 
                                        {
 
                                         let str = value.MENU_NOMBRE;
@@ -82,7 +68,6 @@ class MenuCV extends Component{
                         </div>
                     </nav>
                 </>
-      }
 }
 
 export {MenuCV};
