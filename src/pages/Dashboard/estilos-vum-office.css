@@ -271,6 +271,11 @@ a {
     color: #1780E8;
 }
 
+.navbar-vertical{
+    top: 3.3125rem;
+}
+
+
 @media (max-width: 535px) {
     .container-cards {
         grid-template-rows: none;
@@ -353,16 +358,16 @@ a {
         padding-right: unset;
     }
     .navbarMobile {
-        padding: 0% 2% 0% 0% !important;
+        padding: 0% 0% 0% 0% !important;
         background-color: unset !important;
         margin-left: -15.1px;
     }
     #generalContent {
         padding: 1% !important;
     }
-    .navbarPadding {
+    /* .navbarPadding {
         max-height: 500px !important;
-    }
+    } */
 }
 
 @media only screen and (min-width: 320px) and (max-width: 736px) and (orientation: landscape) {
@@ -382,14 +387,14 @@ a {
         padding-right: unset;
     }
     .navbarMobile {
-        padding: 0% 2% 0% 0% !important;
+        padding: 0% 0% 0% 0% !important;
         background-color: unset !important;
         margin-left: -15.1px;
     }
     #generalContent {
         padding: 1% !important;
     }
-    .navbarPadding {
+    /* .navbarPadding {
         max-height: 500px !important;
-    }
+    } */
 }

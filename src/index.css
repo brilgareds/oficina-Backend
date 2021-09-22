@@ -164,9 +164,9 @@
     #generalContent {
         padding: 1% !important;
     }
-    .navbarPadding {
+    /* .navbarPadding {
         max-height: 500px !important;
-    }
+    } */
     .nombreUsuarioDesktop{
         display: none;
     }
