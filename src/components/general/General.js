@@ -172,6 +172,22 @@ import { baseUrl } from "../../config/config";
                     labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
                 }
             break;
+            case 'file':
+                if(val === '' ){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
+    
+                break
+              case 'password':
+                if(val === '' ){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
+              break
+              case 'email':
+                if(val === '' ){
+                    labelValidate += `<li class="list-group-item border-0">${labelast }</li>`
+                }
+              break
         
             default:
                 break;
@@ -185,7 +201,7 @@ import { baseUrl } from "../../config/config";
                             ${labelValidate}
                         </ul>`
                 Swal.fire({
-                    title: "<h5>Validar las siguientes preguntas</h5>",
+                    title: "<h5 class='text-primary'>Validar las siguientes preguntas</h5>",
                     html: list,
                     showCancelButton: false,
                     showConfirmButton: true,

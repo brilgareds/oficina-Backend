@@ -281,7 +281,8 @@ class Family extends Component{
                 showCancelButton: true,
                 confirmButtonColor: "#1783EE",
                 cancelButtonColor: "#A6A6A6",
-                confirmButtonText: 'Eliminar!'
+                confirmButtonText: 'Eliminar!',
+                cancelButtonText:'Cerrar'
               }).then((result) => {
                 if (result.isConfirmed) {
                     const datos = {COD_FAMI:parseInt(data.COD_FAMI)}
