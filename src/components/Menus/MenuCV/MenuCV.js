@@ -3,6 +3,7 @@ import { routes } from '../../../environments/environments';
 import { Link } from 'react-router-dom';
 import { baseUrl } from '../../../config/config';
 import { getData, loadDataValidate } from '../../general/General';
+import { ToggleIcon } from '../../toggleIcon/ToggleIcon';
 
 class MenuCV extends Component{
     constructor(props) {
@@ -37,11 +38,7 @@ class MenuCV extends Component{
 
                         <div className="d-flex align-items-center" style={{ paddingLeft: "5%" }}>
                             <div className="toggle-icon-wrapper">
-                                <button className="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left">
-                                    <span className="navbar-toggle-icon">
-                                        <span className="toggle-line"></span>
-                                    </span>
-                                </button>
+                                <ToggleIcon />
                             </div>
                             <Link to={{ pathname: routes.home.url }}>
 
