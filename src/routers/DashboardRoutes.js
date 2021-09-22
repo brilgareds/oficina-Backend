@@ -6,7 +6,6 @@ import Footer from '../components/shared/footer/Footer';
 import { routes } from '../environments/environments.ts';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { MenuCV } from '../components/Menus/MenuCV/MenuCV';
-import { Page404 } from '../pages/Page404/Page404';
 
 export const DashboardRoutes = () => {
 

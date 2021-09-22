@@ -51,7 +51,6 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         saveSurveys(data)
             .then(async data => {
                 response = data;
-                throw new Error('');
 
                 const options = {
                     title: 'Respuestas guardadas correctamente!',
