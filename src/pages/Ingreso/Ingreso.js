@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import  { Redirect } from 'react-router-dom'
 import { PersonalCampo } from '../../components/CheckIn/PersonalCampo/PersonalCampo';
 import { Sedes } from '../../components/CheckIn/Sedes/Sedes';
@@ -8,7 +8,6 @@ import { useIngreso } from './useIngreso';
 export const Ingreso = () => {
 
     const {
-        mainInfo,
         finished,
         formCheckIn,
         hasMainInfo,
@@ -20,8 +19,6 @@ export const Ingreso = () => {
         handleFormSubmit,
         handleCheckUpdate
     } = useIngreso();
-
-    console.log('Form is: ', formCheckIn)
 
     return (
         (finished) ?

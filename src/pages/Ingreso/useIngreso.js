@@ -54,6 +54,7 @@ export const useIngreso = () => {
                 return a;
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mainInfo]);
 
     const handleCheckUpdate = (e) => {

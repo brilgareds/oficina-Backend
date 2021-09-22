@@ -24,6 +24,7 @@ export const Sedes = ({ setForm, form, userHasCheckIn, userHasCheckOut }) => {
                 }
             }
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleReasonUpdate = (e) => {
