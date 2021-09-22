@@ -132,6 +132,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                     title: 'Gasto eliminado correctamente',
                     showCancelButton: true,
                     cancelButtonText: "Cerrar",
+                    cancelButtonColor: "#A6A6A6",
                     showConfirmButton: false,
                 }).then(() => {
                     setStateLoadingTable(true);
@@ -143,6 +144,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                     title: 'El gasto seleccionado no se eliminado correctamente',
                     showCancelButton: true,
                     cancelButtonText: "Cerrar",
+                    cancelButtonColor: "#A6A6A6",
                     showConfirmButton: false,
                 });
 
@@ -199,6 +201,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                         title: 'Gasto guardado correctamente',
                         showCancelButton: true,
                         cancelButtonText: "Cerrar",
+                        cancelButtonColor: "#A6A6A6",
                         showConfirmButton: false,
                     }).then(() => {
                         setStateLoadingTable(true);

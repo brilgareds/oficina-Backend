@@ -145,7 +145,7 @@ class Salud extends Component{
                         text: "Se registro con éxito",
                         icon: 'success',
                         showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
+                        confirmButtonColor: "#A6A6A6",
                         confirmButtonText: 'Cerrar'
                     })
                     this.loadDataPrincipal();
@@ -411,8 +411,8 @@ class Salud extends Component{
                                 </div>
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button   onClick={() => this.validateInputTabsIn('complementary-tab')     } className="btn btn-primary">Siguiente</button>
-                                        {/* <button   onClick={() => simulateClick('parent-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
+                                        <button   onClick={() => this.validateInputTabsIn('complementary-tab')     } className="btn succesButton">Siguiente</button>
+                                        {/* <button   onClick={() => simulateClick('parent-tab',0,'click')} className="btn succesButton">Siguiente</button> */}
                                     </div>
                                 </div>
 
@@ -494,14 +494,14 @@ class Salud extends Component{
                                                                                                                             
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-start">
-                                        <button onClick={() => this.vaidateBack('sick-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                        <button onClick={() => this.vaidateBack('sick-tab')} className="btn succesButton">Atr&aacute;s</button>
                                     </div>
                                     <div className="col d-flex flex-wrap justify-content-end">
                                         <button onClick={() => {
                                             let seePreg = !seePregnancy? 'pregnancy-tab':'characteristic-tab'
                                             this.validateInputTabsIn(seePreg) 
-                                            }} className="btn btn-primary">Siguiente</button>
-                                        {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn btn-primary">Siguiente</button> */}
+                                            }} className="btn succesButton">Siguiente</button>
+                                        {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn succesButton">Siguiente</button> */}
                                     </div>
                                 </div>
                             </div>
@@ -548,10 +548,10 @@ class Salud extends Component{
                                 </div>
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-start">
-                                        <button onClick={() => this.vaidateBack('complementary-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                        <button onClick={() => this.vaidateBack('complementary-tab')} className="btn succesButton">Atr&aacute;s</button>
                                     </div>
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button onClick={() => this.validateInputTabsIn('characteristic-tab') } className="btn btn-primary">Siguiente</button>
+                                        <button onClick={() => this.validateInputTabsIn('characteristic-tab') } className="btn succesButton">Siguiente</button>
                                     </div>
                                 </div>
                             </div>
@@ -617,10 +617,10 @@ class Salud extends Component{
 
                                             this.vaidateBack(seePreg)
                                              
-                                             }} className="btn btn-primary">Atr&aacute;s</button>
+                                             }} className="btn succesButton">Atr&aacute;s</button>
                                     </div>
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button onClick={() => this.saveDataPrincipal()} className="btn btn-primary">Guardar</button>
+                                        <button onClick={() => this.saveDataPrincipal()} className="btn succesButton">Guardar</button>
                                     </div>
                                 </div>
                             </div>

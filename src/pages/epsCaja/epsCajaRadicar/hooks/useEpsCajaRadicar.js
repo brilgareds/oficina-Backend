@@ -133,9 +133,10 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                 icon: 'error',
                 title: 'Solo se permiten subir archivos tipo pdf',
                 confirmButtonText: 'Cerrar',
+                confirmButtonColor: "#A6A6A6",
             });
         }
-        
+
     }
 
     useEffect(() => {
@@ -170,14 +171,19 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                         numero: numberRow,
                         documento: (element.TIP_NOMBRE).toUpperCase(),
                         archivo:
-                            <input
-                                onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
-                                key={key}
-                                id={`file_${numberRow}`} name={`file_${numberRow}`}
-                                className="form-control"
-                                type="file"
-                                accept=".pdf"
-                            />
+                            <>
+                                <label htmlFor={`file_${numberRow}`} className="btn fileButton"> Subir archivo </label>
+                                <input
+                                    onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
+                                    key={key}
+                                    id={`file_${numberRow}`} 
+                                    name={`file_${numberRow}`}
+                                    className="form-control"
+                                    type="file"
+                                    accept=".pdf"
+                                    style={{ display: "none" }}
+                                />
+                            </>
                     });
                 });
 
@@ -216,7 +222,9 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                     title: mensaje,
                     showConfirmButton: false,
                     showCancelButton: true,
-                    cancelButtonText: 'Continuar'
+                    cancelButtonText: 'Continuar',
+                    cancelButtonColor: "#1783EE",
+
                 }).then((result) => {
                     consultarArchivos(tipoParentesco);
                 })
@@ -293,7 +301,8 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                     Swal.fire({
                         icon: 'success',
                         title: 'Datos guardados correctamente.',
-                        confirmButtonText: 'Ok',
+                        confirmButtonText: 'Cerrar',
+                        confirmButtonColor: "#A6A6A6",
                     }).then((result) => {
                         window.location.reload();
                     })
@@ -304,6 +313,7 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                         icon: 'error',
                         title: 'Hubo un error en la inserción, por favor revisa el formulario.',
                         confirmButtonText: 'Cerrar',
+                        confirmButtonColor: "#A6A6A6",
                     });
                 });
 

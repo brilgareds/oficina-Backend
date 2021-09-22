@@ -136,6 +136,7 @@ const api = {
     getSurveysHealthCondition: `${backendPath}/surveys/healthCondition`,
     getTokenPath: `${backendPath}/auth/login`,
     getUserInfoPath: `${backendPath}/auth/me`,
+    postLoginContratista: `${backendPath}/auth/loginContratista`,
     getDocumentTypes: `${backendPath}/documentType/get`,
     getAllEps: `${backendPath}/eps/get`,
     getForYouCategory: `${backendPath}/rrhh/for_you_categories`,

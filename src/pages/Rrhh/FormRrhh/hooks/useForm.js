@@ -162,7 +162,8 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //ty
                 Swal.fire({
                     icon: 'success',
                     title: 'Datos guardados correctamente.',
-                    confirmButtonText: 'Ok',
+                    confirmButtonText: 'Cerrar',
+                    confirmButtonColor: "#A6A6A6",
                 }).then((result) => {
                     window.location.reload();
                 })
@@ -173,6 +174,7 @@ export const useFormRrhh = (formInitialState = {}, typeForm,) => {          //ty
                     icon: 'error',
                     title: 'Hubo un error en la inserción, por favor revisa el formulario.',
                     confirmButtonText: 'Cerrar',
+                    confirmButtonColor: "#A6A6A6",
                 });
             });
 

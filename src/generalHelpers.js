@@ -25,6 +25,30 @@ const getFetch = async ({ url, set }) => {
     }
 };
 
+const getFetchWithParams = async ({ url, params }) => {
+
+    try {
+        let config = {
+            headers: {
+                'Authorization': (!localStorage.getItem('a_t')) ? '' : `Bearer ${localStorage.getItem('a_t')}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json'
+            },
+            params: params
+        }
+
+        const result = await (await axios.get(url, config)).data;
+
+        return result;
+
+    } catch (e) {
+
+        validateError(url, e);
+
+        console.log(e);
+    }
+};
+
 
 const definirPropiedadesLink = (menu, k, first) => {
     const { descripcion, clasesIcono, titulo, redireccionar, recurso, tipoAccion, subMenus } = menu;
@@ -235,6 +259,7 @@ const advertenciaFormularioVacio = () => {
         `,
         icon: 'warning',
         confirmButtonText: 'Cerrar',
+        confirmButtonColor: "#A6A6A6",
     });
 }
 
@@ -412,5 +437,6 @@ export {
     getBranches,
     getCities,
     getRutasPorEmpresa,
+    getFetchWithParams,
 
 }

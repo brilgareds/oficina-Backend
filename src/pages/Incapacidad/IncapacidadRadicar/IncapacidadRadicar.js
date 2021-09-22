@@ -131,7 +131,7 @@ export const IncapacidadRadicar = () => {
                                 <div className="row">
                                     <div className="col-12 col-lg-10 mb-3"></div>
                                     <div className="col-12 col-lg-2 mb-3 d-grid gap-2">
-                                        <button type="submit" className="btn btn-success  btnEnviar">Enviar</button>
+                                        <button type="submit" className="btn succesButton">Enviar</button>
                                     </div>
                                 </div>
                             </div>

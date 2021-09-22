@@ -43,22 +43,46 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
                     resGetUserIncapacities.forEach((element, key) => {
 
+                        // rowsDTable.push({
+                        //     consecutivo: element.INCAP_CODIGO,
+                        //     tipo_incapacidad: element.TIP_NOMBRE,
+                        //     documentos:
+                        //         <button
+                        //             key={key}
+                        //             className="btn btn-info"
+                        //             value={String(element.INCAP_CODIGO)}
+                        //             onClick={event => { onClickIconDocumento({ event }) }}
+                        //         > Ver documentos </button>,
+                        //     estado: validarEstadoIncapacidad(String(element.ESTADO)),
+                        //     actualizar:
+                        //         <button className="btn btn-success"
+                        //             value={String(element.INCAP_CODIGO)}
+                        //             onClick={event => { onClickActualizarIncapacidad({ event }) }}
+                        //         >Actualizar</button>,
+
+                        // });
+
                         rowsDTable.push({
                             consecutivo: element.INCAP_CODIGO,
                             tipo_incapacidad: element.TIP_NOMBRE,
                             documentos:
-                                <button
-                                    key={key}
-                                    className="btn btn-info"
+                                <img
+                                    className="imgDeleteGasto"
+                                    alt="view"
+                                    src="/assets/img/view.png"
                                     value={String(element.INCAP_CODIGO)}
-                                    onClick={event => { onClickIconDocumento({ event }) }}
-                                > Ver documentos </button>,
+                                    onClick={event => { onClickIconDocumento(element.INCAP_CODIGO) }}
+                                />,
                             estado: validarEstadoIncapacidad(String(element.ESTADO)),
                             actualizar:
-                                <button className="btn btn-success"
+                                <img
+                                    className="imgDeleteGasto"
+                                    alt="trash-fill-orange"
+                                    src="/assets/img/actualizar-flecha.png"
                                     value={String(element.INCAP_CODIGO)}
-                                    onClick={event => { onClickActualizarIncapacidad({ event }) }}
-                                >Actualizar</button>,
+                                    onClick={event => { onClickActualizarIncapacidad(element.INCAP_CODIGO) }}
+                                />,
+
                         });
                     });
 
@@ -98,13 +122,13 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
     }
 
 
-    const onClickIconDocumento = ({ event }) => {
+    const onClickIconDocumento = (event) => {
 
         overlay(true);
 
         postFetch({
             url: api.getUserIncapacitiesFiles,
-            params: { numeroIncapacidad: event.target.value }
+            params: { numeroIncapacidad: event }
         })
             .then((resGetUserIncapacitiesFiles) => {
                 overlay(false);
@@ -138,7 +162,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                 `<tr>
                     <td>${key + 1}</td>
                     <td>${data.TIP_NOMBRE}</td>
-                    <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-info" >Descargar</button> </a></td>
+                    <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-link" > <img class="imgDeleteGasto" alt="download-to-storage-drive" src="/assets/img/download-to-storage-drive.png"/> </button> </a></td>
                 </tr>`
                 ;
 
@@ -167,6 +191,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
             `,
             showCancelButton: true,
             cancelButtonText: "Cerrar",
+            cancelButtonColor: "#A6A6A6",
             showConfirmButton: false,
 
 
@@ -175,12 +200,12 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
     }
 
 
-    const onClickActualizarIncapacidad = ({ event }) => {
+    const onClickActualizarIncapacidad = (event) => {
         overlay(true);
 
         postFetch({
             url: api.getUserDataIncapacity,
-            params: { numeroIncapacidad: event.target.value }
+            params: { numeroIncapacidad: event }
         })
             .then((resGetUserDataIncapacity) => {
                 overlay(false);
@@ -263,7 +288,10 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                     <td>${data.TIP_NOMBRE}</td>
                     <td>${estado}</td>
                     <td>${(data.RECHAZO !== null) ? data.RECHAZO.toUpperCase() : "N/A"}</td>
-                    <td><input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;"></td>
+                    <td>
+                    <label for="inputFile_${key}" class="btn fileButton"> Subir archivo </label>
+                        <input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem; display:none">
+                    </td>
                 </tr>`
                 ;
 
@@ -323,7 +351,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                                 <h5 className="card-title">Documentos</h5>
                             </div>
 
-                            <div class="table-responsive scrollbar">
+                            <div class="table-responsive scrollbar" style="overflow-x: auto;white-space: nowrap;">
                                 <table class="table">
                                     <thead class="headersDataTableModal">
                                         <tr>
@@ -336,10 +364,10 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                                 </table>
                             </div>
 
-                            <div class="col-12 col-lg-12 mb-4" style="text-align: right;">
+                            <div class="col-12 col-lg-12 " style="text-align: right;">
                                 <div class="d-grid gap-2 d-md-block">
-                                    <button id="btnModalGuardar" class="btn btn-success" type="button">Guardar</button>
-                                    <button id="btnModalCerrar" class="btn btn-secondary" type="button">Cerrar</button>
+                                    <button id="btnModalGuardar" class="btn succesButton" type="button">Guardar</button>
+                                    <button id="btnModalCerrar" class="btn closeButton" type="button">Cerrar</button>
                                 </div>
                             </div>
                         </div>
@@ -423,7 +451,8 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                     Swal.fire({
                         icon: 'success',
                         title: 'Datos actualizados correctamente.',
-                        confirmButtonText: 'Ok',
+                        confirmButtonText: 'Cerrar',
+                        confirmButtonColor: "#A6A6A6",
                     }).then((result) => {
                         window.location.reload();
                     })
@@ -434,6 +463,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                         icon: 'error',
                         title: 'Hubo un error en la actualización, por favor revisa el formulario.',
                         confirmButtonText: 'Cerrar',
+                        confirmButtonColor: "#A6A6A6",
                     });
                 });
         } else {

@@ -100,7 +100,7 @@ class Education extends Component{
                     text: result.error,
                     icon: 'error',
                     showCancelButton: false,
-                    confirmButtonColor: '#2c7be5',
+                    confirmButtonColor: "#A6A6A6",
                     confirmButtonText: 'Cerrar'
                 })
             }
@@ -143,7 +143,7 @@ class Education extends Component{
                         text: "Se registro con éxito",
                         icon: 'success',
                         showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
+                        confirmButtonColor: "#A6A6A6",
                         confirmButtonText: 'Cerrar'
                     })
                     this.loadDataPrincipal();
@@ -225,10 +225,10 @@ class Education extends Component{
                 text: "¿Desea eliminar el registro?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#2c7be5',
-                cancelButtonColor: '#2c7be5',
+                confirmButtonColor: "#1783EE",
+                cancelButtonColor: "#A6A6A6",
                 confirmButtonText: 'Eliminar!',
-                cancelButtonText:'Cancelar'
+                cancelButtonText:'Cancelar',
               }).then((result) => {
                 if (result.isConfirmed) {
                     const datos = {EDUCACION_CODIGO:data.EDUCACION_CODIGO}
@@ -241,7 +241,7 @@ class Education extends Component{
                                 text: "Se elimino con éxito",
                                 icon: 'success',
                                 showCancelButton: false,
-                                confirmButtonColor: '#2c7be5',
+                                confirmButtonColor: "#A6A6A6",
                                 confirmButtonText: 'Cerrar'
                             })
                             this.loadDataPrincipal();
@@ -291,7 +291,7 @@ class Education extends Component{
                         text: "Se actualizó con éxito",
                         icon: 'success',
                         showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
+                        confirmButtonColor: "#A6A6A6",
                         confirmButtonText: 'Cerrar'
                     })
                     
@@ -487,8 +487,8 @@ render(){
                             <div className="row pb-4">
                                 <p></p>
                                 <div className="col d-flex flex-wrap justify-content-end">
-                                    <button onClick={() => this.saveEducation()} id="saveButton" className="btn btn-primary saveButton">Guardar</button>
-                                    <button hidden={setHidden} onClick={() => this.updateData()} id="upButton" className="btn btn-primary upButton">Actualizar</button>
+                                    <button onClick={() => this.saveEducation()} id="saveButton" className="btn succesButton saveButton">Guardar</button>
+                                    <button hidden={setHidden} onClick={() => this.updateData()} id="upButton" className="btn succesButton upButton">Actualizar</button>
                                     <div className="inputHiddenEdit"></div>
                                 </div>
                             </div>

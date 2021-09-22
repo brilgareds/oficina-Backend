@@ -216,7 +216,8 @@ export const useAyuda = (formInitialState = {}, typeForm) => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Datos guardados correctamente.',
-                    confirmButtonText: 'Ok',
+                    confirmButtonText: 'Continuar',
+                    confirmButtonColor: "#1783EE",
                 }).then((result) => {
                     window.location.reload();
                 })
@@ -226,6 +227,7 @@ export const useAyuda = (formInitialState = {}, typeForm) => {
                     icon: 'error',
                     title: 'Hubo un error en la inserción, por favor revisa el formulario.',
                     confirmButtonText: 'Cerrar',
+                    confirmButtonColor: "#A6A6A6",
                 });
             });
 

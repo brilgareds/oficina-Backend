@@ -323,7 +323,7 @@ class DataAdditional extends Component{
                     text: "Se registro con éxito",
                     icon: 'success',
                     showCancelButton: false,
-                    confirmButtonColor: '#2c7be5',
+                    confirmButtonColor: "#A6A6A6",
                     confirmButtonText: 'Cerrar'
                 })
 
@@ -447,7 +447,7 @@ class DataAdditional extends Component{
                                 </div>
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button onClick={() => this.validateInputTabsIn('activity-tab')} className="btn btn-primary">Siguiente</button>
+                                        <button onClick={() => this.validateInputTabsIn('activity-tab')} className="btn succesButton">Siguiente</button>
                                     </div>
                                 </div>
                         
@@ -522,10 +522,10 @@ class DataAdditional extends Component{
                                 </div>
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-start">
-                                        <button onClick={() => this.vaidateBack('recreacion-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                        <button onClick={() => this.vaidateBack('recreacion-tab')} className="btn succesButton">Atr&aacute;s</button>
                                     </div>
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button onClick={() => this.validateInputTabsIn('otros-tab')} className="btn btn-primary">Siguiente</button>
+                                        <button onClick={() => this.validateInputTabsIn('otros-tab')} className="btn succesButton">Siguiente</button>
                                     </div>
                                 </div>
                             </div>
@@ -667,10 +667,10 @@ class DataAdditional extends Component{
                                 </div>
                                 <div className="row pb-4 flex">
                                     <div className="col d-flex flex-wrap justify-content-start">
-                                        <button onClick={() => this.vaidateBack('activity-tab')} className="btn btn-primary">Atr&aacute;s</button>
+                                        <button onClick={() => this.vaidateBack('activity-tab')} className="btn succesButton">Atr&aacute;s</button>
                                     </div>
                                     <div className="col d-flex flex-wrap justify-content-end">
-                                        <button onClick={() => this.saveDataAdditional()} className="btn btn-primary">Guardar</button>
+                                        <button onClick={() => this.saveDataAdditional()} className="btn succesButton">Guardar</button>
                                     </div>
                                 </div>
                     

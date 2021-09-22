@@ -133,7 +133,7 @@ export const CartaPresentacion = () => {
                         </div>
 
                         <div className='offset-1 col-10 mt-4 text-end'>
-                            <button type='submit' className='btn btn-primary'>Solicitar aprobación</button>
+                            <button type='submit' className='btn succesButton'>Solicitar aprobación</button>
                         </div>
                     </form>
                 </div>

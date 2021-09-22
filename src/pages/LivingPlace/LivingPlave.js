@@ -97,7 +97,7 @@ class LivingPlace extends Component{
                         text: "Se registro con éxito",
                         icon: 'success',
                         showCancelButton: false,
-                        confirmButtonColor: '#2c7be5',
+                        confirmButtonColor: "#A6A6A6",
                         confirmButtonText: 'Cerrar'
                     })
                     this.loadDataPrincipal();
@@ -236,7 +236,7 @@ class LivingPlace extends Component{
 
                     <div className="row ">
                         <div className="col d-flex flex-wrap justify-content-end">
-                            <button onClick={() => this.saveLivingPlace()} className="btn btn-primary">Guardar</button>
+                            <button onClick={() => this.saveLivingPlace()} className="btn succesButton">Guardar</button>
                         </div>
                     </div>
 
