@@ -68,7 +68,7 @@ export const MiBilletera = () => {
                             </div>
                             <div className="col-12 col-lg-12 mb-4 text-center">
                                 <span className="form-label texto2rio" htmlFor="valorGasto">valor: </span>
-                                <input onKeyDown={event => { return event.keyCode !== 69 }} onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="number" />
+                                <input onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="text" />
                             </div>
 
                             <div className="col-12 col-lg-12 mb-4 text-left">
@@ -94,7 +94,7 @@ export const MiBilletera = () => {
                                 <span className="texto2rio">{getFullNameUser()}</span>
                             </div>
                             <div className="col-md-12">
-                                <DataTabla title={""} columns={columnsDataTable} data={rowsTable} inputSearch={false} />
+                                <DataTabla title={""} columns={columnsDataTable} data={rowsTable} toolbar={false} inputSearch={false} />
                             </div>
                         </div>
                     </div>

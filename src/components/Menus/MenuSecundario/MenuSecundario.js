@@ -9,7 +9,7 @@ export const MenuSecundario = ({ menu, k }) => {
         <div className="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser" data-bs-popper="none">
             <div className="bg-white dark__bg-1000 rounded-2 py-2">
                 <MenuSecundarioHeader />
-                <div className="dropdown-divider"></div>
+                <div className="dropdown-divider divisorResponsive"></div>
                 <MenuSecundarioBody menu={ menu } k={ k } />
                 <div className="dropdown-divider"></div>
                 <MenuSecundarioFooter />

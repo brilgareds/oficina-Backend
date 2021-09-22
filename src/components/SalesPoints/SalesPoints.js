@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { getSalesPoints } from '../../repositories/generalInfo';
 import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
@@ -6,14 +6,14 @@ import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
 export const SalesPoints = ({filter, form, setForm, value, multiple=true, disabled=false}) => {
 
     const [salesPoints, setSalesPoints] = useState([]);
-    const [salesPoint,  setSalesPoint]  = useState([]);
+    const [salesPoint, setSalesPoint] = useState([]);
 
     const handleSalesPointUpdate = (e) => {
         setSalesPoint(e || []);
         setForm(e || []);
     };
 
-    useEffect(()=> {
+    useEffect(() => {
 
         if (filter) {
             handleSalesPointUpdate();
@@ -50,9 +50,9 @@ export const SalesPoints = ({filter, form, setForm, value, multiple=true, disabl
                     height: 0,
                     position: "absolute"
                 }}
-                onChange={ ()=>{} }
+                onChange={() => { }}
                 value={salesPoint}
-                // required='required'
+            // required='required'
             />
         </div>
     )

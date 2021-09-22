@@ -15,7 +15,7 @@ export const Sst = () => {
             <div className="col-md-12 cabeceraRRhh paddingRRHH">
                 <h3 className="tituloBienvenidoRrhh">
                     Bienvenido a 
-                    <img className="logoVumBienvenido" src="/assets/img/icono-vum-office-home.svg" alt="icono-vum-office-home" />
+                    <img className="logoVumBienvenido" src="/assets/img/icono-vum-office-home.png" alt="icono-vum-office-home" />
                 </h3>
             </div>
 

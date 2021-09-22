@@ -18,9 +18,15 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
     const onChangeInputHandle = ({ target }) => {
         setStateForm({
             ...formValue,
-            [target.name]: target.value
+            [target.name]: (target.name === "valorGasto") ? formatNumber(target.value) : target.value
         });
     }
+
+    const formatNumber = (num) => {
+        num = String(num).replace(/\D/g, "");
+        return num === '' ? num : Number(num).toLocaleString();
+    }
+
 
     useEffect(() => {
         if (formValue.loadingPage === true) {
@@ -64,7 +70,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
 
                             rowsDTable.push({
                                 gasto: element.GAST_NOMBRE,
-                                costo: "$" + element.GAST_VALOR,
+                                costo: "$ " + formatNumber(element.GAST_VALOR),
                                 accion:
                                     <img
                                         className="imgDeleteGasto"
@@ -128,7 +134,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                     cancelButtonText: "Cerrar",
                     showConfirmButton: false,
                 }).then(() => {
-                    setStateLoadingTable(true)
+                    setStateLoadingTable(true);
                 });
 
             }).catch(() => {
@@ -154,6 +160,10 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
         return data.toLocaleString("es-ES");
     }
 
+    const limpiarFormatoNumero = (numero) => {
+        return Number(numero.replace(/\./g, ''));
+    }
+
 
     const onClickGuardar = () => {
 
@@ -162,12 +172,17 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
             billCod: formValue.dataUserGastos.gastosUsuario[0]?.BILL_CODIGO[0] || null,
             billeteraNueva: formValue.billeteraNueva,
             cedula: dataUser.cedula,
-            conceptos: { gasto: formValue.gasto.toUpperCase(), valor: Number(formValue.valorGasto), },
+            conceptos: {
+                gasto: formValue.gasto.toUpperCase(),
+                valor: limpiarFormatoNumero(String(formValue.valorGasto)),
+            },
             salario: formValue.dataUserGastos.dataUsuario.SALARIO,
             nombreUser: getFullNameUser().toUpperCase(),
             userDispo: statetTatalDisponible.replace(/\./g, ""),
             userTotalGas: (formValue.billeteraNueva) ? Number(formValue.valorGasto) : Number(stateSumaDeGastos.replace(/\./g, "")) + Number(formValue.valorGasto),
         };
+
+        console.log("params", params);
 
         if (!validarInformacionFormulario(params)) {
             advertenciaFormularioVacio();
@@ -186,7 +201,11 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                         cancelButtonText: "Cerrar",
                         showConfirmButton: false,
                     }).then(() => {
-                        setStateLoadingTable(true)
+                        setStateLoadingTable(true);
+                        formValue.gasto = "";
+                        formValue.valorGasto = "";
+                        console.log("formValue", formValue);
+
                     });
                 });
         }
@@ -199,7 +218,8 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
 
         if (
             exprRegNumeros.test(valor) &&
-            exprRegSoloLetras.test(Number(gasto))
+            exprRegSoloLetras.test(Number(gasto)) &&
+            gasto !== ""
         ) {
             return true;
         }

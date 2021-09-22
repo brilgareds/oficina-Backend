@@ -33,7 +33,7 @@ export const useLogin = (formInitialState = {}) => {
     }
 
     const formatUserInfo = (userInfo) => {
-        
+
         return JSON.stringify({
             'nombres': userInfo.Nombres,
             'apellidos': userInfo.Apellidos,
@@ -79,10 +79,54 @@ export const useLogin = (formInitialState = {}) => {
                 ];
 
                 const [userInfo] = await Promise.all(promisesArray);
-                
-                localStorage.setItem('d_u', formatUserInfo(userInfo)); // data_user
 
-                window.location.href = routes.home.url;
+                if (userInfo?.usuarioInactivoConVariosContratos) {
+
+                    console.log(userInfo);
+
+                    let contratosOp = `<option value="null" selected disabled>SELECCIONE...</option>`;
+                    userInfo.contratos.forEach((contrato, key) => {
+                        contratosOp += `<option value="${key}">Contrato: #${contrato.NUMERO_CONTRATO} - ${contrato.FECHA_INGRESO} - ${contrato.FECHA_VENCIMIENTO} </option>`;
+                    });
+
+                    Swal.fire({
+                        title: 'Empleado Inactivo',
+                        html: `
+                                <div class="row" style="text-align: left; margin: 10px;">
+                                    <div class="col-12 col-lg-12 mb-3 text-center">
+                                        <span style="font-weight: 600;font-size: 20px;">Por favor seleccione el contrato donde requiera iniciar el proceso.</span>
+                                    </div>
+            
+                                    <div class="col-12 col-lg-12">
+                                        <label class="form-label" htmlFor="correoEnvio">Seleccione un contrato: </label>
+                                        <select id="contrato" name="contrato" class="form-control">
+                                            ${contratosOp}
+                                        </select>
+                                    </div>
+
+                                </div>
+                                     
+                                <br/>
+                        `,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        allowOutsideClick: true,
+                        confirmButtonText: "Ingresar",
+
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            const posicionContrato = document.getElementById("contrato").value;
+                            localStorage.setItem('d_u', formatUserInfo(userInfo.contratos[posicionContrato])); // data_user
+                            window.location.href = routes.home.url;
+                        }
+                    })
+
+                } else {
+                    localStorage.setItem('d_u', formatUserInfo(userInfo)); // data_user
+                    window.location.href = routes.home.url;
+                }
 
             } catch (error) { // //Si el usuario no existe le despliega una modal de alerta para ingresar como contratista
 

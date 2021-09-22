@@ -8,6 +8,14 @@
     background-color: #F9FAFD;
   }
 
+  @media (max-width: 700px) { 
+
+    .cv .card .card-header{
+      text-align: center;
+    }
+   }
+
+
   .navbarPaddingCV {
     background-color: #F9FAFD;
 
@@ -127,4 +135,17 @@
 
   .navbar-vertical .navbar-vertical-label{
     font-size: 14px;
+  }
+
+  
+  .colorSquare{
+    color:#1783EE ;
+  }
+
+  .colorTrash{
+    color: #ED635A;
+  }
+
+  .text-dangerpdf{
+    color: #ED635A ;
   }
