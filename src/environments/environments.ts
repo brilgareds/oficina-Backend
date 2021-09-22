@@ -119,10 +119,14 @@ const direccionesPorEmpresa = {
 
 const api = {
     path: backendPath,
+    saveCheckIn: `${backendPath}/entrance/`,
+    saveCheckOut: `${backendPath}/departure/`,
     resquestApprovalPresentationCard: `${backendPath}/presentationCard/resquestApproval/`,
     getAllBranches: `${backendPath}/branches/`,
+    getCheckInAndCheckOutInfo: `${backendPath}/checkInAndCheckOut/getMainInfo/`,
     getAllCities: `${backendPath}/allCities/`,
-    getCitiesForASpecificPerson: `${backendPath}/citiesForASpecificPerson/`,
+    getCitiesForASpecificPerson: `${backendPath}/cities/`,
+    getsalesPoints: `${backendPath}/cities/`,
     getAllMenu: `${backendPath}/navigator/`,
     saveSurveysCovid: `${backendPath}/surveys/covid`,
     saveSurveysEpidemiologicalFence: `${backendPath}/surveys/epidemiologicalFence`,

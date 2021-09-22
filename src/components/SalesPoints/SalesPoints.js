@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { getSalesPoints } from '../../repositories/generalInfo';
 import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
 
-export const SalesPoints = ({ filter, setForm, value }) => {
+export const SalesPoints = ({filter, form, setForm, value, multiple=true, disabled=false}) => {
 
     const [salesPoints, setSalesPoints] = useState([]);
     const [salesPoint, setSalesPoint] = useState([]);
@@ -17,7 +17,16 @@ export const SalesPoints = ({ filter, setForm, value }) => {
 
         if (filter) {
             handleSalesPointUpdate();
-            getSalesPoints(filter).then(setSalesPoints);
+            getSalesPoints(filter).then(salesPoints => {
+                if (salesPoints) {
+                    setSalesPoints(salesPoints);
+
+                    if (form?.salesPoints) {
+                        const salesPoint = salesPoints.filter(currentValue => (currentValue.value === form?.salesPoints))?.[0] || '';
+                        setSalesPoint(salesPoint);
+                    }
+                }
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
@@ -31,7 +40,7 @@ export const SalesPoints = ({ filter, setForm, value }) => {
     return (
         <div>
             <label>Punto de venta</label>
-            <Select isMulti closeMenuOnSelect={false} styles={ColourStyles} onChange={handleSalesPointUpdate} value={salesPoint} options={salesPoints} />
+            <Select isMulti={multiple} closeMenuOnSelect={!multiple} isDisabled={disabled} styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
             <input
                 tabIndex={-1}
                 autoComplete="off"

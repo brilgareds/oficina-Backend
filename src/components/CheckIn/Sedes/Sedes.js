@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
+import React, { useEffect, useState } from 'react';
 import { specificDecimals } from '../../../generalHelpers';
 import { getAllBranches } from '../../../repositories/generalInfo';
 import { ColourStyles   } from '../../Inputs/Multiple/ColourStyles';
 
-export const Sedes = ({ setForm }) => {
+export const Sedes = ({ setForm, form, userHasCheckIn, userHasCheckOut }) => {
 
     const [branch, setBranch] = useState('');
-    const [branches, setBranches] = useState([])
-    const [reason, setReason] = useState('');
-    const [temperature, setTemperature] = useState('');
+    const [branches, setBranches] = useState([]);
+    const [reason, setReason] = useState(form?.reason || '');
+    const [temperature, setTemperature] = useState(form?.temperature || '');
+    const [temperatureCheckOut, setTemperatureCheckOut] = useState(form?.temperatureCheckOut || '');
 
     useEffect(() => {
-        getAllBranches().then(setBranches);
+        getAllBranches().then(newBranches => {
+            if (newBranches) {
+
+                setBranches(newBranches);
+
+                if (form?.branch) {
+                    const branch = newBranches.filter(currentValue => (currentValue.value === form?.branch))?.[0] || '';
+                    setBranch(branch);
+                }
+            }
+        });
     }, []);
 
     const handleReasonUpdate = (e) => {
@@ -31,7 +42,7 @@ export const Sedes = ({ setForm }) => {
         }));
     };
 
-    const handleTemperatureUpdate = (e) => {
+    const handleTemperatureCheckInUpdate = (e) => {
         const value = specificDecimals(e.target.value, 1);
         setTemperature(value);
         setForm(old_value => ({
@@ -40,12 +51,21 @@ export const Sedes = ({ setForm }) => {
         }));
     };
 
+    const handleTemperatureCheckOutUpdate = (e) => {
+        const value = specificDecimals(e.target.value, 1);
+        setTemperatureCheckOut(value);
+        setForm(old_value => ({
+            ...old_value,
+            temperatureCheckOut: value
+        }));
+    };
+
     return (
         <div className='row mb-4'>
             <div className='input-group'>
                 <div className='offset-md-0 col-12 col-md-4 mb-3' style={{paddingRight: '1rem', marginBottom: '1rem'}}>
                     <label>Sedes</label>
-                    <Select styles={ColourStyles} onChange={handleSedeUpdate} value={ branch } options={branches} />
+                    <Select styles={ColourStyles} isDisabled={userHasCheckIn} onChange={handleSedeUpdate} value={ branch } options={branches} />
                     <input
                         tabIndex={-1}
                         autoComplete="off"
@@ -63,12 +83,20 @@ export const Sedes = ({ setForm }) => {
 
                 <div className='col-12 col-md-4' style={{paddingRight: '1rem', marginBottom: '1rem'}}>
                     <label>Températura en °C</label>
-                    <input type='text' pattern="^\d*[,.]?\d+$" value={temperature} onChange={handleTemperatureUpdate} className='form-control' required />
+                    <input type='text' pattern="^\d*[,.]?\d+$" disabled={userHasCheckIn} value={temperature} onChange={handleTemperatureCheckInUpdate} className='form-control' required />
                 </div>
                 <div className='col-12 col-md-4' style={{ marginBottom: '1rem', paddingRight: '1rem'}}>
                     <label>Razón de Permanencia</label>
-                    <textarea type='text' className='form-control' style={{height: '1rem'}} value={reason} onChange={handleReasonUpdate} />
+                    <textarea type='text' className='form-control' disabled={userHasCheckIn} style={{height: '1rem'}} value={reason} onChange={handleReasonUpdate} />
                 </div>
+                {
+                    (userHasCheckIn) &&
+                        <div className='col-12 col-md-4' style={{ marginBottom: '1rem', paddingRight: '1rem'}}>
+                            <label>Températura de salida en °C</label>
+                            <input type='text' pattern="^\d*[,.]?\d+$" disabled={userHasCheckOut} value={temperatureCheckOut} onChange={handleTemperatureCheckOutUpdate} className='form-control' required />
+                        </div>
+                }
+                
             </div>
         </div>
     )

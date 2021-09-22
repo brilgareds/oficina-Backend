@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getSurveys, saveSurveys } from '../../repositories/Encuestas/Encuentas';
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.min.css';
-import 'alertifyjs/build/css/themes/default.min.css';
+import { makeModal } from '../../generalHelpers';
 
 export const useEncuestas = ({tipoEncuesta=''}) => {
 
@@ -53,14 +51,27 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         saveSurveys(data)
             .then(async data => {
                 response = data;
-                return alertify.alert('Respuestas guardadas correctamente!', '¡Gracias por responder la encuesta!', ()=>{});
+                throw new Error('');
+
+                const options = {
+                    title: 'Respuestas guardadas correctamente!',
+                    text: '¡Gracias por responder la encuesta!',
+                    icon: 'success'
+                };
+                
+                return makeModal(options);
             })
-            .then(() => {
-                return generarReporte({response,tipoEncuesta});
-            })
+            .then(() => generarReporte({response,tipoEncuesta}))
             .catch(e => {
                 console.log('Error: ', e);
-                alertify.error('Error al guardar las respuestas<br>Intente nuevamente!');
+
+                const options = {
+                    title: '',
+                    html: 'Error al guardar las respuestas<br>Intente nuevamente!',
+                    icon: 'error'
+                };
+                
+                return makeModal(options);
             });
     };
 
@@ -79,11 +90,17 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
                 return currentIndex;
             });
         } else {
-            const content = '¿Confirmar envío?';
-            const titulo  = 'Encuesta finalizada';
-            const labels  = { ok: 'Enviar', cancel: 'Cancelar' };
-
-            alertify.confirm(titulo, content, respuestasConfirmadas, respuestasDenegadas).set('labels', labels);
+            const options = {
+                text: '¿Confirmar envío?',
+                title: 'Encuesta finalizada',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Enviar',
+                successAnswerFunction: respuestasConfirmadas,
+                cancelAnswerFunction: respuestasDenegadas
+            };
+            
+            makeModal(options);
         }
     };
     

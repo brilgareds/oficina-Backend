@@ -1,86 +1,87 @@
 import React, { useState } from 'react';
 import  { Redirect } from 'react-router-dom'
-import Swal from 'sweetalert2';
 import { PersonalCampo } from '../../components/CheckIn/PersonalCampo/PersonalCampo';
 import { Sedes } from '../../components/CheckIn/Sedes/Sedes';
+import { routes } from '../../environments/environments';
+import { useIngreso } from './useIngreso';
 
 export const Ingreso = () => {
 
-    const [formCheckIn, setFormCheckIn] = useState({});
-    const [finished, setFinished] = useState(false)
+    const {
+        mainInfo,
+        finished,
+        formCheckIn,
+        hasMainInfo,
+        tipoIngresos,
+        userHasSurvey,
+        userHasCheckIn,
+        setFormCheckIn,
+        userHasCheckOut,
+        handleFormSubmit,
+        handleCheckUpdate
+    } = useIngreso();
 
-    const handleCheckUpdate = (e) => {
-        setFormCheckIn(() => ({ typeCheckIn: e.target.value }));
-    };
+    console.log('Form is: ', formCheckIn)
 
-    const tipoIngresos = [
-        {
-           id: 'ingresoHomeOffice',
-           title: 'Home Office'
-        },
-        {
-            id: 'ingresoPersonalDeCampo',
-            title: 'Personal campo'
-        },
-        {
-            id: 'ingresoSede',
-            title: 'Sede'
-        }
-    ];
+    return (
+        (finished) ?
+            <Redirect to='/' /> : 
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form has: ', formCheckIn);
-
-        Swal.fire({
-            title: '',
-            text: 'Ingreso realizado con exito!',
-            icon: 'success',
-            showCancelButton: false,
-            confirmButtonColor: '#2c7be5',
-            confirmButtonText: 'Cerrar'
-        }).then(setFinished(true));
-    };
-
-    return (finished) ? <Redirect to='/' /> : (
-        <>
-            <div className="card mb-3">
-                <div className="card-header position-relative text-center text-md-start ps-md-5" style={{ paddingLeft: '3rem' }}>
-                    <div className="col-12">
-                        <h3>Formulario Ingreso</h3>
+        (hasMainInfo) ? (
+            (!userHasSurvey) ? <Redirect to={routes.encuestaRiesgoCovid.url} />
+            :
+            <>
+                <div className="card mb-3">
+                    <div className="card-header position-relative text-center text-md-start ps-md-5" style={{ paddingLeft: '3rem' }}>
+                        <div className="col-12">
+                            {
+                                (!userHasCheckIn) ?
+                                    <h3>Registrar Entrada</h3> :
+                                (!userHasCheckOut) ?
+                                    <h3>Registrar Salida</h3> :
+                                <h3>Registro finalizado</h3>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="card pt-3 pb-5">
-                <div className="card-body bg-light">
-                    <form onSubmit={handleFormSubmit}>
-                        <div className='offset-1 col-10 mb-4 mt-2'>
-                            <div className="form-check" style={{paddingLeft: '0', marginBottom: '1rem'}}>
-                                <label className="form-check-label">Tipo ingreso:</label>
-                            </div>{
-                            tipoIngresos.map(({id, title}) => (
-                                <div key={id}>
-                                    <div className='form-check'>
-                                        <input className='form-check-input' type='radio' name='tipoIngreso' id={id} value={id} checked={formCheckIn.typeCheckIn === id} onChange={handleCheckUpdate} required />
-                                        <label className='form-check-label' htmlFor={id}>
-                                            { title }
-                                        </label>
+                <div className="card pt-3 pb-5">
+                    <div className="card-body bg-light">
+                        <form onSubmit={handleFormSubmit}>
+                            <div className='offset-1 col-10 mb-4 mt-2'>
+                                <div className="form-check" style={{paddingLeft: '0', marginBottom: '1rem'}}>
+                                    <label className="form-check-label">Tipo ingreso:</label>
+                                </div>{
+                                tipoIngresos.map(({id, title}) => (
+                                    <div key={id}>
+                                        <div className='form-check'>
+                                            <input className='form-check-input' type='radio' name='tipoIngreso' id={id} value={id} checked={formCheckIn.typeCheckIn === id} onChange={handleCheckUpdate} disabled={userHasCheckIn} required />
+                                            <label className='form-check-label' htmlFor={id}>
+                                                { title }
+                                            </label>
+                                        </div>
                                     </div>
+                                ))}
+                                <div className='offset-1 col-10'>{
+                                    (formCheckIn.typeCheckIn === 1165) ? <PersonalCampo form={formCheckIn} setForm={setFormCheckIn} userHasCheckIn={userHasCheckIn} /> :
+                                    (formCheckIn.typeCheckIn === 1166) ? <Sedes         form={formCheckIn} setForm={setFormCheckIn} userHasCheckIn={userHasCheckIn} userHasCheckOut={userHasCheckOut} /> : <></> }
                                 </div>
-                            ))}
-                            <div className='offset-1 col-10'>{
-                                (formCheckIn.typeCheckIn === 'ingresoPersonalDeCampo') ? <PersonalCampo form={formCheckIn} setForm={setFormCheckIn} /> :
-                                (formCheckIn.typeCheckIn === 'ingresoSede')            ? <Sedes         form={formCheckIn} setForm={setFormCheckIn} /> : <></> }
-                            </div>
 
-                            <div className='offset-1 col-10 text-center text-md-end'>
-                                <button type='submit' className='btn btn-primary col-12 col-sm-6 col-md-4 col-xl-3' disabled={!Object.keys(formCheckIn).length}>Ingresar</button>
+                                <div className='offset-1 col-10 text-center text-md-end'>
+                                    {
+                                        (!userHasCheckIn) ?
+                                            <button type='submit' className='btn btn-primary col-12 col-sm-6 col-md-4 col-xl-3' disabled={!Object.keys(formCheckIn).length}>Realizar Ingreso</button> :
+                                        (!userHasCheckOut) ?
+                                            <button type='submit' className='btn btn-primary col-12 col-sm-6 col-md-4 col-xl-3' disabled={!Object.keys(formCheckIn).length}>Realizar Salida</button> :
+                                        <button type='button' className='btn btn-primary col-12 col-sm-6 col-md-4 col-xl-3' disabled={true}>Realizar Salida</button>
+                                    }
+                                    
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </>
-    )
+            </>
+        ) : <></>
+    );
 }
