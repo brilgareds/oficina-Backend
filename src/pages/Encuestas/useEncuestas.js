@@ -19,7 +19,7 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
     }, [tipoEncuesta]);
 
     const generarReporte = (({response}) => {
-        setDataReport(response?.data);
+        setDataReport(response);
         setFormularioEnviado(true);
     });
 
@@ -50,6 +50,8 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
 
         saveSurveys(data)
             .then(async data => {
+                if (!data || !Object.keys(data).length ) throw new Error(data);
+
                 response = data;
 
                 const options = {
