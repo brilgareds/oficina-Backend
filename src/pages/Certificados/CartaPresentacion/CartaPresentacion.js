@@ -5,6 +5,7 @@ import { CartaPuntoVentaFueraHorario } from '../../../components/CartaPuntoVenta
 import { Cities } from '../../../components/Cities/Cities';
 import { SalesPoints } from '../../../components/SalesPoints/SalesPoints';
 import { UnrelatedSalesPoints } from '../../../components/UnrelatedSalesPoints/UnrelatedSalesPoints';
+import { makeModal } from '../../../generalHelpers';
 import { ResquestApproval } from '../../../repositories/PresentationCard/PresentationCard';
 import { useCartaPresentacion } from './useCartaPresentacion';
 
@@ -64,17 +65,20 @@ export const CartaPresentacion = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        console.log('Form has: ', formPresentationCard);
 
         const params = formatRequestBody(formPresentationCard);
 
-        console.log('\nParams: ', params);
-
         ResquestApproval({params})
             .then(response => {
-                console.log('Response is: ', response);
-                return response;
+                console.log('Response: ', response);
+
+                const options = {
+                    title: '',
+                    text: '¡Carta de presentación generada correctamente!',
+                    icon: 'success'
+                };
+                
+                return makeModal(options);
             })
             .catch(err => { console.log('Error has: ', err) })
     };

@@ -99,9 +99,9 @@ const saveSurveys = async ({ params, tipoEncuesta }) => {
             (tipoEncuesta === 'riesgoCovid') ? api.saveSurveysHealthCondition :
                 (tipoEncuesta === 'cercoEpidemeologico') ? api.saveSurveysEpidemiologicalFence : ''
     );
-    const response = await (await (url ? postFetch({ url, params }) : {}) || {});
+    const response = (await (await (url ? postFetch({ url, params }) : {}) || {})) || {};
 
-    return response;
+    return response?.data || {};
 };
 
 
