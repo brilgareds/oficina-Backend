@@ -13,13 +13,13 @@ export const CartaPresentacion = () => {
 
     // const [cpPuntoVenta, setCpPuntoVenta] = useState(false);
 
-    const {formPresentationCard, setFormPresentationCard } = useCartaPresentacion();
+    const { formPresentationCard, setFormPresentationCard } = useCartaPresentacion();
     const { typeCard } = formPresentationCard;
 
     const tipoCartas = [
         {
-           id: 'cartaPuntoVenta',
-           title: 'Carta de presentación a punto de venta'
+            id: 'cartaPuntoVenta',
+            title: 'Carta de presentación a punto de venta'
         },
         {
             id: 'cartaPuntoVentaFueraHorario',
@@ -33,23 +33,23 @@ export const CartaPresentacion = () => {
 
     const formatRequestBody = (data) => {
         const {
-            city='',
-            materials=[],
-            checkInTime='',
-            salesPoints=[],
-            checkOutTime='',
-            unrelatedsalesPoints=[]
+            city = '',
+            materials = [],
+            checkInTime = '',
+            salesPoints = [],
+            checkOutTime = '',
+            unrelatedsalesPoints = []
         } = data;
 
         let response = {
             city,
-            salesPoints: salesPoints.map(({value}) => value),
-            unrelatedsalesPoints: unrelatedsalesPoints.map(({value}) => value)
+            salesPoints: salesPoints.map(({ value }) => value),
+            unrelatedsalesPoints: unrelatedsalesPoints.map(({ value }) => value)
         };
 
         if (data.typeCard === 'cartaIngresoMateriales') {
             Object.assign(response, {
-                materials: materials.map(({accion, cantidad, material}) => ({accion, cantidad, material}))
+                materials: materials.map(({ accion, cantidad, material }) => ({ accion, cantidad, material }))
             });
         }
 
@@ -68,7 +68,7 @@ export const CartaPresentacion = () => {
 
         const params = formatRequestBody(formPresentationCard);
 
-        ResquestApproval({params})
+        ResquestApproval({ params })
             .then(response => {
                 console.log('Response: ', response);
 
@@ -77,14 +77,14 @@ export const CartaPresentacion = () => {
                     text: '¡Carta de presentación generada correctamente!',
                     icon: 'success'
                 };
-                
+
                 return makeModal(options);
             })
             .catch(err => { console.log('Error has: ', err) })
     };
 
     const handleChangeTypeCard = (e) => {
-        setFormPresentationCard(old_data => ({ city: old_data?.city || '', materials: old_data?.materials || [],  salesPoints: old_data?.salesPoints || [], unrelatedsalesPoints: old_data?.unrelatedsalesPoints || [], typeCard: e.target.value }));
+        setFormPresentationCard(old_data => ({ city: old_data?.city || '', materials: old_data?.materials || [], salesPoints: old_data?.salesPoints || [], unrelatedsalesPoints: old_data?.unrelatedsalesPoints || [], typeCard: e.target.value }));
     };
 
     const handleCityChange = (newData) => {
@@ -114,15 +114,15 @@ export const CartaPresentacion = () => {
                 <div className="card-body bg-light" style={{ padding: '4rem 3rem' }}>
                     <form onSubmit={handleSubmit}>
                         <div className='offset-1 col-10 mb-4'>
-                            <div className="form-check" style={{paddingLeft: '0', marginBottom: '1rem'}}>
+                            <div className="form-check" style={{ paddingLeft: '0', marginBottom: '1rem' }}>
                                 <label className="form-check-label">Tipo de Carta:</label>
                             </div>{
-                            tipoCartas.map(({id, title}) => (
-                                <div className='form-check' key={id}>
-                                    <input id={id} type='radio' name='carta_presentacion' className='form-check-input' value={id} checked={formPresentationCard?.typeCard === id} onChange={handleChangeTypeCard} />
-                                    <label htmlFor={id} className='form-check-label'>{title}</label>
-                                </div>
-                            ))}
+                                tipoCartas.map(({ id, title }) => (
+                                    <div className='form-check' key={id}>
+                                        <input id={id} type='radio' name='carta_presentacion' className='form-check-input' value={id} checked={formPresentationCard?.typeCard === id} onChange={handleChangeTypeCard} />
+                                        <label htmlFor={id} className='form-check-label'>{title}</label>
+                                    </div>
+                                ))}
                         </div>
 
                         <div className='offset-1 col-10 mt-5'>
@@ -131,9 +131,9 @@ export const CartaPresentacion = () => {
                                 <SalesPoints filter={(formPresentationCard?.city)} setForm={handleSalesPointChange} value={formPresentationCard?.salesPoints || []} />
                                 <UnrelatedSalesPoints filter={(formPresentationCard?.city)} setForm={handleUnrelatedSalesPointChange} value={formPresentationCard?.unrelatedsalesPoints || []} />
                             </div>{
-                            (typeCard === 'cartaPuntoVenta')             ? <CartaPuntoVenta form={formPresentationCard} setForm={setFormPresentationCard} /> :
-                            (typeCard === 'cartaIngresoMateriales')      ? <CartaIngresoMateriales form={formPresentationCard} setForm={setFormPresentationCard} /> : 
-                            (typeCard === 'cartaPuntoVentaFueraHorario') ? <CartaPuntoVentaFueraHorario form={formPresentationCard} setForm={setFormPresentationCard} /> : <></> }
+                                (typeCard === 'cartaPuntoVenta') ? <CartaPuntoVenta form={formPresentationCard} setForm={setFormPresentationCard} /> :
+                                    (typeCard === 'cartaIngresoMateriales') ? <CartaIngresoMateriales form={formPresentationCard} setForm={setFormPresentationCard} /> :
+                                        (typeCard === 'cartaPuntoVentaFueraHorario') ? <CartaPuntoVentaFueraHorario form={formPresentationCard} setForm={setFormPresentationCard} /> : <></>}
                         </div>
 
                         <div className='offset-1 col-10 mt-4 text-end'>
