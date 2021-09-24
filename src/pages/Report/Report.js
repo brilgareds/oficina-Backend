@@ -8,7 +8,7 @@ export const Report = ({showButtonCheckIn, dataReport={}}) => {
     const testId = dataReport?.survey?.ENC_CODIGO;
     const fechaReg = dataReport?.fechaReg || currentDate();
     const nombreEmpresa = dataReport?.logo?.[0]?.EMP_NOMBRE;
-    const user = dataReport.userData;
+    // const user = dataReport.userData;
 
     return (
         <div className='report-container'>

@@ -33,6 +33,7 @@ export const CartaPresentacion = () => {
 
     const formatRequestBody = (data) => {
         const {
+            typeCard= '',
             city='',
             materials=[],
             checkInTime='',
@@ -42,6 +43,7 @@ export const CartaPresentacion = () => {
         } = data;
 
         let response = {
+            typeCard,
             city,
             salesPoints: salesPoints.map(({value}) => value),
             unrelatedsalesPoints: unrelatedsalesPoints.map(({value}) => value)
@@ -70,17 +72,21 @@ export const CartaPresentacion = () => {
 
         ResquestApproval({params})
             .then(response => {
+                if (!response) throw new Error(response);
+
                 console.log('Response: ', response);
 
-                const options = {
-                    title: '',
-                    text: '¡Carta de presentación generada correctamente!',
-                    icon: 'success'
-                };
+                const options = { text: '¡Carta de presentación generada correctamente!', icon: 'success' };
                 
                 return makeModal(options);
             })
-            .catch(err => { console.log('Error has: ', err) })
+            .catch(err => {
+                console.log('Error has: ', err);
+
+                const options = { text: '¡Ocurrio un error al crear la carta!', icon: 'error' };
+                
+                return makeModal(options);
+            })
     };
 
     const handleChangeTypeCard = (e) => {
