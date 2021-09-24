@@ -35,7 +35,7 @@ export const Navbar = ({ menu }) => {
                 <div className="divCerrarSesion text-center" onClick={logOut}>
                     <div className="row">
                         <div className="col-md-12">
-                            <i style={{ color: "#0F4F80", fontSize: "30px" }} class="fas fa-power-off"></i>
+                            <i style={{ color: "#0F4F80", fontSize: "30px" }} className="fas fa-power-off"></i>
                             {/* <img className="iconoCerrarSesion" src="/assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" /> */}
                         </div>
                         <div className="col-md-12">

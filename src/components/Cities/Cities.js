@@ -51,7 +51,7 @@ export const Cities = ({ form, setForm, disabled = false }) => {
             }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [setCities]);
+    }, []);
 
 
     return (
