@@ -1,19 +1,45 @@
 import { useEffect, useState } from 'react';
-import Select from 'react-select';
+import Select, { createFilter } from 'react-select';
 import { getSalesPoints } from '../../repositories/generalInfo';
 import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
+import { Component } from "react";
+import { FixedSizeList as List } from "react-window";
 
-export const UnrelatedSalesPoints = ({filter, setForm, value}) => {
+
+class MenuList extends Component {
+    render() {
+        const height = 35;
+        const { options, children, maxHeight, getValue } = this.props;
+        const [value] = getValue();
+        const initialOffset = options.indexOf(value) * height;
+
+        return (
+            (options.length === 0) ?
+                <></>
+                :
+                <List
+                    height={maxHeight}
+                    itemCount={children.length}
+                    itemSize={height}
+                    initialScrollOffset={initialOffset}
+                >
+                    {({ index, style }) => <div title={children[index].props.data.fullLabel} style={style}>{children[index]}</div>}
+                </List>
+        );
+    }
+}
+
+export const UnrelatedSalesPoints = ({ filter, setForm, value }) => {
 
     const [salesPoints, setSalesPoints] = useState([]);
-    const [salesPoint,  setSalesPoint]  = useState('');
+    const [salesPoint, setSalesPoint] = useState('');
 
     const handleSalesPointUpdate = (e) => {
         setSalesPoint(e || []);
         setForm(e || []);
     };
 
-    useEffect(()=> {
+    useEffect(() => {
 
         if (filter) {
             handleSalesPointUpdate();
@@ -31,7 +57,18 @@ export const UnrelatedSalesPoints = ({filter, setForm, value}) => {
     return (
         <div>
             <label>Punto de venta no relacionado</label>
-            <Select isMulti closeMenuOnSelect={false} styles={ColourStyles} onChange={handleSalesPointUpdate} value={ salesPoint } options={salesPoints} />
+            <Select
+                components={{ MenuList }}
+                captureMenuScroll={false}
+                filterOption={createFilter({ ignoreAccents: false })}
+
+                placeholder={'Seleccione...'} isMulti
+                closeMenuOnSelect={false}
+                styles={ColourStyles}
+                onChange={handleSalesPointUpdate}
+                value={salesPoint}
+                options={salesPoints}
+            />
             <input
                 tabIndex={-1}
                 autoComplete="off"
@@ -41,9 +78,9 @@ export const UnrelatedSalesPoints = ({filter, setForm, value}) => {
                     height: 0,
                     position: "absolute"
                 }}
-                onChange={ ()=>{} }
+                onChange={() => { }}
                 value={salesPoint}
-                // required='required'
+            // required='required'
             />
         </div>
     )
