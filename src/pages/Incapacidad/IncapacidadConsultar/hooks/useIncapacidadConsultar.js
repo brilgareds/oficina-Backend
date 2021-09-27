@@ -142,8 +142,8 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         const columnsTableDocumentos = [
             { title: '#' },
-            { title: 'DOCUMENTO' },
-            { title: 'ARCHIVO' },
+            { title: 'Documento' },
+            { title: 'Archivo' },
         ];
 
         let thHeader = ``;
@@ -270,10 +270,10 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
         }
 
         const columnsTableDocumentos = [
-            { title: 'DOCUMENTO' },
-            { title: 'ESTADO' },
-            { title: 'MOTIVO RECHAZO' },
-            { title: 'ARCHIVO' },
+            { title: 'Documento' },
+            { title: 'Estado' },
+            { title: 'Motivo rechazo' },
+            { title: 'Archivo' },
         ];
 
         let thHeader = ``;

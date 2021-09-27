@@ -31,28 +31,25 @@ export const Rrhh = () => {
             <div className="col-md-12 paddingRRHH text-left mb-3">
                 <Link to={{ pathname: routes.rrhh.subPages.formRrhh.url, params: { typeForm: "estamosParaTi" } }}>
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
-                        {/* <img className="imgbtnRrhh" src="/assets/img/rrhh/icono-estamos-para-ti.svg" alt="icono-estamos-para-ti" /> */}
-                        <i className="bi bi-bookmark-heart"></i> &nbsp;&nbsp;
+                        <i className="fas fa-heart"></i> &nbsp;&nbsp;
                         Estamos para ti
                     </button>
                 </Link>
                 <Link to={{ pathname: routes.rrhh.subPages.formRrhh.url, params: { typeForm: "talkToUs" } }}>
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
-                        {/* <img className="imgbtnRrhh" src="/assets/img/rrhh/icono-talk-to-you.svg" alt="icono-estamos-para-ti" /> */}
-                        <i className="bi bi-chat-left-text"></i> &nbsp;&nbsp;
+                        <i className="fas fa-people-arrows"></i> &nbsp;&nbsp;
                         Talk to us
                     </button> <br />
                 </Link>
                 <Link to={{ pathname: routes.rrhh.subPages.formRrhh.url, params: { typeForm: "SolicitudesRRHH" } }}>
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
-                        {/* <img className="imgbtnRrhh" src="/assets/img/rrhh/icono-solitidues-RRHH.svg" alt="icono-estamos-para-ti" /> */}
-                        <i className="bi bi-file-text"></i> &nbsp;&nbsp;
+                        <i className="fas fa-file-signature"></i> &nbsp;&nbsp;
                         Solicitudes de RRHH
                     </button>
                 </Link>
             </div>
 
-            
+
         </>
 
     )

@@ -31,26 +31,25 @@ export const Desarrollo = () => {
             </div>
 
             <div className="col-md-12 paddingRRHH text-left mb-3">
-                <Link to={{ pathname: '' }} data-bs-target="#modalImagenRedireccion" img-url="img/enconstruccion.jpg" data-bs-toggle="modal">
+                {/* <Link to={{ pathname: '' }} data-bs-target="#modalImagenRedireccion" img-url="img/enconstruccion.jpg" data-bs-toggle="modal">
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <span style={{ marginRight: '0.5rem', fontSize: '1.4rem' }}><i className="fas fa-exclamation-circle"></i></span>
                         Entérate
                     </button>
-                </Link>
+                </Link> */}
 
-                <Link to={{ pathname: '' }} data-bs-target="#modalImagenRedireccion" img-url="img/proteccion.jpg" data-bs-toggle="modal">
+                <Link to={{ pathname: '' }} data-bs-toggle="modal" data-bs-target="#modalImagenRedireccion" img-url="img/proteccion.jpg" img-redireccion="https://www.proteccion.com/universidad?utm_source=GrupoListos&utm_medium=referral&utm_campaign=EmpresaGrupoListos">
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <span style={{ marginRight: '0.5rem', fontSize: '1.4rem' }}><i className="fas fa-user-edit"></i></span>
                         Mejora tu perfil
                     </button>
-                    <br />
                 </Link>
 
                 <Link target='_blank' to={{ pathname: modulos.desarrollo.yaEstasListo }} >
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <span style={{ marginRight: '0.5rem', fontSize: '1.4rem' }}><i className="fas fa-running"></i></span>
                         ¡Ya estas listo!
-                    </button>
+                    </button> <br />
                 </Link>
 
                 <Link target='_blank' to={{ pathname: modulos.desarrollo.novedadesEnRed }}>

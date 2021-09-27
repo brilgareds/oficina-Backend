@@ -32,19 +32,19 @@ export const EpsCajaRadicar = () => {
         dataTables: {
             benefificarios: {
                 headers: [
-                    { title: 'IDENTIFICACION', field: 'identificacion', headerStyle: headerStyles },
-                    { title: 'NOMBRES', field: 'nombres', headerStyle: headerStyles },
-                    { title: 'SEXO', field: 'genero', headerStyle: headerStyles },
-                    { title: 'EDAD', field: 'edad', headerStyle: headerStyles },
-                    { title: 'BENEFICIARIO EPS', field: 'beneficiarioEps', headerStyle: headerStyles },
-                    { title: 'BENEFICIARIO CAJA', field: 'beneficiarioCaja', headerStyle: headerStyles },
+                    { title: 'Identificación', field: 'identificacion', headerStyle: headerStyles },
+                    { title: 'Nombres', field: 'nombres', headerStyle: headerStyles },
+                    { title: 'Sexo', field: 'genero', headerStyle: headerStyles },
+                    { title: 'Edad', field: 'edad', headerStyle: headerStyles },
+                    { title: 'Beneficiario eps', field: 'beneficiarioEps', headerStyle: headerStyles },
+                    { title: 'Beneficiario caja', field: 'beneficiarioCaja', headerStyle: headerStyles },
                 ],
             },
             documentos: {
                 headers: [
                     { title: '#', field: 'numero', headerStyle: headerStyles },
-                    { title: 'DOCUMENTO', field: 'documento', headerStyle: headerStyles },
-                    { title: 'ARCHIVO', field: 'archivo', headerStyle: headerStyles },
+                    { title: 'Documento', field: 'documento', headerStyle: headerStyles },
+                    { title: 'Archivo', field: 'archivo', headerStyle: headerStyles },
                 ],
             },
         },
@@ -102,7 +102,7 @@ export const EpsCajaRadicar = () => {
                                 <input onChange={onChangeInputHandle} value={telefono} id="telefono" name="telefono" className="form-control" placeholder="Teléfono" type="text" />
                             </div>
                             <div className="col-12 col-lg-3 mb-5">
-                                <label className="form-label" htmlFor="correoElectronico">Correo Electronico: </label>
+                                <label className="form-label" htmlFor="correoElectronico">Correo electrónico: </label>
                                 <input onChange={onChangeInputHandle} value={correoElectronico} id="correoElectronico" name="correoElectronico" className="form-control" placeholder="correoElectronico" type="email" />
                             </div>
 
@@ -127,11 +127,11 @@ export const EpsCajaRadicar = () => {
                                 </div>
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo Parentesco: </label>
+                                <label className="form-label" htmlFor="descripcion">Tipo de parentesco: </label>
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} defaultValue={[statetipoParentesco[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo Documento: </label>
+                                <label className="form-label" htmlFor="descripcion">Tipo de documento: </label>
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
@@ -147,7 +147,7 @@ export const EpsCajaRadicar = () => {
                                 <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="correoElectronico">Fecha nacimiento: </label>
+                                <label className="form-label" htmlFor="correoElectronico">Fecha de nacimiento: </label>
                                 {/* <input onChange={onChangeInputHandle} value={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimientos" type="date" /> */}
                                 <input onChange={onChangeInputHandle} defaultValue={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimiento" type="date" />
                             </div>

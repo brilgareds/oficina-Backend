@@ -39,7 +39,7 @@ export const Navbar = ({ menu }) => {
                             {/* <img className="iconoCerrarSesion" src="/assets/img/icono-cerrar-sesion.svg" alt="icono-cerrar-sesion" /> */}
                         </div>
                         <div className="col-md-12">
-                            <span className="spanCerrarSesion nav-link-text">Cerrar sesion</span>
+                            <span className="spanCerrarSesion nav-link-text">Cerrar sesión</span>
                         </div>
                     </div>
                 </div>

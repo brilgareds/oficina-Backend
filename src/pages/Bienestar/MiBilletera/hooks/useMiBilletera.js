@@ -24,7 +24,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
 
     const formatNumber = (num) => {
         num = String(num).replace(/\D/g, "");
-        return num === '' ? num : Number(num).toLocaleString();
+        return num === '' ? num : Number(num).toLocaleString('es-CO');
     }
 
 
@@ -159,11 +159,12 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
     }
 
     const formatearNumeroAPesos = (data) => {
-        return data.toLocaleString("es-ES");
+        return data.toLocaleString("es-CO");
     }
 
     const limpiarFormatoNumero = (numero) => {
-        return Number(numero.replace(/\./g, ''));
+        let tempNum = numero.replace(/\./g, '');
+        return tempNum.replace(',', '');
     }
 
 
@@ -222,7 +223,8 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
         if (
             exprRegNumeros.test(valor) &&
             exprRegSoloLetras.test(Number(gasto)) &&
-            gasto !== ""
+            gasto !== "" &&
+            Number(valor) < Number(params.userDispo)
         ) {
             return true;
         }
