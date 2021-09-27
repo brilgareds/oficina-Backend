@@ -318,7 +318,7 @@ class Salud extends Component{
                 </div>
                 &nbsp;
                 <div className="card">
-                    <img hidden={seePregnancy}  src={fotoW} alt="" />
+                    <img className="card" hidden={seePregnancy}  src={fotoW} alt="" />
                     <div className="card-body">
                         <ul className="nav nav-pills" id="myTab" role="tablist">
                             <li  className="nav-item" role="presentation">
@@ -336,7 +336,7 @@ class Salud extends Component{
                                 <button disabled={estadonav} className="nav-link readONly" id="characteristic-tab" data-bs-toggle="tab" data-bs-target="#characteristic" type="button" role="tab" aria-controls="characteristic" aria-selected="true">Caracter&iacute;sticas f&iacute;sicas y m&aacute;s</button>
                             </li>
                         </ul>
-
+                        <hr/>
                         &nbsp;
                         <div className="tab-content" id="myTabContent">
                             <div className="tab-pane fade show active" id="sick" role="tabpanel" aria-labelledby="sick-tab">
@@ -483,11 +483,11 @@ class Salud extends Component{
                                     <hr></hr>
                                     &nbsp;
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Nombre de su contacto de emergencia</label>
+                                        <label >Nombre de su contacto de emergencia:</label>
                                         <input ref={inp => this.contact = inp} type="text" className="form-control" id="comp-contactEmer" name="comp-contactEmer"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Tel&eacute;fono del contacto de emergencia</label>
+                                        <label >Tel&eacute;fono del contacto de emergencia:</label>
                                         <input ref={inp => this.numbercontact = inp} type="text" className="form-control" id="comp-contacNumber" name="comp-contacNumber"></input>
                                     </div>
                                 </div>
@@ -522,7 +522,7 @@ class Salud extends Component{
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label htmlFor="diag-timeweek">Tiempo de gestaci&oacute;n (SEMANAS)</label>
-                                        <input ref={inp => this.tiempogesta = inp} type="number" className="form-control" id="diag-timeweek" name="diag-timeweek"></input>
+                                        <input ref={inp => this.tiempogesta = inp} type="number" min={1} max={9} className="form-control" id="diag-timeweek" name="diag-timeweek"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label htmlFor="diag-dateApro">&#191;Fecha probable del parto</label>
@@ -533,7 +533,7 @@ class Salud extends Component{
                                         <input ref={inp => this.observa = inp} type="text" className="form-control" id="diag-obser" name="diag-obser"></input>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-4 pb-4">
+                                    {/* <div className="col-sm-12 col-md-4 pb-4">
                                         <label >Resultado de la prueba de embarazo</label>
                                         <label htmlFor="file-upload" className="custom-file-upload">
                                             <i className="text-danger far fa-file-pdf"></i> Subir archivo
@@ -541,6 +541,11 @@ class Salud extends Component{
                                         <input ref={el => this.file = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
 
 
+                                    </div> */}
+
+                                    <div className="mb-3 col-sm-12 col-md-4 pb-4">
+                                        <label htmlFor="file-upload" className="form-label">Resultado de la prueba de embarazo</label>
+                                        <input className="form-control" ref={el => this.file = el} id="file-upload" name="file-upload" type="file" accept="application/pdf"/>
                                     </div>
 
 

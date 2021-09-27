@@ -580,6 +580,7 @@ class Family extends Component{
                                         <button className="nav-link " disabled={estadonav}  id="report-tab" data-bs-toggle="tab" data-bs-target="#report" type="button" role="tab" aria-controls="report" aria-selected="true">Reporte de salud</button>
                                     </li>
                                 </ul>
+                                <hr/>
                                 &nbsp;
                                 <div className="tab-content" id="myTabContent">
                                     <div className="tab-pane fade" id="registers" role="tabpanel" aria-labelledby="registers-tab">
@@ -679,7 +680,7 @@ class Family extends Component{
                                                 </select>
                                             </div>
                                             <div className="col-sm-12 col-md-4 pb-4">
-                                                <label htmlFor="play">&#191;Desea su familiar participe en las actividades:&#63;:<span className="text-danger">*</span></label>
+                                                <label htmlFor="play">&#191;Su familiar participar&aacute; en actividades de la empresa:&#63;:<span className="text-danger">*</span></label>
                                                 <div className=" d-flex justify-content-around">
                                                     <input  type="radio"  value='S' className="btn-check input-hidden inputRequired" name="play" id="play1" ></input>
                                                     <label className="btn btn-outline-primary" htmlFor="play1">SI</label>&nbsp;
@@ -875,11 +876,11 @@ class Family extends Component{
                                         </div>
                                         <div className="row ">
                                             <label className=" d-flex justify-content-around-text bg-transparent removeBorder" >&#191;Su direcci&oacute;n es:&#63;</label>
-                                            <div className=" d-flex justify-content-around pb-4">
-                                                <input readOnly type="text"  className="form-control" id="gene-addressFinal" ref={el => this.inputAddressFinal = el}></input>&nbsp;
-                                                <span className=" d-flex justify-content-around-text bg-transparent removeBorder link-warning"  id="clearAddress" onClick={() => this.clearAddress()} >Borrar direcci&oacute;n</span>
-
+                                            <div className=" input-group mb-3">
+                                                <input readOnly type="text"  className="form-control" id="gene-addressFinal" ref={el => this.inputAddressFinal = el}></input>
+                                                <span className="input-group-text bg-transparent removeBorder colorTrash"  id="clearAddress" onClick={() => this.clearAddress()} ><i className="fas fa-trash-alt"></i></span>
                                             </div>
+
                                         </div>
                         
                                         <div className="row pb-4 flex">

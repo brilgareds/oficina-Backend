@@ -528,6 +528,7 @@ class CV extends Component {
                             <button disabled={estadonav} className="nav-link" id="indu-tab" data-bs-toggle="tab" data-bs-target="#indu" type="button" role="tab" aria-controls="indu" aria-selected="false">Indumentaria</button>
                         </li>
                     </ul>
+                    <hr />
                     &nbsp;
                     <div className="tab-content" id="myTabContent">
                         <div className="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
@@ -720,10 +721,10 @@ class CV extends Component {
                             <div className="row">
                                 <label>&nbsp;</label>
                                 <label htmlFor="gene-addressFinal"  className=" d-flex justify-content-around-text bg-transparent removeBorder" >&#191;Su direcci&oacute;n es&#63;:<span className="text-danger">*</span></label>
-                                    <div className=" d-flex justify-content-around mb-3">
+                                <div className=" input-group mb-3">
                                         
                                     <input readOnly type="text" defaultValue={dirFinal?dirFinal:''} className="form-control inputRequired" name="gene-addressFinal" id="gene-addressFinal" ref={el => this.inputAddressFinal = el}></input>&nbsp;
-                                    <span className=" d-flex justify-content-around-text bg-transparent removeBorder link-warning"  id="clearAddress" onClick={() => this.clearAddress()} >Borrar direcci&oacute;n</span>
+                                    <span className="input-group-text bg-transparent removeBorder colorTrash"  id="clearAddress" onClick={() => this.clearAddress()} ><i className="fas fa-trash-alt"></i></span>
 
                                 </div>
                             </div>

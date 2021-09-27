@@ -25,6 +25,14 @@
     background-color: #816DDD;
   }
 
+  .cv .nav-link{
+    color:#707070;
+  }
+
+  .cv hr{
+    color:#D8E2EF;
+  }
+
   .backGreen{
     background-color: #74E36B;
     color:#ffffff;
@@ -40,9 +48,9 @@
     border:none;
   }
 
-  .cv input[type="file"] {
+  /* .cv input[type="file"] {
     display: none;
-}
+} */
 
   .custom-file-upload {
     border: 1px solid var(--falcon-input-border-color);
@@ -149,3 +157,20 @@
   .text-dangerpdf{
     color: #ED635A ;
   }
+
+  .swal2-icon.swal2-success {
+      border-color: #6AFA46;
+      color: #6AFA46;
+  }
+
+  .swal2-icon.swal2-warning {
+    border-color: #FAB239;
+    color: #FAB239;
+  }
+
+  .swal2-icon.swal2-error {
+    border-color: #FA746B;
+    color: #FA746B;
+  }
+
+  

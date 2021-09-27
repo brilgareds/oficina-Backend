@@ -376,7 +376,7 @@ class DataAdditional extends Component{
                                 <button className="nav-link " disabled={estadonav} id="otros-tab" data-bs-toggle="tab" data-bs-target="#otros" type="button" role="tab" aria-controls="otros" aria-selected="true">Otros</button>
                             </li>
                         </ul>
-
+                        <hr/>
                         &nbsp;
                         <div className="tab-content" id="myTabContent">
                             <div className="tab-pane fade show active" id="recreacion" role="tabpanel" aria-labelledby="recreacion-tab">
@@ -660,7 +660,7 @@ class DataAdditional extends Component{
    
                                     
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Que beneficio le gustar&iacute;a obtener&#63;</label>
+                                        <label>&#191;Que convenio le gustar&iacute;a obtener de la empresa&#63;</label>
                                         <input ref={inp => this.beneficio = inp} className="form-control " type="text" id="acti-savemoney" name="acti-savemoney" ></input>
                                     </div>
 
