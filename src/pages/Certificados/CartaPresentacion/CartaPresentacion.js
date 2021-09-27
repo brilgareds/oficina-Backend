@@ -123,7 +123,7 @@ export const CartaPresentacion = () => {
                     <form onSubmit={handleSubmit}>
                         <div className='offset-1 col-10 mb-4'>
                             <div className="form-check" style={{ paddingLeft: '0', marginBottom: '1rem' }}>
-                                <label className="form-check-label">Tipo de Carta:</label>
+                                <label className="form-check-label">Tipo de carta:</label>
                             </div>{
                                 tipoCartas.map(({ id, title }) => (
                                     <div className='form-check' key={id}>
