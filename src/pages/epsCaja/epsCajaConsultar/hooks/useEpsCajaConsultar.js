@@ -177,10 +177,10 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
 
         const columnsTableDocumentos = [
             { title: '#' },
-            { title: 'MOTIVO RECHAZO' },
-            { title: 'ESTADO' },
-            { title: 'DESCARGAR' },
-            { title: 'ACTUALIZAR' },
+            { title: 'Motivo rechazo' },
+            { title: 'Estado' },
+            { title: 'Descargar' },
+            { title: 'Actualizar' },
         ];
 
         let thHeader = ``;
