@@ -19,9 +19,9 @@ export const MiBilletera = () => {
     } = useMiBilletera(
         {
             columnsDataTable: [
-                { title: 'GASTO', field: 'gasto', headerStyle: headerStyles },
-                { title: 'COSTO', field: 'costo', headerStyle: headerStyles },
-                { title: 'ELIMINAR', field: 'accion', headerStyle: headerStyles },
+                { title: 'Gasto', field: 'gasto', headerStyle: headerStyles },
+                { title: 'Costo', field: 'costo', headerStyle: headerStyles },
+                { title: 'Eliminar', field: 'accion', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             gasto: "",
@@ -67,15 +67,15 @@ export const MiBilletera = () => {
                                 <input onChange={onChangeInputHandle} value={gasto} name="gasto" id="gasto" className="form-control inputsMiBilletera" placeholder="Tipo de gasto" type="text" />
                             </div>
                             <div className="col-12 col-lg-12 mb-4 text-center">
-                                <span className="form-label texto2rio" htmlFor="valorGasto">valor: </span>
+                                <span className="form-label texto2rio" htmlFor="valorGasto">Valor: </span>
                                 <input onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="text" />
                             </div>
 
                             <div className="col-12 col-lg-12 mb-4 text-left">
                                 <span className="textoSalario">SALARIO: ${stateSalarioUsuario}</span>
-                                <hr />
+                                <hr className="hrDividor" />
                                 <span className="texto2rio">Total gastos: ${stateSumaDeGastos}</span>
-                                <hr />
+                                <hr className="hrDividor" />
                                 <span className="texto2rio">Total disponible: ${statetTatalDisponible}</span>
                             </div>
 

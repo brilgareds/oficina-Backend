@@ -21,13 +21,13 @@ export const CardsOficina = () => {
         {
             imgUrl: '/assets/img/sst.jpg',
             nombre: 'SST',
-            copy: 'Como nuestro trabajador entendemos que tienes objetivos que alcanzar, aquí te damos las herramientas para que los consigas.',
+            copy: 'Como nuestro trabajador "entendemos que tienes objetivos que alcanzar", aquí te damos las herramientas para que los consigas.',
             redirecTo: routes.sst.url,
         },
         {
             imgUrl: '/assets/img/bienestar.jpg',
             nombre: 'Bienestar',
-            copy: 'La seguridad y salud en trabajo son de vital importancia para nosotros! ingresa y llena los reportes COVID.',
+            copy: 'La seguridad y salud en trabajo son de vital importancia para nosotros. Ingresa y llena los reportes COVID.',
             redirecTo: routes.bienestar.url,
         },
     ];

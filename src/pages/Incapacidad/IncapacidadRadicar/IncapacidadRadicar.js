@@ -35,8 +35,8 @@ export const IncapacidadRadicar = () => {
             fechaFin: getDateToday(),
             columnsDataTable: [
                 { title: '#', field: 'numero', headerStyle: headerStyles },
-                { title: 'DOCUMENTO', field: 'documento', headerStyle: headerStyles },
-                { title: 'ARCHIVO', field: 'archivo', headerStyle: headerStyles },
+                { title: 'Documento', field: 'documento', headerStyle: headerStyles },
+                { title: 'Archivo', field: 'archivo', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             files: [],
@@ -56,7 +56,7 @@ export const IncapacidadRadicar = () => {
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Radicar Incapacidades</h3>
+                            <h3>Radicar incapacidades</h3>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@ export const IncapacidadRadicar = () => {
                                 <input onChange={onChangeInputHandle} value={telefono} id="telefono" name="telefono" className="form-control" placeholder="Teléfono" type="text" />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="correoElectronico">Correo Electronico: </label>
+                                <label className="form-label" htmlFor="correoElectronico">Correo electrónico: </label>
                                 <input onChange={onChangeInputHandle} value={correoElectronico} id="correoElectronico" name="correoElectronico" className="form-control" placeholder="correoElectronico" type="email" />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
@@ -96,14 +96,14 @@ export const IncapacidadRadicar = () => {
                                 <input onClick={onCheckedOtherEntity} id="otraEntidad" name="otraEntidad" className="form-check-input" type="checkbox" />
                             </div>
                             <div className="col-12 col-lg-3 mb-5">
-                                <label className="form-label" htmlFor="descripcion">Otra Entidad: </label>
+                                <label className="form-label" htmlFor="descripcion">Otra entidad: </label>
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'otraEntidad', value: valueSe })} options={optionsOtherEntity} defaultValue={[optionsOtherEntity[0]]} placeholder={'Seleccione...'} isDisabled={stateOtraEntidadCheck} styles={customStyles} />
                             </div>
                             <div className="card-header">
                                 <h5 className="card-title">Datos de la incapacidad</h5>
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo incapacidad: </label>
+                                <label className="form-label" htmlFor="descripcion">Tipo de incapacidad: </label>
                                 <Select onChange={value => { onChangeTipoIncapacidadHandle({ value }); onChangeSelectHandle({ nameSelect: 'tipoIncapacidad', value }); }} options={optionsTipoIncapacidad} defaultValue={[optionsTipoIncapacidad[0]]} placeholder={"Selecciona..."} />
                             </div>
                             <div className="col-12 col-lg-4">

@@ -137,21 +137,33 @@ const currentDate = (obj = {}) => {
 };
 
 
-const makeModal = ({title='', text='', html='', icon='success', showCancelButton=false, cancelButtonText='Cancelar', confirmButtonText='Confirmar', successAnswerFunction=()=>{}, cancelAnswerFunction=()=>{}}) => (
+const makeModal = ({
+    title = '',
+    text = '',
+    html = '',
+    icon = 'success',
+    showCancelButton = false,
+    showConfirmButton = true,
+    cancelButtonText = 'Cancelar',
+    confirmButtonText = 'Confirmar',
+    successAnswerFunction = () => { },
+    cancelAnswerFunction = () => { },
+}) => (
     Swal.fire({
-       title,
-       text,
-       html,
-       icon,
-       showCancelButton,
-       cancelButtonText,
-       confirmButtonText,
-       cancelButtonColor: '#A6A6A6',
-       confirmButtonColor: '#1783EE'
-   }).then((result) => {
-    if (result.isConfirmed) successAnswerFunction();
-    else cancelAnswerFunction();
-  }).catch(err => { console.warning(err); cancelAnswerFunction(); })
+        title,
+        text,
+        html,
+        icon,
+        showCancelButton,
+        showConfirmButton,
+        cancelButtonText,
+        confirmButtonText,
+        cancelButtonColor: '#A6A6A6',
+        confirmButtonColor: '#1783EE'
+    }).then((result) => {
+        if (result.isConfirmed) successAnswerFunction();
+        else cancelAnswerFunction();
+    }).catch(err => { console.warning(err); cancelAnswerFunction(); })
 );
 
 
@@ -273,9 +285,9 @@ const capitalizarPalabras = (val) => {
 
             const positionToChange = parseFloat(v.search(/[a-z]/i));
 
-            const firstPart  = v.substring(0, positionToChange);
-            const secondPart = v.substring(positionToChange, positionToChange+1).toUpperCase();
-            const thirdPart  = v.substring(positionToChange+1);
+            const firstPart = v.substring(0, positionToChange);
+            const secondPart = v.substring(positionToChange, positionToChange + 1).toUpperCase();
+            const thirdPart = v.substring(positionToChange + 1);
 
             return firstPart + secondPart + thirdPart;
         })
@@ -285,7 +297,13 @@ const capitalizarPalabras = (val) => {
 const upperFirtLetterText = (text = '') => {
     if (typeof text !== 'string' || !text.length) return text;
 
-    return text[0].toUpperCase() + text.slice(1).toLowerCase();
+    const positionToChange = parseFloat(text.search(/[a-z]/i));
+
+    const firstPart = text.substring(0, positionToChange).toLowerCase();
+    const secondPart = text.substring(positionToChange, positionToChange + 1).toUpperCase();
+    const thirdPart = text.substring(positionToChange + 1).toLowerCase();
+
+    return firstPart + secondPart + thirdPart;
 };
 
 const getFullUser = () => {

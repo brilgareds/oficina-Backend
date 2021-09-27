@@ -15,14 +15,14 @@ export const EpsCajaConsultar = () => {
     } = useEpsCajaConsultar(
         {
             columnsDataTable: [
-                { title: 'CONSECUTIVO', field: 'consecutivo', headerStyle: headerStyles },
-                { title: 'CEDULA INCAPACIDAD', field: 'cedulaIncapacidad', headerStyle: headerStyles },
-                { title: 'NOMBRE', field: 'nombre', headerStyle: headerStyles },
-                { title: 'PARENTESCO', field: 'parentesco', headerStyle: headerStyles },
-                { title: 'EPS', field: 'eps', headerStyle: headerStyles },
-                { title: 'CAJA COMPENSACION', field: 'cajaCompensacion', headerStyle: headerStyles },
-                { title: 'ESTADO', field: 'estado', headerStyle: headerStyles },
-                { title: 'DOCUMENTOS', field: 'documentos', headerStyle: headerStyles },
+                { title: 'Consecutivo', field: 'consecutivo', headerStyle: headerStyles },
+                { title: 'Cédula incapacidad', field: 'cedulaIncapacidad', headerStyle: headerStyles },
+                { title: 'Nombre', field: 'nombre', headerStyle: headerStyles },
+                { title: 'Parentesco', field: 'parentesco', headerStyle: headerStyles },
+                { title: 'Eps', field: 'eps', headerStyle: headerStyles },
+                { title: 'Caja compensación', field: 'cajaCompensacion', headerStyle: headerStyles },
+                { title: 'Estado', field: 'estado', headerStyle: headerStyles },
+                { title: 'Documentos', field: 'documentos', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             files: [],
@@ -41,7 +41,7 @@ export const EpsCajaConsultar = () => {
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Consulta de solicitud Beneficiarios</h3>
+                            <h3>Consulta de solicitud del beneficiario</h3>
                         </div>
                     </div>
                 </div>
