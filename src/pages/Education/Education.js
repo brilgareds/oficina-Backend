@@ -476,13 +476,19 @@ render(){
                                     <label htmlFor="edu-average">Promedio:</label>
                                     <input type="text" readOnly  className="form-control" ref={input => this.campo9 = input}  id="edu-average" name="edu-average"></input>
                                 </div>
-                                <div className="col-sm-12 col-md-4 pb-4 addinputFile">
+                                <div className="mb-3 col-sm-12 col-md-4 pb-4">
+                                    <label htmlFor="file-upload" className="form-label">Certificado de estudio (PDF):</label>
+                                    <input className="form-control" ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file" accept="application/pdf"/>
+                                </div>
+
+
+                                {/* <div className="col-sm-12 col-md-4 pb-4 addinputFile">
                                     <label htmlFor="">Certificado de estudio (PDF):</label>
                                     <label htmlFor="file-upload" className="custom-file-upload">
                                         Subir archivo
                                     </label>
                                     <input ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
-                                </div> 
+                                </div>  */}
                             </div>
                             <div className="row pb-4">
                                 <p></p>
