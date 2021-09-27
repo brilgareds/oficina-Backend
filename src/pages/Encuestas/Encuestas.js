@@ -53,7 +53,6 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
                                             { encuestas.map(({ COD_EC, EC_NOMBRE }) => <Tab key={COD_EC}>{EC_NOMBRE}</Tab>) }
                                         </TabList>
                                         <hr/>
-                                        <span>Maximo total de preguntas: </span><br/><br/>
                                         <div style={{ paddingTop: '2rem' }}>{
                                             encuestas.map(encuesta => {
                                                 const key = encuesta.COD_EC;
