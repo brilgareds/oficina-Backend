@@ -21,7 +21,7 @@ export const CardsOficina = () => {
         {
             imgUrl: '/assets/img/sst.jpg',
             nombre: 'SST',
-            copy: 'Como nuestro trabajador "entendemos que tienes objetivos que alcanzar", aquí te damos las herramientas para que los consigas.',
+            copy: 'Entendemos que tienes objetivos que alcanzar, aquí te damos las herramientas para que los consigas.',
             redirecTo: routes.sst.url,
         },
         {
