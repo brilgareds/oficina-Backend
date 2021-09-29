@@ -129,7 +129,7 @@ export const EpsCajaRadicar = () => {
                                 </div>
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo de parentesco: </label>
+                                <label className="form-label" htmlFor="descripcion">Tipo de parentesco: <AsteriskRequired /> </label>
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} value={formValue?.tipoParentesco} placeholder={'Seleccione...'} styles={stylesSelects} />
                                 <input
                                     tabIndex={-1}
@@ -141,7 +141,7 @@ export const EpsCajaRadicar = () => {
                                         position: "absolute"
                                     }}
                                     onChange={ ()=>{} }
-                                    value={formValue?.tipoParentesco?.value}
+                                    value={formValue?.tipoParentesco}
                                     required='required'
                                 />
                             </div>
@@ -150,7 +150,7 @@ export const EpsCajaRadicar = () => {
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: </label>
+                                <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: <AsteriskRequired /> </label>
                                 <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" min="1" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
