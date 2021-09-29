@@ -263,7 +263,7 @@ const advertenciaFormularioVacio = () => {
                 <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">
                     ◉ Los campos no deben estar vacios <br/>
                     ◉ No se permiten carácteres especiales Eje: !"#$%&/() <br/>
-                    ◉ Debes seleccionar almenos una opción de los campos seleccionables <br/>
+                    ◉ Recuerda que los campos marcados con asteristo son obligatorios <br/>
                 </div>
             </div>
              <br/>

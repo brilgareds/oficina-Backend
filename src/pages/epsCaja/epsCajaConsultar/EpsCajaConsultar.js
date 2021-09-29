@@ -7,7 +7,7 @@ export const EpsCajaConsultar = () => {
 
 
     const dataUser = JSON.parse(localStorage.getItem('d_u'));
-    const headerStyles = { backgroundColor: '#EDF2F9', color: '#344050', zIndex: 0, };
+    const headerStyles = { backgroundColor: '#EDF2F9', color: '#344050', zIndex: 0, textAlign: "center" };
 
     const {
         formValue,
@@ -15,7 +15,7 @@ export const EpsCajaConsultar = () => {
     } = useEpsCajaConsultar(
         {
             columnsDataTable: [
-                { title: 'Consecutivo', field: 'consecutivo', headerStyle: headerStyles },
+                { title: 'Número radicado', field: 'consecutivo', headerStyle: headerStyles },
                 { title: 'Documento identidad', field: 'cedulaIncapacidad', headerStyle: headerStyles },
                 { title: 'Nombre', field: 'nombre', headerStyle: headerStyles },
                 { title: 'Parentesco', field: 'parentesco', headerStyle: headerStyles },
@@ -41,7 +41,7 @@ export const EpsCajaConsultar = () => {
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Consulta de solicitud del beneficiario</h3>
+                            <h3>Consulta solicitudes inclusión de beneficiarios</h3>
                         </div>
                     </div>
                 </div>

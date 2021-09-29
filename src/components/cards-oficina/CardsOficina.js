@@ -9,25 +9,25 @@ export const CardsOficina = () => {
         {
             imgUrl: '/assets/img/rrhh.jpg',
             nombre: 'RRHH',
-            copy: 'Aquí encontrarás acompañamiento en lo que necesites para tu bienestar integral como ser humano.',
+            copy: '¡Estamos para ti! Encuentra en este espacio el acompañamiento para tu bienestar integral.',
             redirecTo: routes.rrhh.url,
         },
         {
             imgUrl: '/assets/img/desarrollo.jpg',
             nombre: 'Desarrollo',
-            copy: 'Organiza y gestiona lo que necesitas para tu desarrollo como nuestro trabajador.',
+            copy: 'Actualízate y capacítate para llevar tus conocimientos a otro nivel.',
             redirecTo: routes.desarrollo.url,
         },
         {
             imgUrl: '/assets/img/sst.jpg',
             nombre: 'SST',
-            copy: 'Entendemos que tienes objetivos que alcanzar, aquí te damos las herramientas para que los consigas.',
+            copy: 'Queremos que seas un talento seguro, es por esto que, encontrarás en este espacio las herramientas para lograrlo.',
             redirecTo: routes.sst.url,
         },
         {
             imgUrl: '/assets/img/bienestar.jpg',
             nombre: 'Bienestar',
-            copy: 'La seguridad y salud en trabajo son de vital importancia para nosotros. Ingresa y llena los reportes COVID.',
+            copy: 'Nos interesa el bienestar integral de nuestros trabajadores, ingresa aquí para conocer todos tus beneficios.',
             redirecTo: routes.bienestar.url,
         },
     ];

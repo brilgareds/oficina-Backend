@@ -3,6 +3,7 @@ import { DataTabla } from '../../../components/DataTable/DataTabla';
 import { currentDate, getFullNameUser } from '../../../generalHelpers';
 import { useEpsCajaRadicar } from './hooks/useEpsCajaRadicar';
 import './epsCajaRadicar.css';
+import { AsteriskRequired } from '../../../components/AsteriskRequired/AsteriskRequired';
 
 export const EpsCajaRadicar = () => {
 
@@ -70,7 +71,7 @@ export const EpsCajaRadicar = () => {
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Radicación de beneficiarios</h3>
+                            <h3>Radicación de solicitud inclusión de beneficiarios</h3>
                         </div>
                     </div>
                 </div>
@@ -91,19 +92,19 @@ export const EpsCajaRadicar = () => {
                                 <h5 className="card-title">Datos del colaborador</h5>
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="cedula">Cédula: </label>
+                                <label className="form-label" htmlFor="cedula">Cédula:  <AsteriskRequired />  </label>
                                 <input onChange={onChangeInputHandle} value={cedula} id="cedula" name="cedula" className="form-control" placeholder="Cédula" type="text" disabled />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="nombreUsuario">Nombre: </label>
+                                <label className="form-label" htmlFor="nombreUsuario">Nombre:  <AsteriskRequired />  </label>
                                 <input onChange={onChangeInputHandle} value={nombreUsuario} id="nombreUsuario" name="nombreUsuario" className="form-control" placeholder="Nombre usuario" type="text" disabled />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="telefono">Teléfono: </label>
+                                <label className="form-label" htmlFor="telefono">Teléfono:  <AsteriskRequired />  </label>
                                 <input onChange={onChangeInputHandle} value={telefono} id="telefono" name="telefono" className="form-control" placeholder="Teléfono" type="text" />
                             </div>
                             <div className="col-12 col-lg-3 mb-5">
-                                <label className="form-label" htmlFor="correoElectronico">Correo electrónico: </label>
+                                <label className="form-label" htmlFor="correoElectronico">Correo electrónico:  <AsteriskRequired />  </label>
                                 <input onChange={onChangeInputHandle} value={correoElectronico} id="correoElectronico" name="correoElectronico" className="form-control" placeholder="correoElectronico" type="email" />
                             </div>
 
@@ -114,12 +115,12 @@ export const EpsCajaRadicar = () => {
 
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="OtroMedioRespuesta">
-                                    Beneficiario para: &nbsp;&nbsp;
+                                    Beneficiario para: <AsteriskRequired /> &nbsp;&nbsp; 
                                 </label>
                                 <div className="row">
                                     <div className="col-md-6 text-right">
                                         <input onChange={onClickButtonRadioHandle} data-target="eps" className="form-check-input inputRadioCajaRadicar" id="epsBeneficiario" type="radio" name="BeneficiarioPara" />
-                                        <label data-target="epsBeneficiario" className="form-check-label" htmlFor="epsBeneficiario">EPS</label>
+                                        <label data-target="epsBeneficiario" className="form-check-label" htmlFor="epsBeneficiario">Eps</label>
                                     </div>
                                     <div className="col-md-6">
                                         <input onChange={onClickButtonRadioHandle} data-target="caja" className="form-check-input inputRadioCajaRadicar" id="cajaBeneficiario" type="radio" name="BeneficiarioPara" />
@@ -145,23 +146,23 @@ export const EpsCajaRadicar = () => {
                                 />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo de documento: </label>
-                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} required/>
+                                <label className="form-label" htmlFor="descripcion">Tipo de documento: <AsteriskRequired /> </label>
+                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: </label>
                                 <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" min="1" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="nombreBeneficiario">Nombre: </label>
-                                <input onChange={onChangeInputHandle} value={nombreBeneficiario} id="nombreBeneficiario" name="nombreBeneficiario" className="form-control" placeholder="Nombre beneficiario" type="text" required />
+                                <label className="form-label" htmlFor="nombreBeneficiario">Nombre: <AsteriskRequired /> </label>
+                                <input onChange={onChangeInputHandle} value={nombreBeneficiario} id="nombreBeneficiario" name="nombreBeneficiario" className="form-control" placeholder="Nombre beneficiario" type="text" />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="apellidoBeneficiario">Apellido: </label>
-                                <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" required />
+                                <label className="form-label" htmlFor="apellidoBeneficiario">Apellido: <AsteriskRequired /> </label>
+                                <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="correoElectronico">Fecha de nacimiento: </label>
+                                <label className="form-label" htmlFor="correoElectronico">Fecha de nacimiento: <AsteriskRequired /> </label>
                                 {/* <input onChange={onChangeInputHandle} value={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimientos" type="date" /> */}
                                 <input onChange={onChangeInputHandle} value={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimiento" type="date" max={today} required/>
                             </div>

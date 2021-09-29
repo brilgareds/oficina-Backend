@@ -73,7 +73,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                                 <img
                                     className="imgDeleteGasto"
                                     alt="trash-fill-orange"
-                                    src="/assets/img/actualizar-flecha.png"
+                                    src="/assets/img/fa-file-alt.png"
                                     value={String(element.BENEF_CODIGO)}
                                     onClick={event => { onClickActualizarIncapacidad(element.BENEF_CODIGO) }}
                                 />,

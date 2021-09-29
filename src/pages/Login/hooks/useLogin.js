@@ -84,8 +84,6 @@ export const useLogin = (formInitialState = {}) => {
 
                 if (userInfo?.usuarioInactivoConVariosContratos) {
 
-                    console.log(userInfo);
-
                     let contratosOp = `<option value="null" selected disabled>SELECCIONE...</option>`;
                     userInfo.contratos.forEach((contrato, key) => {
                         contratosOp += `<option value="${key}">Contrato: #${contrato.NUMERO_CONTRATO} - ${contrato.FECHA_INGRESO} - ${contrato.FECHA_VENCIMIENTO} </option>`;
@@ -138,7 +136,7 @@ export const useLogin = (formInitialState = {}) => {
                     html: `
                     <div className="row">
                         <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                            Si eres un contratistas por favor ingresa por las opciones habilitadas en pantalla
+                            Si eres un personaje externo puedes ingresa por las opciones habilitadas en pantalla
                         </div>
                     </div>
                     <br/>
@@ -229,11 +227,13 @@ export const useLogin = (formInitialState = {}) => {
 
         Swal.fire({
             width: '800px',
-            title: '¡Ingreso Externo¡',
+            title: 'Personaje externo',
             html: `
                     <div class="row" style="text-align: left; margin: 10px;">
                         <div class="col-12 col-lg-12 mb-3 text-center">
-                            <span style="font-weight: 600;font-size: 20px;">Por favor ingresa los siguientes datos para ingresar al sistema</span>
+                            <span style="font-weight: 600;font-size: 20px;">
+                                Ingresa los siguientes datos para acceder al sistema.
+                            </span>
                         </div>
 
                         <div class="col-12 col-lg-6">
@@ -259,7 +259,7 @@ export const useLogin = (formInitialState = {}) => {
                         </div>
 
                         <div class="col-12 col-lg-6">
-                            <label class="form-label" htmlFor="genero">Genero:</label>
+                            <label class="form-label" htmlFor="genero">Sexo:</label>
                             <select id="genero" name="genero" class="form-control">
                                 <option value="null" selected disabled>SELECCIONE...</option>
                                 <option value="F">FEMENINO</option>
@@ -355,24 +355,6 @@ export const useLogin = (formInitialState = {}) => {
 
         });
     }
-
-
-    var el = document.getElementById('btnEnviarModalContratistas');
-    if (el) {
-        el.addEventListener('click', () => {
-            console.log("btnEnviarModalContratistas", "sisas click aqui");
-
-        }, false);
-    }
-
-    // let btnEnviarModalContratistas = document.getElementById('btnEnviarModalContratistas');
-
-    // if (btnEnviarModalContratistas) {
-
-    //     btnEnviarModalContratistas.addEventListener('click', () => {
-    //     });
-    // }
-
 
     const validarInfoContratista = (data) => {
 

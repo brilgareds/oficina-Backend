@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { api } from "../../../../environments/environments";
@@ -13,7 +13,6 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
     const [stateSalarioUsuario, setStateSalarioUsuario] = useState(formInitialState.salarioUsuario);
     const [stateSumaDeGastos, setStateSumaDeGastos] = useState(formInitialState.sumaDeGastos);
     const [statetTatalDisponible, setStatetTatalDisponible] = useState(formInitialState.tatalDisponible);
-    const [stateLoadingTable, setStateLoadingTable] = useState(formInitialState.loadingTable);
 
     const onChangeInputHandle = ({ target }) => {
         setStateForm({
@@ -31,86 +30,76 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
     useEffect(() => {
         if (formValue.loadingPage === true) {
             formValue.loadingPage = false;
-            setStateLoadingTable(true);
+            // setStateLoadingTable(true);
+            cargarDatosGastosTable();
             document.getElementById('root').className = 'mi-billetera';
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [tbodyTest, settbodyTest] = useState([]);
+    const cargarDatosGastosTable = () => {
 
-    const [rowsTable, setRowsTable] = useState(formValue.rowsDataTable);
-    useEffect(() => {
+        overlay(true);
+        settbodyTest([]);
+        let sumaDeGastos = 0;
+        try {
+            postFetch({
+                url: api.getConsultarDatosUsuarioBilletera,
+                params: {
+                    cedula: '1144211277',
+                }
+            })
+                .then(({ dataUsuario, gastosUsuario }) => {
 
-        const source = axios.CancelToken.source();
+                    overlay(false);
 
-        if (stateLoadingTable === true) {
-            overlay(true);
+                    setStateSalarioUsuario(formatearNumeroAPesos(dataUsuario.SALARIO));
 
-            let sumaDeGastos = 0;
+                    gastosUsuario.forEach((element, key) => {
 
-            try {
-
-                postFetch({
-                    url: api.getConsultarDatosUsuarioBilletera,
-                    params: {
-                        cedula: dataUser.cedula,
-                        cancelToken: source.token,
-                    }
-                })
-                    .then(({ dataUsuario, gastosUsuario }) => {
-
-                        let rowsDTable = [];
-                        setStateLoadingTable(false);
-
-                        setStateSalarioUsuario(formatearNumeroAPesos(dataUsuario.SALARIO));
-
-                        gastosUsuario.forEach((element, key) => {
-
-                            sumaDeGastos += Number(limpiarCadenaValores(element.GAST_VALOR));
-
-                            rowsDTable.push({
-                                gasto: element.GAST_NOMBRE,
-                                costo: "$ " + formatNumber(element.GAST_VALOR),
-                                accion:
-                                    <img
-                                        className="imgDeleteGasto"
-                                        alt="trash-fill-orange"
-                                        src="/assets/img/billetera/trash-fill-orange.png"
-                                        onClick={
-                                            () => {
-                                                onClickEliminarGasto({
-                                                    gastoId: element.GAST_CODIGO,
-                                                    billCod: element.BILL_CODIGO[0]
-                                                })
+                        settbodyTest(oldValue => {
+                            return [
+                                ...oldValue,
+                                <tr>
+                                    <td>{element.GAST_NOMBRE}</td>
+                                    <td>{formatNumber(element.GAST_VALOR)}</td>
+                                    <td>
+                                        <img
+                                            className="imgDeleteGasto"
+                                            alt="trash-fill-orange"
+                                            src="/assets/img/billetera/trash-fill-orange.png"
+                                            onClick={
+                                                () => {
+                                                    onClickEliminarGasto({
+                                                        gastoId: element.GAST_CODIGO,
+                                                        billCod: element.BILL_CODIGO[0]
+                                                    })
+                                                }
                                             }
-                                        }
-                                    />,
-                            });
+                                        />
+                                    </td>
+                                </tr>
+                            ]
                         });
 
-                        overlay(false);
-                        setRowsTable(rowsDTable);
-                        setStateSumaDeGastos(formatearNumeroAPesos(sumaDeGastos));
-                        setStatetTatalDisponible(formatearNumeroAPesos(dataUsuario.SALARIO - sumaDeGastos));
-                        formValue.billeteraNueva = (gastosUsuario.length !== 0) ? false : true;
-                        setStateForm({ ...formValue, dataUserGastos: { dataUsuario, gastosUsuario } });
+                        sumaDeGastos += Number(limpiarCadenaValores(element.GAST_VALOR));
 
                     });
-            } catch (error) {
-                if (axios.isCancel(error)) {
-                } else {
-                    throw error
-                }
-            }
+
+                    setStateSumaDeGastos(formatearNumeroAPesos(sumaDeGastos));
+                    setStatetTatalDisponible(formatearNumeroAPesos(dataUsuario.SALARIO - sumaDeGastos));
+                    formValue.billeteraNueva = (gastosUsuario.length !== 0) ? false : true;
+                    setStateForm({ ...formValue, dataUserGastos: { dataUsuario, gastosUsuario } });
+                    overlay(false);
+
+                });
+        } catch (error) {
+
         }
 
 
-        return () => {
-            source.cancel();
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [stateLoadingTable]);
+    }
 
 
     const onClickEliminarGasto = ({ gastoId, billCod }) => {
@@ -135,7 +124,7 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                     cancelButtonColor: "#A6A6A6",
                     showConfirmButton: false,
                 }).then(() => {
-                    setStateLoadingTable(true);
+                    cargarDatosGastosTable();
                 });
 
             }).catch(() => {
@@ -185,7 +174,6 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
             userTotalGas: (formValue.billeteraNueva) ? Number(formValue.valorGasto) : Number(stateSumaDeGastos.replace(/\./g, "")) + Number(formValue.valorGasto),
         };
 
-        console.log("params", params);
 
         if (!validarInformacionFormulario(params)) {
             advertenciaFormularioVacio();
@@ -205,10 +193,9 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
                         cancelButtonColor: "#A6A6A6",
                         showConfirmButton: false,
                     }).then(() => {
-                        setStateLoadingTable(true);
+                        cargarDatosGastosTable();
                         formValue.gasto = "";
                         formValue.valorGasto = "";
-                        console.log("formValue", formValue);
 
                     });
                 });
@@ -234,10 +221,10 @@ export const useMiBilletera = (formInitialState = {}, dataUser) => {
 
     return ({
         formValue,
-        rowsTable,
         stateSalarioUsuario,
         stateSumaDeGastos,
         statetTatalDisponible,
+        tbodyTest,
         onChangeInputHandle,
         onClickGuardar,
     });
