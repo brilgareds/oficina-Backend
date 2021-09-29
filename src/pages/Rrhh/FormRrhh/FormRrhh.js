@@ -4,6 +4,7 @@ import { useFormRrhh } from './hooks/useForm.js';
 import { routes } from '../../../environments/environments.ts';
 import Select from 'react-select';
 import './formRrhh.css';
+import { AsteriskRequired } from '../../../components/AsteriskRequired/AsteriskRequired.js';
 
 
 export const FormRrhh = (props) => {
@@ -55,16 +56,16 @@ export const FormRrhh = (props) => {
                                             (stateTitle !== 'Talk to us')
                                             &&
                                             <div className="col-12 col-lg-4 mb-3">
-                                                <label className="form-label" htmlFor="descripcion">Categoría: </label>
+                                                <label className="form-label" htmlFor="descripcion">Categoría: <AsteriskRequired /> </label>
                                                 <Select onChange={value => onChangeSelectHandle({ value })} options={optionsCategory} defaultValue={[optionsCategory[0]]} placeholder={"Selecciona..."} />
                                             </div>
                                         }
                                         <div className="col-12 col-lg-8 mb-3">
-                                            <label className="form-label" htmlFor="descripcion">Descripción: </label>
+                                            <label className="form-label" htmlFor="descripcion">Descripción:  <AsteriskRequired />  </label>
                                             <textarea onChange={onChangeInputHandle} value={descripcion} id="descripcion" name="descripcion" className="form-control" placeholder="Descripción" maxLength="990" ></textarea>
                                         </div>
                                         <div className="col-12 col-lg-4 mb-3">
-                                            <label className="form-label" htmlFor="correoEnvio">Correo envío respuesta: </label>
+                                            <label className="form-label" htmlFor="correoEnvio">Correo envío respuesta:  <AsteriskRequired />  </label>
                                             <input onChange={onChangeInputHandle} value={correoEnvioRespuesta} id="correoEnvioRespuesta" name="correoEnvioRespuesta" className="form-control" placeholder="Correo Envío Respuesta" type="email" />
                                         </div>
                                         <div className="col-12 col-lg-4 mb-3">
@@ -84,7 +85,7 @@ export const FormRrhh = (props) => {
                                             </div>
                                         </div>
                                         <div className="col-12 col-lg-4 mb-3" id="divNumeroTelefonico">
-                                            <label className="form-label" htmlFor="numeroTelefonico">Numero Teléfonico: </label>
+                                            <label className="form-label" htmlFor="numeroTelefonico">Numero Teléfonico:  <AsteriskRequired />  </label>
                                             <input onChange={onChangeInputHandle} value={numeroTelefonico} id="numeroTelefonico" name="numeroTelefonico" className="form-control" placeholder="Numero Teléfonico" type="number" />
                                         </div>
                                         <div className="col-12 col-lg-12 mb-3">

@@ -178,7 +178,7 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                                 <input
                                     onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
                                     key={key}
-                                    id={`file_${numberRow}`} 
+                                    id={`file_${numberRow}`}
                                     name={`file_${numberRow}`}
                                     className="form-control"
                                     type="file"
@@ -287,8 +287,6 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
             const dataForm = new FormData();
             dataForm.append("allData", JSON.stringify(allData));
 
-            console.log("allData", allData);
-
             filesState.forEach(file => {
                 dataForm.append("file", file.fileInfo);
                 dataForm.append("filesNames", file.tipoDocumento);
@@ -337,7 +335,8 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
             exprRegNumeros.test(tipoDocumento) &&
             exprRegNumeros.test(cedulaBeneficiario) &&
             exprRegSoloLetras.test(nombreBeneficiario) &&
-            exprRegSoloLetras.test(apellidoBeneficiario)
+            exprRegSoloLetras.test(apellidoBeneficiario) &&
+            filesState.length !== 0
         ) {
             return true;
         }

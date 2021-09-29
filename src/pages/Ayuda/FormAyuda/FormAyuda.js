@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { routes } from '../../../environments/environments.ts';
 import './formAyuda.css';
 import { useAyuda } from './hooks/useAyuda';
+import { AsteriskRequired } from '../../../components/AsteriskRequired/AsteriskRequired';
 
 export const FormAyuda = (props) => {
 
@@ -54,17 +55,17 @@ export const FormAyuda = (props) => {
                                             (stateTitle === 'Solicitud')
                                             &&
                                             <div className="col-12 col-lg-4 mb-3">
-                                                <label className="form-label" htmlFor="descripcion">Categoria: </label>
+                                                <label className="form-label" htmlFor="descripcion">Categoria: <AsteriskRequired />  </label>
                                                 <Select onChange={value => onChangeSelectHandle({ value })} options={optionsCategory} defaultValue={[optionsCategory[0]]} placeholder={"Selecciona..."} />
                                             </div>
                                         }
 
                                         <div className="col-12 col-lg-8 mb-3">
-                                            <label className="form-label" htmlFor="descripcion">Descripción: </label>
+                                            <label className="form-label" htmlFor="descripcion">Descripción: </label> <AsteriskRequired />
                                             <textarea onChange={onChangeInputHandle} value={descripcion} id="descripcion" name="descripcion" className="form-control" placeholder="Descripción" maxLength="990" ></textarea>
                                         </div>
                                         <div className="col-12 col-lg-4 mb-3">
-                                            <label className="form-label" htmlFor="correoEnvio">Correo envío respuesta: </label>
+                                            <label className="form-label" htmlFor="correoEnvio">Correo envío respuesta: <AsteriskRequired /> </label>
                                             <input onChange={onChangeInputHandle} value={correoEnvioRespuesta} id="correoEnvioRespuesta" name="correoEnvioRespuesta" className="form-control" placeholder="Correo Envío Respuesta" type="email" />
                                         </div>
 
@@ -89,7 +90,7 @@ export const FormAyuda = (props) => {
                                                     </div>
                                                 </div>
                                                 <div className="col-12 col-lg-4 mb-3" id="divNumeroTelefonico">
-                                                    <label className="form-label" htmlFor="numeroTelefonico">Numero Teléfonico: </label>
+                                                    <label className="form-label" htmlFor="numeroTelefonico">Numero Teléfonico:  <AsteriskRequired />  </label>
                                                     <input onChange={onChangeInputHandle} value={numeroTelefonico} id="numeroTelefonico" name="numeroTelefonico" className="form-control" placeholder="Numero Teléfonico" type="number" />
                                                 </div>
                                             </>

@@ -36,19 +36,21 @@ export const Login = () => {
                                                     <button className="btn btnIniciarSesion d-block w-100 mt-3 fontLinkLabel" type="submit" name="submit">Ingresar</button>
                                                 </div>
                                             </form>
-                                            <div id="divContratistas" className="mb-3 text-center divContratistas">
 
-                                                <button onClick={onClickContratistasHandle} className="btnContratistas d-block w-100 " name="submit">
+                                            <div id="divContratistas" className="mb-3 text-center col-md-12 divContratistas">
+
+                                                <button onClick={onClickContratistasHandle} className="btn btnContratistas d-block w-100 " name="submit">
                                                     <i className="fas fa-briefcase"></i> &nbsp;
-                                                    Contratistas
+                                                    Personaje externo
                                                 </button> &nbsp;
                                                 <a href="https://www.listos.com.co/ListosWeb/vista/zonaCandidatosVista/zonaCandidatosVista.php" target="_blank" rel="noreferrer">
-                                                    <button className="btnContratistas d-block w-100 " name="submit">
+                                                    <button className="btn btnContratistas d-block w-100 " name="submit">
                                                         <i className="fas fa-user-tie"></i> &nbsp;
                                                         Candidatos
                                                     </button>
                                                 </a>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>

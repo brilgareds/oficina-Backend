@@ -18,11 +18,14 @@
     color: white;
     font-weight: 600;
     transition: 0.4s;
+    padding: 0;
+    line-height: 15px;
 }
 
 .btnContratistas:hover{
     background-color: #1566b6;
     transition: 0.4s;
+    color: white;
 }
 
 .tituloBienvenido {
