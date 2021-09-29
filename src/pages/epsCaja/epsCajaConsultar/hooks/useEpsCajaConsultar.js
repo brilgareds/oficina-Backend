@@ -298,15 +298,15 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
             document.getElementById(event.target.id).value = "";
 
             alertify.warning(`
-                                    <div className="row">
-                                        <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
-                                            Error.
-                                        </div>
-                                        <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                                            Solo se permiten subir archivos tipo pdf
-                                        </div>
-                                    </div>
-                                    `).delay(7);
+            <div className="row">
+                <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
+                    Error.
+                </div>
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                    Solo se permiten subir archivos tipo pdf
+                </div>
+            </div>
+            `).delay(7);
         }
     };
 
@@ -333,7 +333,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                 .then(() => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos actualizados correctamente.',
+                        html: `Los documentos para su solicitud radicada con el número #${dataApi[0].BENEF_CODIGO} fueron subidos nuevamente para su aprobación.`,
                         confirmButtonText: 'Continuar',
                         confirmButtonColor: "#1783EE",
                     }).then((result) => {

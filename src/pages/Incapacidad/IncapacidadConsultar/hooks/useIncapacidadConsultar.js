@@ -443,10 +443,12 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                 url: api.postUpdateDisabilityFiling,
                 params: dataForm
             })
+
+            
                 .then(() => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos actualizados correctamente.',
+                        html: `Los documentos para su incapacidad radicada con el número #${numerIncapacidad} fueron subidos nuevamente para su aprobación.`,
                         confirmButtonText: 'Cerrar',
                         confirmButtonColor: "#A6A6A6",
                     }).then((result) => {

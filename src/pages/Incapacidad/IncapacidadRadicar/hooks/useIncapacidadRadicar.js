@@ -107,11 +107,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
         overlay(true);
 
-        // setStateForm({
-        //     ...formValue,
-        //     files: formValue.files.splice(0, formValue.files.length)
-        // });
-
         setStateForm({
             ...formValue,
             tipoIncapacidad: value
@@ -146,7 +141,9 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
 
             setFilesState({ ...filesState, files: filesState.files });
         } else {
+
             document.getElementById(target.target.id).value = "";
+
             Swal.fire({
                 icon: 'error',
                 title: 'Solo se permiten subir archivos tipo pdf',
@@ -171,11 +168,12 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                         <input
                             onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
                             key={key}
-                            id={`file_${numberRow}`} 
+                            id={`file_${numberRow}`}
                             name={`file_${numberRow}`}
                             className="form-control"
                             type="file"
                             accept=".pdf"
+                            required={true}
                         />
                     </>
             });
@@ -236,7 +234,7 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 .then(() => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos guardados correctamente.',
+                        html: `Su incapacidad ha sido radicada correctamente y estará pendiente por aprobacion.<br> Al momento de que su Incapacidad sea aprobada o rechazada se le informara por correo electronico.`,
                         confirmButtonText: 'Cerrar',
                         confirmButtonColor: "#A6A6A6",
                     }).then((result) => {

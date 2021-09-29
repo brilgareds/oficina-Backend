@@ -53,7 +53,7 @@ export const DataTabla = ({ title, columns, data, paging = true, search = true, 
             }}
             options={{
                 paging,
-                pageSize: 12,
+                pageSize: 10,
                 maxBodyHeight: 400,
                 headerStyle: { backgroundColor, color },
                 search,
