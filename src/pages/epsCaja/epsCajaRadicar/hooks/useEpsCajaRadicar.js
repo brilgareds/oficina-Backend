@@ -245,7 +245,7 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
         })
             .then((resGetTipoDocumentoBeneficiario) => {
 
-                let optionsCategory = [{ value: null, label: "SELECCIONE..." }];
+                let optionsCategory = [{ value: '', label: "SELECCIONE..." }];
 
                 resGetTipoDocumentoBeneficiario.forEach(element => {
                     optionsCategory.push({ value: element.TIP_CODIGO, label: element.TIP_NOMBRE.toUpperCase() })
