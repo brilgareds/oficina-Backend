@@ -129,7 +129,7 @@ export const EpsCajaRadicar = () => {
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="descripcion">Tipo de parentesco: </label>
-                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} value={formValue?.tipoParentesco?.value} placeholder={'Seleccione...'} styles={stylesSelects} />
+                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} value={formValue?.tipoParentesco} placeholder={'Seleccione...'} styles={stylesSelects} />
                                 <input
                                     tabIndex={-1}
                                     autoComplete="off"
@@ -150,7 +150,7 @@ export const EpsCajaRadicar = () => {
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: </label>
-                                <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" required />
+                                <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" min="1" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="nombreBeneficiario">Nombre: </label>
