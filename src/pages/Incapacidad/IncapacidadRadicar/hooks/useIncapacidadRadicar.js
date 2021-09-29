@@ -168,7 +168,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                 documento: (element.TIP_NOMBRE).toUpperCase(),
                 archivo:
                     <>
-                        <label htmlFor={`file_${numberRow}`} className="btn fileButton"> Subir archivo </label>
                         <input
                             onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
                             key={key}
@@ -177,7 +176,6 @@ export const useIncapacidadRadicar = (formInitialState = {}, dataUser) => {
                             className="form-control"
                             type="file"
                             accept=".pdf"
-                            style={{ display: "none" }}
                         />
                     </>
             });
