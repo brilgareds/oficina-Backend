@@ -16,14 +16,15 @@ class Salud extends Component{
             dataEtnia:'',
             dataPlanSalud:'',
             estadonav:'disabled',
-            sexo:''
+            sexo:'',
+            seePregnancyFoto:'hidden'
         }
     }
 
     componentDidMount(){
         document.getElementById('root').className = 'cv';
 
-
+        
 
         // consultar grupo sanquineo
         const urlGroup = `${baseUrl}/v1/salud/buscarDatosGrupoSanguineo`;
@@ -38,7 +39,7 @@ class Salud extends Component{
             this.setState({dataGroupBlood:option});             
         });
 
-        // consultar grupo sanquineo
+        // consultar factor
         const urlFactor = `${baseUrl}/v1/salud/buscarDatosFactor`;
         getData(urlFactor).then(result =>{
             let option = result.map((value,x) =>{
@@ -72,6 +73,7 @@ class Salud extends Component{
     seePregnancyTab = (response) =>{
         this.setState({estadonav:''})
         if(response){
+            this.setState({seePregnancyTab:''})
             simulateClick('pregnancy-tab',0,'click')
             setTimeout(() => {
                 this.setState({estadonav:'disabled'})
@@ -133,6 +135,8 @@ class Salud extends Component{
                 formData.append("FECHA_PARTO", this.dateprobably.value)
                 formData.append("OBSERVACION", this.observa.value.trim())
                 formData.append('file',this.file.files[0]?this.file.files[0]:{})
+                formData.append("EMBARAZO", document.querySelector('input[name=pregnancyF]:checked')? parseInt(document.querySelector('input[name=pregnancyF]:checked').value):null)
+
 
 
 
@@ -181,7 +185,7 @@ class Salud extends Component{
                 this.contact.value = element.CONTACTO_EMERGENCIA?element.CONTACTO_EMERGENCIA.trim():''
                 this.numbercontact.value = element.NUMERO_CONTACTO_EMERGENCIA?element.NUMERO_CONTACTO_EMERGENCIA.trim():''
                 this.percent.value = element.PERDIDA_CAPACIDAD_SALUD? parseInt(element.PERDIDA_CAPACIDAD_SALUD):''
-                this.planhave.value = element.PLAN_SALUD?element.PLAN_SALUD.trim():''
+                
                 this.planhaveother.value = element.PLAN_SALUD_OTROS?element.PLAN_SALUD_OTROS.trim():''
                 this.entity.value = element.ENTIDAD_OTROS?element.ENTIDAD_OTROS.trim():''
                 
@@ -232,11 +236,13 @@ class Salud extends Component{
                 }
 
                 if(element.PLAN_SALUD != null){
+                    this.planhave.value = element.PLAN_SALUD?element.PLAN_SALUD.trim():''
+                    console.log("element.PLAN_SALUD?element.PLAN_SALUD.trim():''----      ",element.PLAN_SALUD?element.PLAN_SALUD.trim():'')
                     putInputRequerid('#diag-entity','','add','diag-entity')
                     putInputRequerid('#comp-planHave','','add','comp-planHave')
                     if(element.PLAN_SALUD_OTROS != null){
-                        this.planhaveother.value = element.PLAN_SALUD_OTROS
                         putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
+                        this.planhaveother.value = element.PLAN_SALUD_OTROS
                     }
 
                     if(element.PLAN_SALUD_NO_EPS === null){
@@ -293,6 +299,11 @@ class Salud extends Component{
                 this.setState({estadonav:'disabled'})
             }, 500);
         }
+        if(tab === 'pregnancy-tab'){
+            this.setState({seePregnancyFoto:''})
+        }else{
+            this.setState({seePregnancyFoto:'hidden'})
+        }
     }
 
 
@@ -305,11 +316,16 @@ class Salud extends Component{
         setTimeout(() => {
             this.setState({estadonav:'disabled'})
         }, 500);
+        if(tabidentificador === 'pregnancy-tab'){
+            this.setState({seePregnancyFoto:''})
+        }else{
+            this.setState({seePregnancyFoto:'hidden'})
+        }
     }
 
     render(){
 
-        const {seePregnancy,dataGroupBlood,dataFactor,dataEtnia,dataPlanSalud,estadonav,sexo} = this.state;
+        const {seePregnancy,dataGroupBlood,dataFactor,dataEtnia,dataPlanSalud,estadonav,sexo,seePregnancyFoto} = this.state;
 
         return<>
         
@@ -318,7 +334,7 @@ class Salud extends Component{
                 </div>
                 &nbsp;
                 <div className="card">
-                    <img className="card" hidden={seePregnancy}  src={fotoW} alt="" />
+                    <img className="card imagenPregnancy" hidden={seePregnancyFoto}  src={fotoW} alt="" />
                     <div className="card-body">
                         <ul className="nav nav-pills" id="myTab" role="tablist">
                             <li  className="nav-item" role="presentation">
@@ -336,8 +352,7 @@ class Salud extends Component{
                                 <button disabled={estadonav} className="nav-link readONly" id="characteristic-tab" data-bs-toggle="tab" data-bs-target="#characteristic" type="button" role="tab" aria-controls="characteristic" aria-selected="true">Caracter&iacute;sticas f&iacute;sicas y m&aacute;s</button>
                             </li>
                         </ul>
-                        <hr/>
-                        &nbsp;
+                        <hr className="mb-4"/>
                         <div className="tab-content" id="myTabContent">
                             <div className="tab-pane fade show active" id="sick" role="tabpanel" aria-labelledby="sick-tab">
                                 <div className="row">
@@ -442,7 +457,7 @@ class Salud extends Component{
                                     </div>  
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label  htmlFor="comp-planHave">&#191;Cu&aacute;l plan tiene&#63;</label>
-                                        <select ref={inp =>this.planhave = inp} disabled className="form-select" name="comp-planHave"  id="comp-planHave" onChange={e => {
+                                        <select defaultValue={this.planhave}  ref={inp =>this.planhave = inp} disabled className="form-select" name="comp-planHave"  id="comp-planHave" onChange={e => {
                                                                                     const input = e.target.value
                                                                                     if(input === 'O'){
                                                                                         this.planhaveother.removeAttribute('readOnly')
@@ -501,7 +516,6 @@ class Salud extends Component{
                                             let seePreg = !seePregnancy? 'pregnancy-tab':'characteristic-tab'
                                             this.validateInputTabsIn(seePreg) 
                                             }} className="btn succesButton">Siguiente</button>
-                                        {/* <button onClick={() => simulateClick('report-tab',0,'click')} className="btn succesButton">Siguiente</button> */}
                                     </div>
                                 </div>
                             </div>

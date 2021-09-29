@@ -164,6 +164,9 @@ class Education extends Component{
         }else if(data.trim() === 'FINALIZADO'){
             this.campo6.removeAttribute("readonly")
             putInputRequerid(`#${this.campo6.id}`,'','add',this.campo6.id)
+
+            document.getElementById(`${this.campo6.id}`).setAttribute("max",moment().utc().format('yyyy-MM-DD'))
+
             putInputRequerid(`#${this.campo7.id}`,'','remove',this.campo7.id)
             putInputRequerid(`#${this.campo8.id}`,'','remove',this.campo8.id)
             putInputRequerid(`#${this.campo9.id}`,'','remove',this.campo9.id)
@@ -317,8 +320,8 @@ class Education extends Component{
             console.log(result);
             if(!result.error){
                 const tbodyData = result.map((value,x) =>{
-                    let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('L'):''
-                    let dataFin = value.FECHA_FINALIZACION != null ? moment.utc(value.FECHA_FINALIZACION).format('L'):''
+                    let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('D/M/YYYY'):''
+                    let dataFin = value.FECHA_FINALIZACION != null ? moment.utc(value.FECHA_FINALIZACION).format('D/M/YYYY'):''
                     let icon = value.URL? 'fas fa-file-pdf text-dangerpdf fs-1':'fas fa-file-pdf text-muted fs-1'
                     let disabled = value.URL? false:true
 

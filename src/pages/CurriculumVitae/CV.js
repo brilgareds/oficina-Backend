@@ -464,13 +464,7 @@ class CV extends Component {
             }
 
         });
-        
-        // document.querySelector("#corp-11").addEventListener("keypress", function(event) {
-        //     if (event.code === 'Enter') {
-        //         console.log("keypress",document.querySelector("#corp-12").value += document.querySelector("#corp-11").value)
-        //     }
-        // });
-    
+           
         this.loadDataPrincipal()        
     }
 
@@ -525,7 +519,7 @@ class CV extends Component {
                             <button disabled={estadonav} className="nav-link" id="corpo-tab" data-bs-toggle="tab" data-bs-target="#corpo" type="button" role="tab" aria-controls="corpo" aria-selected="false">Datos corporativos</button>
                         </li>
                         <li className="nav-item" role="presentation">
-                            <button disabled={estadonav} className="nav-link" id="indu-tab" data-bs-toggle="tab" data-bs-target="#indu" type="button" role="tab" aria-controls="indu" aria-selected="false">Indumentaria</button>
+                            <button disabled={estadonav} className="nav-link" id="indu-tab" data-bs-toggle="tab" data-bs-target="#indu" type="button" role="tab" aria-controls="indu" aria-selected="false">Dotaci&oacute;n</button>
                         </li>
                     </ul>
                     <hr />

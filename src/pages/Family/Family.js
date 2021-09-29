@@ -298,6 +298,7 @@ class Family extends Component{
                                 confirmButtonText: 'Cerrar'
                             })
                             this.loadDataPrincipal();
+                            this.cleanInputs()
                         }
                     })
                 }
@@ -524,6 +525,7 @@ class Family extends Component{
             }
         })
         this.campos4.removeAttribute('readOnly')
+    
 
 
     }
@@ -697,11 +699,11 @@ class Family extends Component{
                                                 <label>Beneficiario de:</label>
                                                 <div className="form-check">
                                                     <input ref={check => this.eps = check}  className="form-check-input checkServices"  type="checkbox" id={`checkEPS`}  value={`checkEPS`} />
-                                                    <label className="form-check-label" htmlFor={`checkEPS`}>{`EPS`}</label>
+                                                    <label className="form-check-label" htmlFor={`checkEPS`}>{`Eps`}</label>
                                                 </div>
                                                 <div className="form-check">
                                                     <input ref={check => this.caja = check} className="form-check-input checkServices"  type="checkbox" id={`checkcAJA`}  value={`checkcAJA`}  />
-                                                    <label className="form-check-label" htmlFor={`checkcAJA`}>{`CAJA`}</label>
+                                                    <label className="form-check-label" htmlFor={`checkcAJA`}>{`Caja compensación familiar`}</label>
                                                 </div>
 
                                             </div>

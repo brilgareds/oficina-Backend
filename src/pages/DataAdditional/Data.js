@@ -85,13 +85,19 @@ class DataAdditional extends Component{
             let option = result.map((value,x) => {   
             return  <div  key={x} className="form-check">
                     <input className="form-check-input checkServicesTemas" data-parent={value["TIP_NOMBRE"]}  type="checkbox" id={`checkInteres${value["TIP_NOMBRE"]}`}  value={value["TIP_CODIGO"]} onChange={(e) => {
-                        if(e.target.dataset.parent === 'OTRO'){
+                        if(e.target.dataset.parent === 'OTROS'){
                             if(e.target.checked ){
                                 putInputRequerid(`#${this.cualInteres.id}`,'','add',this.cualInteres.id);
                             }else{
                                 putInputRequerid(`#${this.cualInteres.id}`,'','remove',this.cualInteres.id);
                             }
                            
+                        }else if(e.target.dataset.parent === 'DEPORTES'){
+                            if(e.target.checked ){
+                                putInputRequerid(`#${this.sportcualInteres.id}`,'','add',this.sportcualInteres.id);
+                            }else{
+                                putInputRequerid(`#${this.sportcualInteres.id}`,'','remove',this.sportcualInteres.id);
+                            }
                         }
                     }} />
                     <label className="form-check-label" htmlFor={`checkInteres${value["TIP_NOMBRE"]}`}>{value["TIP_NOMBRE"]}</label>
@@ -140,6 +146,18 @@ class DataAdditional extends Component{
             this.cualInteres.value = datos.INTERES_OTRO
             this.beneficio.value = datos.CONVENIOS_ADICIONALES
             this.sportcualInteres.value = datos.DEPORTES_INTERES
+
+            if(datos.INTERES_OTRO){
+                putInputRequerid(`#${this.cualInteres.id}`,'','add',this.cualInteres.id);
+            }
+
+
+            if(datos.DEPORTES_INTERES){
+                putInputRequerid(`#${this.sportcualInteres.id}`,'','add',this.sportcualInteres.id);
+            }
+
+//             this.cualInteres
+// this.sportcualInteres
 
             if(datos.MASCOTA != null){
                 if(datos.MASCOTA === 1){
@@ -441,8 +459,8 @@ class DataAdditional extends Component{
                                         <input  ref={inp => this.cualInteres =inp} readOnly className="form-control " type="text" id="interescual" name="interescual" ></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Qu&eacute; deporte es de su inter&eacute;s&#63;</label>
-                                        <input  ref={inp => this.sportcualInteres =inp} className="form-control " type="text" id="interescualSport" name="interescualSport" ></input>
+                                        <label htmlFor="interescualSport">&#191;Qu&eacute; deporte es de su inter&eacute;s&#63;</label>
+                                        <input  readOnly ref={inp => this.sportcualInteres =inp} className="form-control " type="text" id="interescualSport" name="interescualSport" ></input>
                                     </div>
                                 </div>
                                 <div className="row pb-4 flex">
@@ -609,19 +627,10 @@ class DataAdditional extends Component{
                                                 <label>&#191;Pertence a alguna poblaci&oacute;n especial &#63;</label>
                                                     {dataCondiEspe}
                                             </div>
-                                </div>
-
+                                        </div>
                                    </div>
                                </div>
                                
-                               
-                                
-                               
-
-                            
-
-
-
                                 <div className="row">
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label>&#191;Usted ahorra&#63;</label>
@@ -649,18 +658,18 @@ class DataAdditional extends Component{
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Cu&aacute;les bienes est&aacute; pagando actualmente&#63;</label>
+                                        <label>&#191;Cu&aacute;les bienes/serivicios est&aacute; pagando actualmente&#63;</label>
                                             {buscarDatosBienesServicios}
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Cu&aacute;l bien desea adquirir a corto plazo&#63;</label>
+                                        <label>&#191;Cu&aacute;les bienes/serivicios desea adquirir a corto plazo&#63;</label>
                                             {buscarDatosBienesServiciosCortoPlazo}
                                     </div>
    
                                     
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Que convenio le gustar&iacute;a obtener de la empresa&#63;</label>
+                                        <label>&#191;Qu&eacute; convenio le gustar&iacute;a obtener de la empresa&#63;</label>
                                         <input ref={inp => this.beneficio = inp} className="form-control " type="text" id="acti-savemoney" name="acti-savemoney" ></input>
                                     </div>
 
