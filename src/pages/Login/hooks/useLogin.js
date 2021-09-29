@@ -19,6 +19,8 @@ export const useLogin = (formInitialState = {}) => {
 
 
     const onKeyUpInputHandle = ({ target }) => {
+        if (!parseFloat(target.value)) return;
+
         setStateForm({
             ...formValue,
             [target.name]: target.value

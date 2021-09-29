@@ -27,7 +27,7 @@ export const CartaPresentacion = () => {
         },
         {
             id: 'cartaIngresoMateriales',
-            title: 'Carta de ingreso de materiales a punto de venta'
+            title: 'Carta de ingreso/retiro de materiales a punto de venta'
         }
     ];
 
@@ -50,6 +50,8 @@ export const CartaPresentacion = () => {
         };
 
         if (data.typeCard === 'cartaIngresoMateriales') {
+            if (!materials?.length) throw new Error('No puede generar la carta sin incluir materiales!');
+
             Object.assign(response, {
                 materials: materials.map(({ accion, cantidad, material }) => ({ accion, cantidad, material }))
             });
@@ -68,27 +70,33 @@ export const CartaPresentacion = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const params = formatRequestBody(formPresentationCard);
+        try {
 
-        overlay(true);
+            const params = formatRequestBody(formPresentationCard);
+    
+            overlay(true);
+    
+            ResquestApproval({ params })
+                .then(response => {
+                    if (!response || !Object.keys(response)?.length) throw new Error();
+    
+                    overlay(false);
+                    const options = { text: '¡Carta de presentación generada correctamente!', icon: 'success' };
 
-        ResquestApproval({ params })
-            .then(response => {
-                if (!response || !Object.keys(response)?.length) throw new Error();
+                    return makeModal(options);
+                })
+                .catch(err => {
+                    overlay(false);
+                    const options = { text: '¡Ocurrio un error al crear la carta!', icon: 'error' };
 
-                console.log('Response: ', response);
+                    return makeModal(options);
+                })
+        } catch (e) {
+            const options = { text: e.message, icon: 'warning' };
+                    
+            return makeModal(options);
+        }
 
-                overlay(false);
-                const options = { text: '¡Carta de presentación generada correctamente!', icon: 'success' };
-                
-                return makeModal(options);
-            })
-            .catch(err => {
-                overlay(false);
-                const options = { text: '¡Ocurrio un error al crear la carta!', icon: 'error' };
-                
-                return makeModal(options);
-            })
     };
 
     const handleChangeTypeCard = (e) => {

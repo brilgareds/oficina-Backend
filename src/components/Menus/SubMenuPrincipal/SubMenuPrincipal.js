@@ -16,8 +16,8 @@ export const SubMenuPrincipal = ({ menu, k, first=false }) => {
     return (
         <>
             <Link className={ `nav-link ${dropDown }` } to={{ pathname: `${href}` }} img-redireccion={redireccionar || '#'} data-bs-target={dataBsTarget} img-url={recurso} data-bs-toggle={ dataBsToggle }  aria-controls={ href } target={ target } title={ descripcion }>
-                <div className="d-flex align-items-center" style={{ color: "#1780E8" }}>
-                    { (first) ? <span className="nav-link-icon"><i className={clasesIcono}></i></span> : <></> }
+                <div className="d-flex align-items-center">
+                    { (first) ? <span className="nav-link-icon" style={{textAlign: 'left'}}><i className={clasesIcono}></i></span> : <></> }
                     <span className="nav-link-text ps-1" style={{ color: colorTitulo }} >{titulo}</span>
                 </div>
             </Link>

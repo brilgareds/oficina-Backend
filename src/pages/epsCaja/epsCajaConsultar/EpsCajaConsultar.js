@@ -16,7 +16,7 @@ export const EpsCajaConsultar = () => {
         {
             columnsDataTable: [
                 { title: 'Consecutivo', field: 'consecutivo', headerStyle: headerStyles },
-                { title: 'Cédula incapacidad', field: 'cedulaIncapacidad', headerStyle: headerStyles },
+                { title: 'Documento identidad', field: 'cedulaIncapacidad', headerStyle: headerStyles },
                 { title: 'Nombre', field: 'nombre', headerStyle: headerStyles },
                 { title: 'Parentesco', field: 'parentesco', headerStyle: headerStyles },
                 { title: 'Eps', field: 'eps', headerStyle: headerStyles },
