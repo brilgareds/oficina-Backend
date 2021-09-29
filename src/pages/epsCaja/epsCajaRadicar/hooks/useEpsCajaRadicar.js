@@ -298,9 +298,12 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                 params: dataForm
             })
                 .then(() => {
+
+                    let inclusion = (stateBeneficioPara === "eps") ? "SERVICIO DE SALUD (EPS)" : "CAJA DE COMPENSACION FAMILIAR";
+
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos guardados correctamente.',
+                        html: `Su solicitud para la inclusion del usuario ${formValue?.apellidoBeneficiario} ${formValue?.apellidoBeneficiario} con numero de cedula ${formValue?.cedulaBeneficiario} al ${inclusion}.", fue radicada con exito. Al correo se le estara informando del avance de este proceso.`,
                         confirmButtonText: 'Cerrar',
                         confirmButtonColor: "#A6A6A6",
                     }).then((result) => {
