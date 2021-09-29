@@ -30,7 +30,7 @@ export const Login = () => {
                                             <form onSubmit={onSubmitForm}>
                                                 <div className="mb-3 text-center">
                                                     <label className="labelInpiut">Por favor digita tu cédula</label>
-                                                    <input onKeyUp={onKeyUpInputHandle} name="identification" id="identification" className="form-control inputsFormulario fontFamilyToNumber" type="number" autoComplete="off" />
+                                                    <input onKeyUp={onKeyUpInputHandle} name="identification" id="identification" className="form-control inputsFormulario fontFamilyToNumber" type="number" min="1" autoComplete="off" />
                                                 </div>
                                                 <div className="mb-3">
                                                     <button className="btn btnIniciarSesion d-block w-100 mt-3 fontLinkLabel" type="submit" name="submit">Ingresar</button>

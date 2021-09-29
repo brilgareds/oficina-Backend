@@ -56,7 +56,7 @@ const definirPropiedadesLink = (menu, k, first) => {
 
     const response = {
         k,
-        colorTitulo: (first) ? '' : '#5e6e82',
+        colorTitulo: (first) ? '' : '#1780E8',
         collapse: (tieneSubMenus) ? 'collapse' : '',
         target: (tipoAccion === 'R') ? '_blank' : '',
         dropDown: (tieneSubMenus) ? 'dropdown-indicator' : '',
@@ -97,7 +97,7 @@ const specificDecimals = (value = 0, quantityDecimals = 0) => {
     const dotOrCommaPosition = getDotOrCommaPosition(value);
 
     if (dotOrCommaPosition === 0) {
-        value = (quantityDecimals) ? `0${value}` : value.substring(1);
+        value = (quantityDecimals) ? `1${value}` : value.substring(1);
     }
 
     const maxQuantityCharacters = (dotOrCommaPosition && value[dotOrCommaPosition]) ? parseFloat(dotOrCommaPosition) + quantityDecimals : value.length;
@@ -131,7 +131,7 @@ const currentDate = (obj = {}) => {
             (format === 'spanish') ? spanishDate : ''
     );
 
-    const fullDate = `${date} ${(withTime) ? ` ${time}` : ''}`;
+    const fullDate = (`${date} ${(withTime) ? ` ${time}` : ''}`).trim();
 
     return fullDate;
 };

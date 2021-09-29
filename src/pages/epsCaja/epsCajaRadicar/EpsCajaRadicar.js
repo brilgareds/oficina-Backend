@@ -1,12 +1,13 @@
 import Select from 'react-select';
 import { DataTabla } from '../../../components/DataTable/DataTabla';
-import { getDateToday, getFullNameUser } from '../../../generalHelpers';
+import { currentDate, getFullNameUser } from '../../../generalHelpers';
 import { useEpsCajaRadicar } from './hooks/useEpsCajaRadicar';
 import './epsCajaRadicar.css';
 
 export const EpsCajaRadicar = () => {
 
     const dataUser = JSON.parse(localStorage.getItem('d_u'));
+    const today = currentDate({format: 'english', withTime: false});
     const headerStyles = { backgroundColor: '#EDF2F9', color: '#344050', zIndex: 0, };
     const stylesSelects = { menuPortal: provided => ({ ...provided, zIndex: 9999 }), menu: provided => ({ ...provided, zIndex: 9999 }) }
     const {
@@ -27,7 +28,7 @@ export const EpsCajaRadicar = () => {
         cedulaBeneficiario: "",
         nombreBeneficiario: "",
         apellidoBeneficiario: "",
-        fechaNacimientoBeneficiario: getDateToday(),
+        fechaNacimientoBeneficiario: '',
         loadingPage: true,
         dataTables: {
             benefificarios: {
@@ -128,28 +129,41 @@ export const EpsCajaRadicar = () => {
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="descripcion">Tipo de parentesco: </label>
-                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} defaultValue={[statetipoParentesco[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
+                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} value={formValue?.tipoParentesco?.value} placeholder={'Seleccione...'} styles={stylesSelects} />
+                                <input
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    style={{
+                                        opacity: 0,
+                                        width: "20%",
+                                        height: 0,
+                                        position: "absolute"
+                                    }}
+                                    onChange={ ()=>{} }
+                                    value={formValue?.tipoParentesco?.value}
+                                    required='required'
+                                />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="descripcion">Tipo de documento: </label>
-                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
+                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} required/>
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: </label>
-                                <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Cédula beneficiario" type="number" />
+                                <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="nombreBeneficiario">Nombre: </label>
-                                <input onChange={onChangeInputHandle} value={nombreBeneficiario} id="nombreBeneficiario" name="nombreBeneficiario" className="form-control" placeholder="Nombre beneficiario" type="text" />
+                                <input onChange={onChangeInputHandle} value={nombreBeneficiario} id="nombreBeneficiario" name="nombreBeneficiario" className="form-control" placeholder="Nombre beneficiario" type="text" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="apellidoBeneficiario">Apellido: </label>
-                                <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" />
+                                <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="correoElectronico">Fecha de nacimiento: </label>
                                 {/* <input onChange={onChangeInputHandle} value={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimientos" type="date" /> */}
-                                <input onChange={onChangeInputHandle} defaultValue={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimiento" type="date" />
+                                <input onChange={onChangeInputHandle} value={fechaNacimientoBeneficiario} id="fechaNacimientoBeneficiario" name="fechaNacimientoBeneficiario" className="form-control fechas datepicker" placeholder="Fecha Nacimiento" type="date" max={today} required/>
                             </div>
 
 
@@ -161,7 +175,7 @@ export const EpsCajaRadicar = () => {
                                 <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5>
                             </div>
 
-                            <DataTabla title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={documentos.headers} data={stateRowsTableDocumentos} />
+                            <DataTabla paging={false} title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={documentos.headers} data={stateRowsTableDocumentos} />
 
                             <div className="col-12 col-lg-12 mt-4 mb-3">
                                 <div className="row">

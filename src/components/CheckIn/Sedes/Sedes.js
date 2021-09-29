@@ -44,6 +44,8 @@ export const Sedes = ({ setForm, form, userHasCheckIn, userHasCheckOut }) => {
     };
 
     const handleTemperatureCheckInUpdate = (e) => {
+        if (parseFloat(e.target.value) < 1 || parseFloat(e.target.value) >= 100) return;
+
         const value = specificDecimals(e.target.value, 1);
         setTemperature(value);
         setForm(old_value => ({
@@ -53,6 +55,8 @@ export const Sedes = ({ setForm, form, userHasCheckIn, userHasCheckOut }) => {
     };
 
     const handleTemperatureCheckOutUpdate = (e) => {
+        if (parseFloat(e.target.value) < 1 || parseFloat(e.target.value) >= 100) return;
+
         const value = specificDecimals(e.target.value, 1);
         setTemperatureCheckOut(value);
         setForm(old_value => ({
