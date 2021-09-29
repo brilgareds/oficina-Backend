@@ -286,8 +286,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                     <td>${estado}</td>
                     <td>${(data.RECHAZO !== null) ? data.RECHAZO.toUpperCase() : "N/A"}</td>
                     <td>
-                    <label for="inputFile_${key}" class="btn fileButton"> Subir archivo </label>
-                        <input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem; display:none">
+                        <input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;">
                     </td>
                 </tr>`
                 ;

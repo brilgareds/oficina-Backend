@@ -214,7 +214,6 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
             //     onClick={event => { onClickActualizarIncapacidad(element.BENEF_CODIGO) }}
             // />,
 
-            <img className="imgDeleteGasto" alt="trash-fill-orange" src="/assets/img/actualizar-flecha.png"/>
 
             tdBody +=
                 `<tr>
@@ -223,12 +222,11 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                     <td>${validarEstadoPeticionDocumentosBeneficiario(data.ARCH_ESTADO)}</td>
                     <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-link" ><img class="imgDeleteGasto" alt="download-to-storage-drive" src="/assets/img/download-to-storage-drive.png"/> </button> </a></td>
                     <td>
-                        <label for="inputFile_${key}" class="btn fileButton"> Subir archivo </label>
-                        <input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" style="display:none" type="file" accept=".pdf">
+                        <input class="form-control" name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" type="file" accept=".pdf">
                     </td>
                 </tr>`
                 ;
-                
+
 
 
         });
