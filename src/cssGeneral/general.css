@@ -18,6 +18,7 @@
 
   .navbarPaddingCV {
     background-color: #F9FAFD;
+    font-family: Raleway !important;
 
   }
 
@@ -138,7 +139,7 @@
   }
 
   .navbarPaddingcv{
-    height:calc(100vh - 10.3125rem) !important ;
+    height:calc(100vh - 9.9125rem) !important;
   }
 
   .navbar-vertical .navbar-vertical-label{
@@ -173,4 +174,38 @@
     color: #FA746B;
   }
 
-  
+ .btn-calificanos{
+     background-color: #74E36B ;
+     color: #0F4F80;
+     border-radius:25px;
+  }
+
+  .sizeTextFaces{
+    font-size: 8px;
+  }
+
+  .line-calificanos{
+    color:#74E36B ;
+  }
+
+
+  :checked + label img {
+    transform: scale(0.9);
+    box-shadow: 0 0 5px #ffffff;
+    z-index: -1;
+    border-radius: 0.5em;
+  }
+
+  .imgAnswers{
+    height:4rem;
+  }
+
+  .labelTextAnswers{
+    font-size:9px;
+  }
+
+
+    /* .imagenPregnancy{
+      display: none;
+    }
+   */
