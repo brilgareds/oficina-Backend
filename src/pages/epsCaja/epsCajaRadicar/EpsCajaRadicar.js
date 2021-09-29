@@ -129,16 +129,29 @@ export const EpsCajaRadicar = () => {
                                 </div>
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo de parentesco: <AsteriskRequired /> </label>
-                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} defaultValue={[statetipoParentesco[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
+                                <label className="form-label" htmlFor="descripcion">Tipo de parentesco: </label>
+                                <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoParentesco', value: valueSe })} options={statetipoParentesco} value={formValue?.tipoParentesco} placeholder={'Seleccione...'} styles={stylesSelects} />
+                                <input
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    style={{
+                                        opacity: 0,
+                                        width: "20%",
+                                        height: 0,
+                                        position: "absolute"
+                                    }}
+                                    onChange={ ()=>{} }
+                                    value={formValue?.tipoParentesco?.value}
+                                    required='required'
+                                />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
                                 <label className="form-label" htmlFor="descripcion">Tipo de documento: <AsteriskRequired /> </label>
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'tipoDocumento', value: valueSe })} options={stateTipoIdentificacion} defaultValue={[stateTipoIdentificacion[0]]} placeholder={'Seleccione...'} styles={stylesSelects} />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: <AsteriskRequired /> </label>
-                                <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" />
+                                <label className="form-label" htmlFor="cedulaBeneficiario">Documento identidad: </label>
+                                <input onChange={onChangeInputHandle} value={cedulaBeneficiario} id="cedulaBeneficiario" name="cedulaBeneficiario" className="form-control" placeholder="Documento identidad" type="number" min="1" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="nombreBeneficiario">Nombre: <AsteriskRequired /> </label>
