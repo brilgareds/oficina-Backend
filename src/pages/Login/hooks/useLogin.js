@@ -136,7 +136,7 @@ export const useLogin = (formInitialState = {}) => {
                     html: `
                     <div className="row">
                         <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                            Si eres un personaje externo puedes ingresa por las opciones habilitadas en pantalla
+                            Si eres un personal externo puedes ingresa por las opciones habilitadas en pantalla
                         </div>
                     </div>
                     <br/>
@@ -227,7 +227,7 @@ export const useLogin = (formInitialState = {}) => {
 
         Swal.fire({
             width: '800px',
-            title: 'Personaje externo',
+            title: 'Personal externo',
             html: `
                     <div class="row" style="text-align: left; margin: 10px;">
                         <div class="col-12 col-lg-12 mb-3 text-center">

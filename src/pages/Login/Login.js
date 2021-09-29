@@ -41,7 +41,7 @@ export const Login = () => {
 
                                                 <button onClick={onClickContratistasHandle} className="btn btnContratistas d-block w-100 " name="submit">
                                                     <i className="fas fa-briefcase"></i> &nbsp;
-                                                    Personaje externo
+                                                    Personal<br/>externo
                                                 </button> &nbsp;
                                                 <a href="https://www.listos.com.co/ListosWeb/vista/zonaCandidatosVista/zonaCandidatosVista.php" target="_blank" rel="noreferrer">
                                                     <button className="btn btnContratistas d-block w-100 " name="submit">
