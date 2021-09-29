@@ -67,8 +67,7 @@ export const useEncuestas = ({ tipoEncuesta = '' }) => {
             })
             .then(() => generarReporte({ response, tipoEncuesta }))
             .catch(e => {
-                console.log('Error: ', e);
-
+                
                 const options = {
                     title: '',
                     html: 'Error al guardar las respuestas<br>Intente nuevamente!',

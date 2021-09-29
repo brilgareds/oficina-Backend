@@ -52,8 +52,8 @@ export const DataTabla = ({ title, columns, data, paging = true, search = true, 
                 onRowDelete
             }}
             options={{
-                paging,
-                maxBodyHeight: 520,
+                pageSize: 12,
+                maxBodyHeight: 400,
                 headerStyle: { backgroundColor, color },
                 search,
                 toolbar

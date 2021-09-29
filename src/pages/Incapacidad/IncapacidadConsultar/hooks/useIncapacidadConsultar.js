@@ -257,9 +257,6 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
     const desplegarModalActualizarDatos = (dataIncapacityObj) => {
 
-
-        console.log("dataIncapacityObj", dataIncapacityObj);
-
         const { dataIncapacity, documentsIncapacity } = dataIncapacityObj;
 
         if (

@@ -79,8 +79,6 @@ export const useIngreso = () => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        console.log('formCheckIn: ', formCheckIn);
-
         if (!userHasCheckIn) {
 
             const params = {
