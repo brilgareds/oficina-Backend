@@ -1,4 +1,3 @@
-import { LaptopWindows } from '@material-ui/icons';
 import React from 'react';
 import  { Redirect } from 'react-router-dom'
 import { PersonalCampo } from '../../components/CheckIn/PersonalCampo/PersonalCampo';
@@ -18,8 +17,7 @@ export const Ingreso = () => {
         setFormCheckIn,
         userHasCheckOut,
         handleFormSubmit,
-        handleCheckUpdate,
-        handleRedirectIngreso,
+        handleCheckUpdate
     } = useIngreso();
 
     return (
