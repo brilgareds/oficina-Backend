@@ -73,6 +73,7 @@ class Salud extends Component{
     seePregnancyTab = (response) =>{
         this.setState({estadonav:''})
         if(response){
+            this.setState({seePregnancyFoto:''})
             this.setState({seePregnancyTab:''})
             simulateClick('pregnancy-tab',0,'click')
             setTimeout(() => {
@@ -293,17 +294,19 @@ class Salud extends Component{
     validateInputTabsIn = (tab) => {
         let valtab =  validateInputTabs(tab)
         if(valtab === ''){
+
+            if(tab === 'pregnancy-tab' ){
+                this.setState({seePregnancyFoto:''})
+            }else{
+                this.setState({seePregnancyFoto:'hidden'})
+            }
             this.setState({estadonav:''})
             simulateClick(tab,0,'click')
             setTimeout(() => {
                 this.setState({estadonav:'disabled'})
             }, 500);
         }
-        if(tab === 'pregnancy-tab'){
-            this.setState({seePregnancyFoto:''})
-        }else{
-            this.setState({seePregnancyFoto:'hidden'})
-        }
+
     }
 
 
@@ -459,6 +462,7 @@ class Salud extends Component{
                                         <label  htmlFor="comp-planHave">&#191;Cu&aacute;l plan tiene&#63;</label>
                                         <select defaultValue={this.planhave}  ref={inp =>this.planhave = inp} disabled className="form-select" name="comp-planHave"  id="comp-planHave" onChange={e => {
                                                                                     const input = e.target.value
+                                                                                    e.target.value = input
                                                                                     if(input === 'O'){
                                                                                         this.planhaveother.removeAttribute('readOnly')
                                                                                         putInputRequerid(`#${this.planhaveother.id}`,'','add',this.planhaveother.id)
@@ -536,7 +540,7 @@ class Salud extends Component{
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label htmlFor="diag-timeweek">Tiempo de gestaci&oacute;n (SEMANAS)</label>
-                                        <input ref={inp => this.tiempogesta = inp} type="number" min={1} max={9} className="form-control" id="diag-timeweek" name="diag-timeweek"></input>
+                                        <input ref={inp => this.tiempogesta = inp} type="number" min={1} max={40} className="form-control" id="diag-timeweek" name="diag-timeweek"></input>
                                     </div>
                                     <div className="col-sm-12 col-md-4 pb-4">
                                         <label htmlFor="diag-dateApro">&#191;Fecha probable del parto</label>
@@ -547,22 +551,10 @@ class Salud extends Component{
                                         <input ref={inp => this.observa = inp} type="text" className="form-control" id="diag-obser" name="diag-obser"></input>
                                     </div>
 
-                                    {/* <div className="col-sm-12 col-md-4 pb-4">
-                                        <label >Resultado de la prueba de embarazo</label>
-                                        <label htmlFor="file-upload" className="custom-file-upload">
-                                            <i className="text-danger far fa-file-pdf"></i> Subir archivo
-                                        </label>
-                                        <input ref={el => this.file = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
-
-
-                                    </div> */}
-
                                     <div className="mb-3 col-sm-12 col-md-4 pb-4">
                                         <label htmlFor="file-upload" className="form-label">Resultado de la prueba de embarazo</label>
                                         <input className="form-control" ref={el => this.file = el} id="file-upload" name="file-upload" type="file" accept="application/pdf"/>
                                     </div>
-
-
 
                                 </div>
                                 <div className="row pb-4 flex">
