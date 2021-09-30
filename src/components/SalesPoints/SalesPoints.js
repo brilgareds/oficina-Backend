@@ -76,10 +76,9 @@ export const SalesPoints = ({ filter, form, setForm, value, multiple = true, dis
                 components={{ MenuList }}
                 captureMenuScroll={false}
                 filterOption={createFilter({ ignoreAccents: false })}
-                disabled={!salesPoint?.length}
                 isMulti={multiple}
                 closeMenuOnSelect={!multiple}
-                isDisabled={disabled}
+                isDisabled={cargando}
                 styles={ColourStyles}
                 onChange={handleSalesPointUpdate}
                 value={salesPoint}
