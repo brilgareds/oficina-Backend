@@ -38,21 +38,24 @@ const MenuCV= () => {
                         </div>
                         <div className="sombraNavbarInhabilitada collapse navbar-collapse" id="navbarVerticalCollapse">
                             <div className="navbar-vertical-content scrollbar navbarPaddingcv navbarPaddingcv mb-2">
-                                <div className="list-group ">
-                                    {
-                                    !dataPrincipal?[]: dataPrincipal.map((value,x) => 
-                                    {
-                                    let str = value.MENU_NOMBRE;
-                                    let res = str.replace(" ", "_"); 
-                                    return   <Link presiono="true" key={x}  className="list-group-flush" to={res.toLowerCase()}>
-                                        <label className="list-group-item ">
-                                            <i id={`colorCheck${value.MENU_CODIGO}`} className={`${value.MENU_ICONO}  checkGrey me-2`}></i>
-                                            <span className="col-auto navbar-vertical-label listnavCV">{value.MENU_NOMBRE}</span>
-                                        </label>
-                                    </Link>
-                                    })
-                                    }
-                                </div>
+
+                                {
+                                    <ul className="nav nav-pills flex-column mb-sm-auto mb-0  align-items-start " style={{margin:'3px'}}>
+                                        {
+                                        !dataPrincipal?[]: dataPrincipal.map((value,x) => {
+                                            let str = value.MENU_NOMBRE;
+                                            let res = str.replace(" ", "_"); 
+                                            return  <li class="nav-item" key={x} >
+                                                        <Link  to={res.toLowerCase()} class="nav-link align-middle px-0">
+                                                            <i id={`colorCheck${value.MENU_CODIGO}`} class={`${value.MENU_ICONO}  checkGrey me-3 fs-1`}></i> <span class="ms-1 ">{str}</span>
+                                                        </Link>
+                                                    </li>
+                                        
+                                        
+                                        })
+                                        }
+                                    </ul>
+                                }
                             </div>
                             <Link to={{ pathname: routes.home.url }}>
                                 <div className="d-flex row row-cols-1  bg-CV colorBackButton align-self-center pm-2">
