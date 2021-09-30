@@ -77,7 +77,7 @@ export const UnrelatedSalesPoints = ({ filter, setForm, value }) => {
                 styles={ColourStyles}
                 onChange={handleSalesPointUpdate}
                 value={salesPoint}
-                disabled={!salesPoint?.length}
+                isDisabled={cargando}
                 options={salesPoints}
             />
             <input
