@@ -23,6 +23,7 @@ export const DashboardRoutes = () => {
                 return (
                     <Switch>
                         <Route exact={true} path={routes.encuestaRiesgoCovid.url} component={routes.encuestaRiesgoCovid.componente} />
+                        <Route exact={true} path={routes.home.url} component={routes.home.componente} />
                         <Route path='*' component={routes.ingreso.componente} />
                     </Switch>
                 )
