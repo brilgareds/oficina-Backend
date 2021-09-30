@@ -155,11 +155,11 @@ export const EpsCajaRadicar = () => {
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="nombreBeneficiario">Nombre: <AsteriskRequired /> </label>
-                                <input onChange={onChangeInputHandle} value={nombreBeneficiario} id="nombreBeneficiario" name="nombreBeneficiario" className="form-control" placeholder="Nombre beneficiario" type="text" />
+                                <input onChange={onChangeInputHandle} value={nombreBeneficiario} id="nombreBeneficiario" name="nombreBeneficiario" className="form-control" placeholder="Nombre beneficiario" type="text" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="apellidoBeneficiario">Apellido: <AsteriskRequired /> </label>
-                                <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" />
+                                <input onChange={onChangeInputHandle} value={apellidoBeneficiario} id="apellidoBeneficiario" name="apellidoBeneficiario" className="form-control" placeholder="Apellido beneficiario" type="text" required />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
                                 <label className="form-label" htmlFor="correoElectronico">Fecha de nacimiento: <AsteriskRequired /> </label>
