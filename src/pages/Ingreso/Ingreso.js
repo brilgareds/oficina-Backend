@@ -1,3 +1,4 @@
+import { LaptopWindows } from '@material-ui/icons';
 import React from 'react';
 import  { Redirect } from 'react-router-dom'
 import { PersonalCampo } from '../../components/CheckIn/PersonalCampo/PersonalCampo';
@@ -17,13 +18,14 @@ export const Ingreso = () => {
         setFormCheckIn,
         userHasCheckOut,
         handleFormSubmit,
-        handleCheckUpdate
+        handleCheckUpdate,
+        handleRedirectIngreso,
     } = useIngreso();
 
     return (
         (finished) ?
-            <Redirect to='/' /> : 
-
+            <Redirect to={routes.home.url} /> 
+            :
         (hasMainInfo) ? (
             (!userHasSurvey) ? <Redirect to={routes.encuestaRiesgoCovid.url} />
             :
@@ -78,7 +80,7 @@ export const Ingreso = () => {
                         </form>
                     </div>
                 </div>
-            </>
+            </> 
         ) : <></>
     );
 }
