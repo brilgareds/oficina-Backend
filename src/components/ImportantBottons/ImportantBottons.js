@@ -9,6 +9,8 @@ import negativa from '../../assets/img/calificanos/negativa.png'
 import totalNega from '../../assets/img/calificanos/totalmente-negativa.png'
 import correo from '../../assets/img/calificanos/correo.png'
 import whatsapp from '../../assets/img/calificanos/whatsapp.png'
+import { postData } from '../general/General';
+import { baseUrl } from '../../config/config';
 
 
 export const ImportantBottons = () => {
@@ -47,6 +49,9 @@ export const ImportantBottons = () => {
                     </div></div>
 
                 </div>
+
+                <div class="mb-2" id="divaddDataComunicate" hidden><input class="form-control " type="text" id="addDataComunicate" name="addDataComunicate"/></div>
+
             </div>
             <div class="d-flex  text-white justify-content-center mb-2">
                 <button class="btn btn-calificanos"  id="btncalifica">Enviar respuestas</button>
@@ -66,59 +71,114 @@ export const ImportantBottons = () => {
             focusConfirm:false,
           })
 
-          const but = document.getElementById("btncalifica")
-          but.addEventListener('click',function(){
-              console.log("prueba  ")
+            const but = document.getElementById("btncalifica")
+            but.addEventListener('click',function(){
+                console.log("prueba  ")
 
-            const contaAnsw =  document.querySelectorAll('input[name=radioCalificanos]:checked').length
-            const contaComun =  document.querySelectorAll('input[name=checkComunication]:checked').length
-            const divAlert =  document.getElementById('alertaDatosmodal')
+                const contaAnsw =  document.querySelectorAll('input[name=radioCalificanos]:checked').length
+                const contaComun =  document.querySelectorAll('input[name=checkComunication]:checked').length
+                const divAlert =  document.getElementById('alertaDatosmodal')
 
-            if(contaAnsw === 0){
-                divAlert.classList.add('alert-info')
-                divAlert.innerHTML = "Debes seleccionar una respuesta"
-                setTimeout(() => {
-                    divAlert.classList.remove('alert-info')
-                    divAlert.innerHTML = ''
-                }, 2000);
-                return false
-            }else{
-                const radioCheckedAnswers = document.querySelector('input[name=radioCalificanos]:checked')
-                console.log(radioCheckedAnswers.dataset.validateemotion)
-                console.log("es igual a cero 22222")
-                if(radioCheckedAnswers.dataset.validateemotion === '0'){
-                    console.log("es igual a cero ")
-                    if(contaComun === 0){
-                        divAlert.classList.add('alert-info')
-                        divAlert.innerHTML = "Debes seleccionar un medio de comunicación"
-                        setTimeout(() => {
-                            divAlert.classList.remove('alert-info')
-                            divAlert.innerHTML = ''
-                        }, 2000);
-                        return false
+                if(contaAnsw === 0){
+                    divAlert.classList.add('alert-info')
+                    divAlert.innerHTML = "Debes seleccionar una respuesta"
+                    setTimeout(() => {
+                        divAlert.classList.remove('alert-info')
+                        divAlert.innerHTML = ''
+                    }, 2000);
+                    return false
+                }else{
+                    const radioCheckedAnswers = document.querySelector('input[name=radioCalificanos]:checked')
+                    console.log(radioCheckedAnswers.dataset.validateemotion)
+                    console.log("es igual a cero 22222")
+                    if(radioCheckedAnswers.dataset.validateemotion === '0'){
+                        console.log("es igual a cero ")
+                        if(contaComun === 0){
+                            divAlert.classList.add('alert-info')
+                            divAlert.innerHTML = "Debes seleccionar un medio de comunicación"
+                            setTimeout(() => {
+                                divAlert.classList.remove('alert-info')
+                                divAlert.innerHTML = ''
+                            }, 2000);
+                            return false
+                        }else{
+                            console.log("envia todos")
+                            sendQualification()
+                        }
+
                     }else{
-                        console.log("envia todos")
+                        console.log('se envia data carita')
                         sendQualification()
                     }
-
-                }else{
-                    console.log('se envia data carita')
-                    sendQualification()
                 }
+
+
+
+            },false)
+
+            const rad = document.querySelectorAll('input[name=radioCalificanos]');
+            for (let i = 0; i < rad.length; i++) {
+                rad[i].addEventListener('change', function() {
+                    const divHidden = document.getElementsByClassName('seeDivComunicate')
+                    console.log(this.dataset.validateemotion)
+                    if(this.dataset.validateemotion === '1'){
+                        divHidden[0].setAttribute('hidden','hidden')
+                        document.getElementById('addDataComunicate').value= ''
+                        document.getElementById('divaddDataComunicate').setAttribute('hidden','hidden')
+
+                        if(document.querySelectorAll('input[name=checkComunication]:checked').length){
+                            console.log('entro quitar cheked por si hay seleciconados ')
+                            document.querySelectorAll('input[name=checkComunication]:checked')[0].checked = false
+                        }
+                    }else{
+                        divHidden[0].removeAttribute('hidden')
+                    }
+                });
             }
 
+            const radComunicate = document.querySelectorAll('input[name=checkComunication]');
+            for (let i = 0; i < radComunicate.length; i++) {
+            
+                radComunicate[i].addEventListener('click',function(){
+                    const radio =  document.querySelectorAll('input[name=checkComunication]:checked')[0].dataset.campobd
+                    const data =JSON.parse(localStorage.getItem("d_u"))
+                    const mail = data.mail
+                    const phone = data.numeroCelular
+                    const input = document.getElementById('addDataComunicate')
+                    document.getElementById('divaddDataComunicate').removeAttribute('hidden')
+                    if(radio === 'W'){
+                        input.value = phone
+                    }else if(radio === '377'){
+                        input.value = mail
+                    }
+                })
+            }
 
-
-          },false)
-
-        //   const radioAnsValidate = document.getElementsByTagNameNS('radioCalificanos')
-        //   radioAnsValidate.addEventListener('change',function(){
-        //       console.log('entro calificanos')
-        //   },false)
 
     }
 
     const sendQualification = () => {
+      const data =JSON.parse(localStorage.getItem("d_u"))
+      const input = document.getElementById('addDataComunicate')
+
+
+      let noti = document.querySelectorAll('input[name=checkComunication]:checked').length === 0 ? '': document.querySelectorAll('input[name=checkComunication]:checked')[0].dataset.campobd
+    //   let send = document.querySelectorAll('input[name=radioCalificanos]:checked').length === 0 ? '': document.querySelectorAll('input[name=radioCalificanos]:checked')[0].dataset.campobd
+
+      const datos =  {
+            "OVT_CEDULA": parseInt(data.cedula),
+            "input_add": input.value?input.value:'',
+            "sendNotification":noti,
+            "CALIFICACION": parseInt(document.querySelectorAll('input[name=radioCalificanos]:checked')[0].dataset.campobd)
+
+          }
+
+          postData(`${baseUrl}/v1/qualification/crearRegistroQualification`,datos).then(ele => {
+              console.log(ele)
+          })
+
+
+
         console.log("se va para la bd")
     }
 

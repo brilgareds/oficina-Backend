@@ -114,41 +114,45 @@ class Education extends Component{
 
         if( !validateInputTabs('inputRequired')){
 
-            const dataUser = JSON.parse( localStorage.getItem("d_u"));
-            const cedula = parseInt(dataUser['cedula'])
+            if(this.validateDates()){
+                const dataUser = JSON.parse( localStorage.getItem("d_u"));
+                const cedula = parseInt(dataUser['cedula'])
+    
+                var formData = new FormData();
+                formData.append('file',this.filePdf.files[0]?this.filePdf.files[0]:{})
+                formData.append('MENU_CODIGO', 2)
+                formData.append('INFORMACION_BASICA_CODIGO', cedula)
+                formData.append('NIVEL_ESTUDIO', parseInt(this.campo1.value))
+                formData.append('TITULO', this.campo2.value)
+                formData.append('INSTITUCION', this.campo4.value)
+                formData.append('PAI_CODIGO',parseInt(this.selectCountry.value))
+                formData.append('DTO_CODIGO',parseInt(this.selectDpto.value)) 
+                formData.append('CIUDAD', parseInt(this.selectCity.value) )
+                formData.append('ESTADO_ESTUDIO', this.campo3.value)
+                formData.append('FECHA_INICIO', this.campo5.value)
+                formData.append('FECHA_FINALIZACION', this.campo6.value?this.campo6.value:'')
+                formData.append('FECHA_GRADO_TENTATIVO', this.campo7.value?this.campo7.value:'')
+                formData.append('MODALIDAD_ESTUDIO',this.campo8.value? parseInt(this.campo8.value):0)
+                formData.append('PROMEDIO', this.campo9.value?this.campo9.value:'')
+    
+    
+                const urlSave =  `${baseUrl}/v1/educacion/crearRegistro`;
+                postFetch({url:urlSave,params:formData}).then(result => {
+                    if(result.ok){
+                        Swal.fire({
+                            title: '',
+                            text: "Se registro con éxito",
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: "#A6A6A6",
+                            confirmButtonText: 'Cerrar'
+                        })
+                        this.loadDataPrincipal();
+                    }
+                })
+            }
 
-            var formData = new FormData();
-            formData.append('file',this.filePdf.files[0]?this.filePdf.files[0]:{})
-            formData.append('MENU_CODIGO', 2)
-            formData.append('INFORMACION_BASICA_CODIGO', cedula)
-            formData.append('NIVEL_ESTUDIO', parseInt(this.campo1.value))
-            formData.append('TITULO', this.campo2.value)
-            formData.append('INSTITUCION', this.campo4.value)
-            formData.append('PAI_CODIGO',parseInt(this.selectCountry.value))
-            formData.append('DTO_CODIGO',parseInt(this.selectDpto.value)) 
-            formData.append('CIUDAD', parseInt(this.selectCity.value) )
-            formData.append('ESTADO_ESTUDIO', this.campo3.value)
-            formData.append('FECHA_INICIO', this.campo5.value)
-            formData.append('FECHA_FINALIZACION', this.campo6.value?this.campo6.value:'')
-            formData.append('FECHA_GRADO_TENTATIVO', this.campo7.value?this.campo7.value:'')
-            formData.append('MODALIDAD_ESTUDIO',this.campo8.value? parseInt(this.campo8.value):0)
-            formData.append('PROMEDIO', this.campo9.value?this.campo9.value:'')
-
-
-            const urlSave =  `${baseUrl}/v1/educacion/crearRegistro`;
-            postFetch({url:urlSave,params:formData}).then(result => {
-                if(result.ok){
-                    Swal.fire({
-                        title: '',
-                        text: "Se registro con éxito",
-                        icon: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: "#A6A6A6",
-                        confirmButtonText: 'Cerrar'
-                    })
-                    this.loadDataPrincipal();
-                }
-            })
+         
         }
 
     }
@@ -264,25 +268,26 @@ class Education extends Component{
     updateData = () => {
         if(!validateInputTabs()){
 
-                    var formData = new FormData();
-                    formData.append('file',this.filePdf.files[0]?this.filePdf.files[0]:{})
-                    formData.append('EDUCACION_CODIGO', document.getElementById('idDocument').value)
-                    formData.append('NIVEL_ESTUDIO', parseInt(this.campo1.value))
-                    formData.append('TITULO', this.campo2.value)
-                    formData.append('INSTITUCION', this.campo4.value)
-                    formData.append('PAI_CODIGO',parseInt(this.selectCountry.value))
-                    formData.append('DTO_CODIGO',parseInt(this.selectDpto.value)) 
-                    formData.append('CIUDAD', parseInt(this.selectCity.value) )
-                    formData.append('ESTADO_ESTUDIO', this.campo3.value)
-                    formData.append('FECHA_INICIO', this.campo5.value)
-                    formData.append('FECHA_FINALIZACION', this.campo6.value?this.campo6.value:'')
-                    formData.append('FECHA_GRADO_TENTATIVO', this.campo7.value?this.campo7.value:'')
-                    formData.append('MODALIDAD_ESTUDIO',this.campo8.value? parseInt(this.campo8.value):0)
-                    formData.append('PROMEDIO', this.campo9.value?this.campo9.value:'')
+            if(this.validateDates()){
+                var formData = new FormData();
+                formData.append('file',this.filePdf.files[0]?this.filePdf.files[0]:{})
+                formData.append('EDUCACION_CODIGO', document.getElementById('idDocument').value)
+                formData.append('NIVEL_ESTUDIO', parseInt(this.campo1.value))
+                formData.append('TITULO', this.campo2.value)
+                formData.append('INSTITUCION', this.campo4.value)
+                formData.append('PAI_CODIGO',parseInt(this.selectCountry.value))
+                formData.append('DTO_CODIGO',parseInt(this.selectDpto.value)) 
+                formData.append('CIUDAD', parseInt(this.selectCity.value) )
+                formData.append('ESTADO_ESTUDIO', this.campo3.value)
+                formData.append('FECHA_INICIO', this.campo5.value)
+                formData.append('FECHA_FINALIZACION', this.campo6.value?this.campo6.value:'')
+                formData.append('FECHA_GRADO_TENTATIVO', this.campo7.value?this.campo7.value:'')
+                formData.append('MODALIDAD_ESTUDIO',this.campo8.value? parseInt(this.campo8.value):0)
+                formData.append('PROMEDIO', this.campo9.value?this.campo9.value:'')
 
 
-            const urlSave =  `${baseUrl}/v1/educacion/actualizarRegistro`;
-            postFetch({url:urlSave,params:formData}).then(result => {
+                const urlSave =  `${baseUrl}/v1/educacion/actualizarRegistro`;
+                postFetch({url:urlSave,params:formData}).then(result => {
 
                 if(result.ok){
                     document.getElementById('saveButton').style = 'display:block';
@@ -301,6 +306,7 @@ class Education extends Component{
                 }
                 this.loadDataPrincipal();
             })
+          }
         }
 
 
@@ -320,14 +326,14 @@ class Education extends Component{
             console.log(result);
             if(!result.error){
                 const tbodyData = result.map((value,x) =>{
-                    let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('D/M/YYYY'):''
-                    let dataFin = value.FECHA_FINALIZACION != null ? moment.utc(value.FECHA_FINALIZACION).format('D/M/YYYY'):''
+                    let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('DD/MM/YYYY'):''
+                    let dataFin = value.FECHA_FINALIZACION != null ? moment.utc(value.FECHA_FINALIZACION).format('DD/MM/YYYY'):''
                     let icon = value.URL? 'fas fa-file-pdf text-dangerpdf fs-1':'fas fa-file-pdf text-muted fs-1'
                     let disabled = value.URL? false:true
 
                     return  <tr key={x} >
-                                <td className="text-nowrap">{value.TITULO}</td>
-                                <td className="text-nowrap">{value.INSTITUCION}</td>
+                                <td className="">{value.TITULO}</td>
+                                <td className="">{value.INSTITUCION}</td>
                                 <td className="text-nowrap">{value.NIVEL_NOMBRE}</td>
                                 <td className="text-nowrap">{value.ESTADO_NOMBRE}</td>
                                 <td className="text-nowrap">{dateIni} - {dataFin}</td>
@@ -389,6 +395,42 @@ class Education extends Component{
 
     }
 
+    validateDates = () =>{
+        const stateStudy = document.getElementById('edu-state').options[document.getElementById('edu-state').selectedIndex].text
+        if(stateStudy.toUpperCase() === 'FINALIZADO'){
+            const dateIni = moment(this.campo5.value);
+            const dateFin = moment(this.campo6.value);
+            if(dateIni > dateFin){
+                Swal.fire({
+                    title: '',
+                    text: "La fecha de finalización no puede ser menor a la de inicio",
+                    icon: 'info',
+                    showCancelButton: false,
+                    confirmButtonColor: "#A6A6A6",
+                    confirmButtonText: 'Cerrar'
+                })
+                return false
+            }
+            return true
+        }else if(stateStudy.toUpperCase() === 'EN CURSO'){
+            const dateIni = moment(this.campo5.value);
+            const dateFin = moment(this.campo7.value);
+            if(dateIni > dateFin){
+                Swal.fire({
+                    title: '',
+                    text: "La fecha de grado no puede ser menor a la de inicio",
+                    icon: 'info',
+                    showCancelButton: false,
+                    confirmButtonColor: "#A6A6A6",
+                    confirmButtonText: 'Cerrar'
+                })
+                return false
+            }
+            return true
+        }else{
+            return true
+        }
+    }
 
 
 
@@ -483,15 +525,6 @@ render(){
                                     <label htmlFor="file-upload" className="form-label">Certificado de estudio (PDF):</label>
                                     <input className="form-control" ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file" accept="application/pdf"/>
                                 </div>
-
-
-                                {/* <div className="col-sm-12 col-md-4 pb-4 addinputFile">
-                                    <label htmlFor="">Certificado de estudio (PDF):</label>
-                                    <label htmlFor="file-upload" className="custom-file-upload">
-                                        Subir archivo
-                                    </label>
-                                    <input ref={el => this.filePdf = el} id="file-upload" name="file-upload" type="file" accept="application/pdf" />
-                                </div>  */}
                             </div>
                             <div className="row pb-4">
                                 <p></p>
