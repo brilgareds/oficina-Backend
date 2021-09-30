@@ -22,8 +22,8 @@ export const DashboardRoutes = () => {
             if (JSON.parse(localStorage.getItem('d_u')).ingresoExterno === true) {
                 return (
                     <Switch>
-                        <Route path={routes.ingreso.url} component={routes.ingreso.componente} />
-                        <Route path="*" component={routes.encuestaRiesgoCovid.componente} />
+                        <Route exact={true} path={routes.encuestaRiesgoCovid.url} component={routes.encuestaRiesgoCovid.componente} />
+                        <Route path='*' component={routes.ingreso.componente} />
                     </Switch>
                 )
 

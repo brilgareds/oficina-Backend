@@ -32,6 +32,7 @@ export const SalesPoints = ({ filter, form, setForm, value, multiple = true, dis
 
     const [salesPoints, setSalesPoints] = useState([]);
     const [salesPoint, setSalesPoint] = useState([]);
+    const [cargando, setCargando] = useState(false)
 
     const handleSalesPointUpdate = (e) => {
         setSalesPoint(e || []);
@@ -42,10 +43,13 @@ export const SalesPoints = ({ filter, form, setForm, value, multiple = true, dis
 
         if (filter) {
             overlay(true);
+            setCargando(true);
             handleSalesPointUpdate();
+            setSalesPoints([]);
             getSalesPoints(filter).then(salesPoints => {
-                overlay(false);
                 if (salesPoints) {
+                    overlay(false);
+                    setCargando(false)
                     setSalesPoints(salesPoints);
 
                     if (form?.salesPoints) {
@@ -53,7 +57,7 @@ export const SalesPoints = ({ filter, form, setForm, value, multiple = true, dis
                         setSalesPoint(salesPoint);
                     }
                 }
-            });
+            }).catch(e => { overlay(false); });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
@@ -72,7 +76,7 @@ export const SalesPoints = ({ filter, form, setForm, value, multiple = true, dis
                 components={{ MenuList }}
                 captureMenuScroll={false}
                 filterOption={createFilter({ ignoreAccents: false })}
-
+                disabled={!salesPoint?.length}
                 isMulti={multiple}
                 closeMenuOnSelect={!multiple}
                 isDisabled={disabled}
@@ -80,7 +84,7 @@ export const SalesPoints = ({ filter, form, setForm, value, multiple = true, dis
                 onChange={handleSalesPointUpdate}
                 value={salesPoint}
                 options={salesPoints}
-                placeholder={'Seleccione...'}
+                placeholder={(cargando) ? 'Cargando.....' : 'Seleccione'}
             />
             <input
                 tabIndex={-1}
