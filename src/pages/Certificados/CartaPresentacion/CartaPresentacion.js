@@ -81,7 +81,7 @@ export const CartaPresentacion = () => {
                     if (!response || !Object.keys(response)?.length) throw new Error();
     
                     overlay(false);
-                    const options = { text: '¡Carta de presentación generada correctamente!', icon: 'success' };
+                    const options = { text: '¡Carta de presentación generada correctamente!', icon: 'success', successAnswerFunction: ()=>{ window.location.reload(); } };
 
                     return makeModal(options);
                 })

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import Select, { createFilter } from 'react-select';
-import { getSalesPoints } from '../../repositories/generalInfo';
+import { getAllSalesPoints } from '../../repositories/generalInfo';
 import { ColourStyles } from '../Inputs/Multiple/ColourStyles';
 import { Component } from "react";
 import { FixedSizeList as List } from "react-window";
+import { overlay } from '../../generalHelpers';
 
 
 class MenuList extends Component {
@@ -33,6 +34,7 @@ export const UnrelatedSalesPoints = ({ filter, setForm, value }) => {
 
     const [salesPoints, setSalesPoints] = useState([]);
     const [salesPoint, setSalesPoint] = useState('');
+    const [cargando, setCargando] = useState(false);
 
     const handleSalesPointUpdate = (e) => {
         setSalesPoint(e || []);
@@ -42,8 +44,17 @@ export const UnrelatedSalesPoints = ({ filter, setForm, value }) => {
     useEffect(() => {
 
         if (filter) {
+            overlay(true);
+            setCargando(true);
             handleSalesPointUpdate();
-            getSalesPoints(filter).then(setSalesPoints);
+            setSalesPoints([]);
+            getAllSalesPoints(filter).then(salespoints => {
+                if (salespoints) {
+                    overlay(false);
+                    setCargando(false);
+                    setSalesPoints(salespoints);
+                }
+            }).catch(e => { overlay(false); });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
@@ -61,12 +72,12 @@ export const UnrelatedSalesPoints = ({ filter, setForm, value }) => {
                 components={{ MenuList }}
                 captureMenuScroll={false}
                 filterOption={createFilter({ ignoreAccents: false })}
-
-                placeholder={'Seleccione...'} isMulti
+                placeholder={(cargando) ? 'Cargando.....' : 'Seleccione'} isMulti
                 closeMenuOnSelect={false}
                 styles={ColourStyles}
                 onChange={handleSalesPointUpdate}
                 value={salesPoint}
+                disabled={!salesPoint?.length}
                 options={salesPoints}
             />
             <input
