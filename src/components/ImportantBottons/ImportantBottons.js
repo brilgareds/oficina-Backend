@@ -12,6 +12,9 @@ import whatsapp from '../../assets/img/calificanos/whatsapp.png'
 import { postData } from '../general/General';
 import { baseUrl } from '../../config/config';
 
+import fotoGracias from '../../assets/img/calificanos/gracias.png'
+import fotoNo from '../../assets/img/calificanos/respuesta-negativa.png'
+
 
 export const ImportantBottons = () => {
    
@@ -160,26 +163,48 @@ export const ImportantBottons = () => {
     const sendQualification = () => {
       const data =JSON.parse(localStorage.getItem("d_u"))
       const input = document.getElementById('addDataComunicate')
-
-
-      let noti = document.querySelectorAll('input[name=checkComunication]:checked').length === 0 ? '': document.querySelectorAll('input[name=checkComunication]:checked')[0].dataset.campobd
-    //   let send = document.querySelectorAll('input[name=radioCalificanos]:checked').length === 0 ? '': document.querySelectorAll('input[name=radioCalificanos]:checked')[0].dataset.campobd
-
+      let noti = document.querySelectorAll('input[name=checkComunication]:checked').length === 0 ? "": document.querySelectorAll('input[name=checkComunication]:checked')[0].dataset.campobd
       const datos =  {
             "OVT_CEDULA": parseInt(data.cedula),
-            "input_add": input.value?input.value:'',
+            "input_add": input.value?input.value:"",
             "sendNotification":noti,
             "CALIFICACION": parseInt(document.querySelectorAll('input[name=radioCalificanos]:checked')[0].dataset.campobd)
 
           }
-
           postData(`${baseUrl}/v1/qualification/crearRegistroQualification`,datos).then(ele => {
-              console.log(ele)
+             if(ele.ok){
+                // fotoGracias
+                // fotoNo
+
+                if(parseInt(document.querySelectorAll('input[name=radioCalificanos]:checked')[0].dataset.validateemotion) === 0){
+                    Swal.fire({
+                        title: '',
+                        html: `<img class="mb-2" src=${fotoNo} /><div class="text-white">Gracias por tu respuesta, nos comunicaremos contigo para saber cómo podemos mejorar.</div>`,
+                        showCancelButton: false,
+                        confirmButtonColor: "#74E36B",
+                        confirmButtonText: 'Cerrar',
+                        background:'#0F4F80',
+                        allowOutsideClick:false,
+                        allowEscapeKey:false,
+                        focusConfirm:false
+                    })
+                }else{
+                    Swal.fire({
+                        title: '',
+                        html: `<img class="mb-2" src=${fotoGracias} /><div class="text-white">Tu respuesta nos alienta a esforzarnos cada día más.</div>`,
+                        showCancelButton: false,
+                        confirmButtonColor: "#74E36B",
+                        confirmButtonText: 'Cerrar',
+                        background:'#0F4F80',
+                        allowOutsideClick:false,
+                        allowEscapeKey:false,
+                        focusConfirm:false
+                    })
+
+                }
+
+             }
           })
-
-
-
-        console.log("se va para la bd")
     }
 
     return (

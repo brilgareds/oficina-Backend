@@ -89,7 +89,6 @@ class Education extends Component{
         const url = `${baseUrl}/v1/informacionBasica/consultarCiudades`;
         postData(url,datos).then(result => {
 
-            console.log(result)
             if(!result.error){
                 let option = result.map((value,x) => <option  key={x} value={value["cod_mpio"]}>{value["nom_mpio"]}</option>);
                 this.setState({city:option});
@@ -159,7 +158,6 @@ class Education extends Component{
 
     changeInputReadOnly = (data) =>{
         if(data.trim() === 'EN CURSO'){
-            console.log("en curso");
             putInputRequerid(`#${this.campo6.id}`,'','remove',this.campo6.id)
             putInputRequerid(`#${this.campo7.id}`,'','add',this.campo7.id)
             putInputRequerid(`#${this.campo8.id}`,'','add',this.campo8.id)
@@ -323,7 +321,6 @@ class Education extends Component{
         this.cleanInputs()
 
         postData(urlSave,data).then(result => {
-            console.log(result);
             if(!result.error){
                 const tbodyData = result.map((value,x) =>{
                     let dateIni = value.FECHA_INICIO != null? moment.utc(value.FECHA_INICIO).format('DD/MM/YYYY'):''
