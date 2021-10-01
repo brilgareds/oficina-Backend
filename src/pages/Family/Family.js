@@ -586,7 +586,7 @@ class Family extends Component{
                                 &nbsp;
                                 <div className="tab-content" id="myTabContent">
                                     <div className="tab-pane fade" id="registers" role="tabpanel" aria-labelledby="registers-tab">
-                                            {dataFamiliy}
+                                        <div className="table-responsive scrollbar"> {dataFamiliy}</div>
                                     </div>
                                     <div className="tab-pane fade" id="identity" role="tabpanel" aria-labelledby="identity-tab">
                                         <div className="row">
