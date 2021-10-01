@@ -45,9 +45,9 @@ const MenuCV= () => {
                                         !dataPrincipal?[]: dataPrincipal.map((value,x) => {
                                             let str = value.MENU_NOMBRE;
                                             let res = str.replace(" ", "_"); 
-                                            return  <li class="nav-item" key={x} >
-                                                        <Link  to={res.toLowerCase()} class="nav-link align-middle px-0">
-                                                            <i id={`colorCheck${value.MENU_CODIGO}`} class={`${value.MENU_ICONO}  checkGrey me-3 fs-1`}></i> <span class="ms-1 ">{str}</span>
+                                            return  <li className="nav-item" key={x} >
+                                                        <Link  to={res.toLowerCase()} className="nav-link align-middle px-0">
+                                                            <i id={`colorCheck${value.MENU_CODIGO}`} className={`${value.MENU_ICONO}  checkGrey me-3 fs-1`}></i> <span className="ms-1 ">{str}</span>
                                                         </Link>
                                                     </li>
                                         
