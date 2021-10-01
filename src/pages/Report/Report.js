@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { routes } from '../../environments/environments';
+import { files, routes } from '../../environments/environments';
 import { currentDate, getDocumentIdUser, getEmailUser, getFullNameUser, getGenderUser, getPhoneUser, getStatusUser } from '../../generalHelpers';
 import './report.css';
 
@@ -8,6 +8,7 @@ export const Report = ({showButtonCheckIn, dataReport={}}) => {
     const testId = dataReport?.survey?.ENC_CODIGO;
     const fechaReg = dataReport?.fechaReg || currentDate();
     const nombreEmpresa = dataReport?.logo?.[0]?.EMP_NOMBRE;
+    // const user = dataReport.userData;
 
     return (
         <div className='report-container'>
@@ -32,7 +33,7 @@ export const Report = ({showButtonCheckIn, dataReport={}}) => {
                 <div className='col-12 col-lg-5'>
                     <div className='mb-3 mensaje-covid' style={{background: `rgb${dataReport?.score?.[0]}`, color: `rgb${dataReport?.score?.[1] || ''}` }}>{dataReport?.score?.[2] || ''}</div>
                     <div className='offset-1 col-10 mb-3 p-0 text-center'>
-                        <Link to={ '/assets/documents/Recomendaciones_generales.pdf' } style={{ fontSize: '0.9rem' }} target='_blank'>Conoce aquí las recomendaciones asociadas al Covid-19</Link>
+                        <Link to={{ pathname: files.recomendacionesGenerales.url }} style={{ fontSize: '0.9rem' }} target='_blank'>Conoce aquí las recomendaciones asociadas al Covid-19</Link>
                     </div>
                 </div>
                 {

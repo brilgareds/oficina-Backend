@@ -1,4 +1,5 @@
 import Select from 'react-select';
+import { AsteriskRequired } from '../../../components/AsteriskRequired/AsteriskRequired';
 import { DataTabla } from '../../../components/DataTable/DataTabla';
 import { getDateToday, getFullNameUser } from '../../../generalHelpers';
 import { useIncapacidadRadicar } from './hooks/useIncapacidadRadicar';
@@ -35,8 +36,8 @@ export const IncapacidadRadicar = () => {
             fechaFin: getDateToday(),
             columnsDataTable: [
                 { title: '#', field: 'numero', headerStyle: headerStyles },
-                { title: 'DOCUMENTO', field: 'documento', headerStyle: headerStyles },
-                { title: 'ARCHIVO', field: 'archivo', headerStyle: headerStyles },
+                { title: 'Documento', field: 'documento', headerStyle: headerStyles },
+                { title: 'Archivo', field: 'archivo', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             files: [],
@@ -56,7 +57,7 @@ export const IncapacidadRadicar = () => {
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Radicar Incapacidades</h3>
+                            <h3>Radicar incapacidades</h3>
                         </div>
                     </div>
                 </div>
@@ -71,23 +72,23 @@ export const IncapacidadRadicar = () => {
                                 <h5 className="card-title">Datos del colaborador</h5>
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="cedula">Cédula: </label>
+                                <label className="form-label" htmlFor="cedula">Cédula: <AsteriskRequired /> </label>
                                 <input onChange={onChangeInputHandle} value={cedula} id="cedula" name="cedula" className="form-control" placeholder="Cédula" type="text" disabled />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="nombreUsuario">Nombre: </label>
+                                <label className="form-label" htmlFor="nombreUsuario">Nombre: <AsteriskRequired /> </label>
                                 <input onChange={onChangeInputHandle} value={nombreUsuario} id="nombreUsuario" name="nombreUsuario" className="form-control" placeholder="Nombre usuario" type="text" disabled />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="telefono">Teléfono: </label>
+                                <label className="form-label" htmlFor="telefono">Teléfono: <AsteriskRequired /> </label>
                                 <input onChange={onChangeInputHandle} value={telefono} id="telefono" name="telefono" className="form-control" placeholder="Teléfono" type="text" />
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="correoElectronico">Correo Electronico: </label>
+                                <label className="form-label" htmlFor="correoElectronico">Correo electrónico: <AsteriskRequired /> </label>
                                 <input onChange={onChangeInputHandle} value={correoElectronico} id="correoElectronico" name="correoElectronico" className="form-control" placeholder="correoElectronico" type="email" />
                             </div>
                             <div className="col-12 col-lg-3 mb-3">
-                                <label className="form-label" htmlFor="eps">EPS: </label>
+                                <label className="form-label" htmlFor="eps">Eps: <AsteriskRequired /> </label>
                                 <input onChange={onChangeInputHandle} value={eps} id="eps" name="eps" className="form-control" placeholder="Eps" type="eps" disabled />
                             </div>
                             <div className="col-12 col-lg-2 mb-3 text-center">
@@ -96,18 +97,18 @@ export const IncapacidadRadicar = () => {
                                 <input onClick={onCheckedOtherEntity} id="otraEntidad" name="otraEntidad" className="form-check-input" type="checkbox" />
                             </div>
                             <div className="col-12 col-lg-3 mb-5">
-                                <label className="form-label" htmlFor="descripcion">Otra Entidad: </label>
+                                <label className="form-label" htmlFor="descripcion">Otra entidad: </label>
                                 <Select onChange={valueSe => onChangeSelectHandle({ nameSelect: 'otraEntidad', value: valueSe })} options={optionsOtherEntity} defaultValue={[optionsOtherEntity[0]]} placeholder={'Seleccione...'} isDisabled={stateOtraEntidadCheck} styles={customStyles} />
                             </div>
                             <div className="card-header">
                                 <h5 className="card-title">Datos de la incapacidad</h5>
                             </div>
                             <div className="col-12 col-lg-4 mb-3">
-                                <label className="form-label" htmlFor="descripcion">Tipo incapacidad: </label>
+                                <label className="form-label" htmlFor="descripcion">Tipo de incapacidad: <AsteriskRequired /> </label>
                                 <Select onChange={value => { onChangeTipoIncapacidadHandle({ value }); onChangeSelectHandle({ nameSelect: 'tipoIncapacidad', value }); }} options={optionsTipoIncapacidad} defaultValue={[optionsTipoIncapacidad[0]]} placeholder={"Selecciona..."} />
                             </div>
                             <div className="col-12 col-lg-4">
-                                <label className="form-label" htmlFor="exampleFormControlInput1">Rango de fechas</label>
+                                <label className="form-label" htmlFor="exampleFormControlInput1">Rango de fechas: <AsteriskRequired /></label>
                                 <div className="input-group mr-auto md-auto">
                                     <input onChange={onChangeInputHandle} defaultValue={fechaInicio} id="fechaInicio" name="fechaInicio" className="form-control fechas datepicker" placeholder="Fecha inicio" type="date" />
                                     <span className="input-group-text"> - </span>
@@ -125,7 +126,7 @@ export const IncapacidadRadicar = () => {
                                 <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5>
                             </div>
 
-                            <DataTabla title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={columnsDataTable} data={rowsTable}  />
+                            <DataTabla paging={false} title={<> <h5 className="card-title">Sube tus archivos aquí en formato pdf </h5> </>} columns={columnsDataTable} data={rowsTable}  />
 
                             <div className="col-12 col-lg-12 mt-4 mb-3">
                                 <div className="row">

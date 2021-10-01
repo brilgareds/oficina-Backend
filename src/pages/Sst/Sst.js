@@ -39,7 +39,7 @@ export const Sst = () => {
                 <Link to={{ pathname: routes.encuestaCerco.url }}>
                     <button className=" btns-rrhh zoomBtn mb-3" type="button">
                         <span style={{ marginRight: '0.5rem', fontSize: '1.4rem' }}><i className="fas fa-head-side-mask"></i></span>
-                        Cerco epidemeológico
+                        Cerco epidemiológico
                     </button>
                     <br/>
                 </Link>

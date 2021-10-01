@@ -14,11 +14,11 @@ export const IncapacidadConsultar = () => {
     } = useIncapacidadConsultar(
         {
             columnsDataTable: [
-                { title: 'CONSECUTIVO', field: 'consecutivo', headerStyle: headerStyles },
-                { title: 'TIPO INCAPACIDAD', field: 'tipo_incapacidad', headerStyle: headerStyles },
-                { title: 'DOCUMENTOS', field: 'documentos', headerStyle: headerStyles },
-                { title: 'ESTADO', field: 'estado', headerStyle: headerStyles },
-                { title: 'ACTUALIZAR', field: 'actualizar', headerStyle: headerStyles },
+                { title: 'Consecutivo', field: 'consecutivo', headerStyle: headerStyles },
+                { title: 'Tipo incapacidad', field: 'tipo_incapacidad', headerStyle: headerStyles },
+                { title: 'Documentos', field: 'documentos', headerStyle: headerStyles },
+                { title: 'Estado', field: 'estado', headerStyle: headerStyles },
+                { title: 'Actualizar', field: 'actualizar', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             files: [],
@@ -36,7 +36,7 @@ export const IncapacidadConsultar = () => {
                 <div className="card-body position-relative textoMigaDePan">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h3>Consultar Incapacidades</h3>
+                            <h3>Consultar incapacidades</h3>
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,32 @@ a {
 }
 
 .nav-link {
+    background-color: transparent !important;
+    text-decoration: none !important;
+    color: #1780E8 !important;
     text-align: center;
+    border-color: initial !important;
+}
+
+.nav-link:link {
+    background-color: transparent !important;
+    text-decoration: none !important;
+    color: #1780E8 !important;
+    border-color: initial !important;
+}
+
+.nav-link:visited {
+    background-color: transparent !important;
+    text-decoration: none !important;
+    color: #1780E8 !important;
+    border-color: initial !important;
+}
+
+.nav-link:active {
+    background-color: transparent !important;
+    text-decoration: none !important;
+    color: #1780E8 !important;
+    border-color: initial !important;
 }
 
 .paddingContainer {

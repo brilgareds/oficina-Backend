@@ -73,7 +73,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                                 <img
                                     className="imgDeleteGasto"
                                     alt="trash-fill-orange"
-                                    src="/assets/img/actualizar-flecha.png"
+                                    src="/assets/img/fa-file-alt.png"
                                     value={String(element.BENEF_CODIGO)}
                                     onClick={event => { onClickActualizarIncapacidad(element.BENEF_CODIGO) }}
                                 />,
@@ -177,10 +177,10 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
 
         const columnsTableDocumentos = [
             { title: '#' },
-            { title: 'MOTIVO RECHAZO' },
-            { title: 'ESTADO' },
-            { title: 'DESCARGAR' },
-            { title: 'ACTUALIZAR' },
+            { title: 'Motivo rechazo' },
+            { title: 'Estado' },
+            { title: 'Descargar' },
+            { title: 'Actualizar' },
         ];
 
         let thHeader = ``;
@@ -214,7 +214,6 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
             //     onClick={event => { onClickActualizarIncapacidad(element.BENEF_CODIGO) }}
             // />,
 
-            <img className="imgDeleteGasto" alt="trash-fill-orange" src="/assets/img/actualizar-flecha.png"/>
 
             tdBody +=
                 `<tr>
@@ -223,12 +222,11 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                     <td>${validarEstadoPeticionDocumentosBeneficiario(data.ARCH_ESTADO)}</td>
                     <td><a href="${data.ARCH_RUTA}" target="_blank"> <button id="btnArchivoModal_${key}" class="btn btn-link" ><img class="imgDeleteGasto" alt="download-to-storage-drive" src="/assets/img/download-to-storage-drive.png"/> </button> </a></td>
                     <td>
-                        <label for="inputFile_${key}" class="btn fileButton"> Subir archivo </label>
-                        <input name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" style="display:none" type="file" accept=".pdf">
+                        <input class="form-control" name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" type="file" accept=".pdf">
                     </td>
                 </tr>`
                 ;
-                
+
 
 
         });
@@ -300,15 +298,15 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
             document.getElementById(event.target.id).value = "";
 
             alertify.warning(`
-                                    <div className="row">
-                                        <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
-                                            Error.
-                                        </div>
-                                        <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
-                                            Solo se permiten subir archivos tipo pdf
-                                        </div>
-                                    </div>
-                                    `).delay(7);
+            <div className="row">
+                <div className="col-12 col-lg-12" style="text-align: center; font-size: 18px; font-weight: 800;">
+                    Error.
+                </div>
+                <div className="col-12 col-lg-12" style="text-align: left; font-size: 16px; font-weight: 600; margin-bottom: 15px;">
+                    Solo se permiten subir archivos tipo pdf
+                </div>
+            </div>
+            `).delay(7);
         }
     };
 
@@ -335,7 +333,7 @@ export const useEpsCajaConsultar = (formInitialState = {}, dataUser) => {
                 .then(() => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos actualizados correctamente.',
+                        html: `Los documentos para su solicitud radicada con el número #${dataApi[0].BENEF_CODIGO} fueron subidos nuevamente para su aprobación.`,
                         confirmButtonText: 'Continuar',
                         confirmButtonColor: "#1783EE",
                     }).then((result) => {

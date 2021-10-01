@@ -1,5 +1,5 @@
 import { api } from '../../environments/environments';
-import { getFetch, postFetch } from '../../generalHelpers';
+import { getFetch, postFetch, upperFirtLetterText } from '../../generalHelpers';
 
 const formatSurveys = (questions) => {
     let newQuestions = [];
@@ -12,17 +12,22 @@ const formatSurveys = (questions) => {
             question.questions.forEach((pregunta, i) => {
                 const quantityResponses = pregunta.responses.length;
 
+                pregunta.PREGUNTA = upperFirtLetterText(pregunta.PREGUNTA);
+
                 if (quantityResponses === 1 && !pregunta.PREGUNTA_SIGUIENTE_ID) {
                     pregunta.responses[0].PREGUNTA_SIGUIENTE_ID = question.questions[i + 1]?.ID || '';
                 }
 
                 pregunta.responses.forEach((response, j) => {
+
                     pregunta.responses[j].codeER = pregunta.responses[j].COD_ER;
                     delete pregunta.responses[j].COD_ER;
+                    response.RESPUESTA = upperFirtLetterText(response.RESPUESTA);
 
                     if (pregunta.SELECCION === 'M') {
                         pregunta.responses[j].single = (response.RESPUESTA.toLowerCase().includes('ninguna'));
                     }
+                    
                 });
 
                 pregunta.responses.sort((a, b) => ((
@@ -99,9 +104,9 @@ const saveSurveys = async ({ params, tipoEncuesta }) => {
             (tipoEncuesta === 'riesgoCovid') ? api.saveSurveysHealthCondition :
                 (tipoEncuesta === 'cercoEpidemeologico') ? api.saveSurveysEpidemiologicalFence : ''
     );
-    const response = await (await (url ? postFetch({ url, params }) : {}) || {});
+    const response = (await (await (url ? postFetch({ url, params }) : {}) || {})) || {};
 
-    return response;
+    return response?.data || {};
 };
 
 

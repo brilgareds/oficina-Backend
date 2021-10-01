@@ -34,9 +34,9 @@ export const Encuestas = ({ tipoEncuesta= '' }) => {
                 <div className="card-header position-relative text-center text-md-start ps-md-5" style={{ paddingLeft: '3rem' }}>
                     <div className="col-12">
                         <h3>{
-                            (tipoEncuesta === 'casosCovid')          ? 'Encuesta Casos Covid'           :
-                            (tipoEncuesta === 'cercoEpidemeologico') ? 'Encuesta Cerco epidemiológico'  :
-                            (tipoEncuesta === 'riesgoCovid')         ? 'Encuesta Riesgo Covid'          : '' }
+                            (tipoEncuesta === 'casosCovid')          ? 'Encuesta casos Covid'           :
+                            (tipoEncuesta === 'cercoEpidemeologico') ? 'Encuesta cerco epidemiológico'  :
+                            (tipoEncuesta === 'riesgoCovid')         ? 'Encuesta riesgo Covid'          : '' }
                         </h3>
                     </div>
                 </div>

@@ -22,8 +22,8 @@ export const Ingreso = () => {
 
     return (
         (finished) ?
-            <Redirect to='/' /> : 
-
+            <Redirect to={routes.home.url} /> 
+            :
         (hasMainInfo) ? (
             (!userHasSurvey) ? <Redirect to={routes.encuestaRiesgoCovid.url} />
             :
@@ -78,7 +78,7 @@ export const Ingreso = () => {
                         </form>
                     </div>
                 </div>
-            </>
+            </> 
         ) : <></>
     );
 }

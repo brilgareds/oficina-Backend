@@ -19,7 +19,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 import './dataTabla.css';
 
-export const DataTabla = ({ title, columns, data, search = true, toolbar = true, backgroundColor, color, onRowAdd = false, onRowDelete = false }) => {
+export const DataTabla = ({ title, columns, data, paging = true, search = true, toolbar = true, backgroundColor, color, onRowAdd = undefined, onRowDelete = undefined }) => {
 
     const tableIcons = {
         Add: forwardRef((props, ref) => <div className='containerAddCircleIcon'><AddCircleIcon className='addCircleIcon' style={{ fontSize: '2rem', color: '#1780e8' }} {...props} ref={ref} /></div>),
@@ -52,6 +52,8 @@ export const DataTabla = ({ title, columns, data, search = true, toolbar = true,
                 onRowDelete
             }}
             options={{
+                paging,
+                pageSize: 10,
                 maxBodyHeight: 400,
                 headerStyle: { backgroundColor, color },
                 search,

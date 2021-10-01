@@ -56,7 +56,7 @@ const definirPropiedadesLink = (menu, k, first) => {
 
     const response = {
         k,
-        colorTitulo: (first) ? '' : '#5e6e82',
+        colorTitulo: (first) ? '' : '#1780E8',
         collapse: (tieneSubMenus) ? 'collapse' : '',
         target: (tipoAccion === 'R') ? '_blank' : '',
         dropDown: (tieneSubMenus) ? 'dropdown-indicator' : '',
@@ -97,7 +97,7 @@ const specificDecimals = (value = 0, quantityDecimals = 0) => {
     const dotOrCommaPosition = getDotOrCommaPosition(value);
 
     if (dotOrCommaPosition === 0) {
-        value = (quantityDecimals) ? `0${value}` : value.substring(1);
+        value = (quantityDecimals) ? `1${value}` : value.substring(1);
     }
 
     const maxQuantityCharacters = (dotOrCommaPosition && value[dotOrCommaPosition]) ? parseFloat(dotOrCommaPosition) + quantityDecimals : value.length;
@@ -131,27 +131,39 @@ const currentDate = (obj = {}) => {
             (format === 'spanish') ? spanishDate : ''
     );
 
-    const fullDate = `${date} ${(withTime) ? ` ${time}` : ''}`;
+    const fullDate = (`${date} ${(withTime) ? ` ${time}` : ''}`).trim();
 
     return fullDate;
 };
 
 
-const makeModal = ({title='', text='', html='', icon='success', showCancelButton=false, cancelButtonText='Cancelar', confirmButtonText='Confirmar', successAnswerFunction=()=>{}, cancelAnswerFunction=()=>{}}) => (
+const makeModal = ({
+    title = '',
+    text = '',
+    html = '',
+    icon = 'success',
+    showCancelButton = false,
+    showConfirmButton = true,
+    cancelButtonText = 'Cancelar',
+    confirmButtonText = 'Confirmar',
+    successAnswerFunction = () => { },
+    cancelAnswerFunction = () => { },
+}) => (
     Swal.fire({
-       title,
-       text,
-       html,
-       icon,
-       showCancelButton,
-       cancelButtonText,
-       confirmButtonText,
-       cancelButtonColor: '#A6A6A6',
-       confirmButtonColor: '#1783EE'
-   }).then((result) => {
-    if (result.isConfirmed) successAnswerFunction();
-    else cancelAnswerFunction();
-  }).catch(err => { console.warning(err); cancelAnswerFunction(); })
+        title,
+        text,
+        html,
+        icon,
+        showCancelButton,
+        showConfirmButton,
+        cancelButtonText,
+        confirmButtonText,
+        cancelButtonColor: '#A6A6A6',
+        confirmButtonColor: '#1783EE'
+    }).then((result) => {
+        if (result.isConfirmed) successAnswerFunction();
+        else cancelAnswerFunction();
+    }).catch(err => { console.warning(err); cancelAnswerFunction(); })
 );
 
 
@@ -251,7 +263,7 @@ const advertenciaFormularioVacio = () => {
                 <div className="col-12 col-lg-12" style="text-align: left; font-size: 15px;">
                     ◉ Los campos no deben estar vacios <br/>
                     ◉ No se permiten carácteres especiales Eje: !"#$%&/() <br/>
-                    ◉ Debes seleccionar almenos una opción de los campos seleccionables <br/>
+                    ◉ Recuerda que los campos marcados con asterisco son obligatorios <br/>
                 </div>
             </div>
              <br/>
@@ -273,9 +285,9 @@ const capitalizarPalabras = (val) => {
 
             const positionToChange = parseFloat(v.search(/[a-z]/i));
 
-            const firstPart  = v.substring(0, positionToChange);
-            const secondPart = v.substring(positionToChange, positionToChange+1).toUpperCase();
-            const thirdPart  = v.substring(positionToChange+1);
+            const firstPart = v.substring(0, positionToChange);
+            const secondPart = v.substring(positionToChange, positionToChange + 1).toUpperCase();
+            const thirdPart = v.substring(positionToChange + 1);
 
             return firstPart + secondPart + thirdPart;
         })
@@ -285,7 +297,13 @@ const capitalizarPalabras = (val) => {
 const upperFirtLetterText = (text = '') => {
     if (typeof text !== 'string' || !text.length) return text;
 
-    return text[0].toUpperCase() + text.slice(1).toLowerCase();
+    const positionToChange = parseFloat(text.search(/[a-z]/i));
+
+    const firstPart = text.substring(0, positionToChange).toLowerCase();
+    const secondPart = text.substring(positionToChange, positionToChange + 1).toUpperCase();
+    const thirdPart = text.substring(positionToChange + 1).toLowerCase();
+
+    return firstPart + secondPart + thirdPart;
 };
 
 const getFullUser = () => {

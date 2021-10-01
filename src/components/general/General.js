@@ -36,7 +36,6 @@ import { baseUrl } from "../../config/config";
 
 
      function simulateClick(id,tiempo,evento) {
-         console.log(id)
         let event = new Event(evento, {bubbles: true});
         let elem = document.getElementById(id); 
         setTimeout(() =>{           
@@ -194,7 +193,6 @@ import { baseUrl } from "../../config/config";
             }
         })
 
-        // console.log(labelValidate);
 
         if(labelValidate){
             let list = `<ul class="list-group list-group-flush inline-flex">

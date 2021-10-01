@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getSurveys, saveSurveys } from '../../repositories/Encuestas/Encuentas';
 import { makeModal } from '../../generalHelpers';
 
-export const useEncuestas = ({tipoEncuesta=''}) => {
+export const useEncuestas = ({ tipoEncuesta = '' }) => {
 
     const [tabIndex, setTabIndex] = useState(0);
     const [encuestas, setEncuestas] = useState([]);
@@ -15,11 +15,11 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
 
         document.getElementById('root').className = 'encuesta';
 
-        getSurveys({tipoEncuesta}).then(setEncuestas);
+        getSurveys({ tipoEncuesta }).then(setEncuestas);
     }, [tipoEncuesta]);
 
-    const generarReporte = (({response}) => {
-        setDataReport(response?.data);
+    const generarReporte = (({ response }) => {
+        setDataReport(response);
         setFormularioEnviado(true);
     });
 
@@ -31,10 +31,10 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
         for (let prop in filtro) {
             let obj = filtro[prop];
             const esArray = Array.isArray(obj);
-          
+
             if (!esArray) respuestas.push(filtro[prop])
             else {
-                respuestas = [ ...respuestas, ...obj.map(({value}) => ({ codeER: value, value: null })) ];
+                respuestas = [...respuestas, ...obj.map(({ value }) => ({ codeER: value, value: null }))];
             }
         }
 
@@ -43,49 +43,53 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
 
 
     const respuestasConfirmadas = (evt, value) => {
-        
+
         const params = { answers: formatRespuestas(formEncuesta) };
         const data = { params, tipoEncuesta };
         let response = {};
 
         saveSurveys(data)
             .then(async data => {
+                // if (!data || !Object.keys(data).length) throw new Error(data);
+
                 response = data;
 
                 const options = {
                     title: 'Respuestas guardadas correctamente!',
                     text: '¡Gracias por responder la encuesta!',
-                    icon: 'success'
+                    icon: 'success',
+                    showCancelButton: true,
+                    cancelButtonText: "Cerrar",
+                    showConfirmButton: false,
                 };
-                
+
                 return makeModal(options);
             })
-            .then(() => generarReporte({response,tipoEncuesta}))
+            .then(() => generarReporte({ response, tipoEncuesta }))
             .catch(e => {
-                console.log('Error: ', e);
-
+                
                 const options = {
                     title: '',
                     html: 'Error al guardar las respuestas<br>Intente nuevamente!',
                     icon: 'error'
                 };
-                
+
                 return makeModal(options);
             });
     };
 
-    const respuestasDenegadas = () => {};
+    const respuestasDenegadas = () => { };
 
     const nextTab = () => {
 
         if (existeProximoTab) {
 
             setTabIndex(currentIndex => {
-                const newIndex = currentIndex+1;
+                const newIndex = currentIndex + 1;
                 const existeTab = encuestas[newIndex];
-    
+
                 if (existeTab) currentIndex = newIndex;
-    
+
                 return currentIndex;
             });
         } else {
@@ -98,13 +102,13 @@ export const useEncuestas = ({tipoEncuesta=''}) => {
                 successAnswerFunction: respuestasConfirmadas,
                 cancelAnswerFunction: respuestasDenegadas
             };
-            
+
             makeModal(options);
         }
     };
-    
-    const existeProximoTab = (encuestas && encuestas[tabIndex+1]);
-    
+
+    const existeProximoTab = (encuestas && encuestas[tabIndex + 1]);
+
     return {
         encuestas,
         tabIndex,

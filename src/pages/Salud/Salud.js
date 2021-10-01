@@ -143,7 +143,7 @@ class Salud extends Component{
 
                 const urlSave =  `${baseUrl}/v1/salud/crearRegistroSalud`;
                 postFetch({url:urlSave,params:formData}).then(result => {
-                    console.log(result);
+                    
                 if(result.ok){
                     Swal.fire({
                         title: '',
@@ -173,7 +173,7 @@ class Salud extends Component{
 
         const urlSave =  `${baseUrl}/v1/salud/buscarDatos`;
         postData(urlSave,datos).then(result => {
-            console.log(result)
+            
             result.forEach(element => {
                 
                 this.estatura.value = element.ESTATURA?element.ESTATURA.trim():''
@@ -440,7 +440,7 @@ class Salud extends Component{
                             <div className="tab-pane fade " id="complementary" role="tabpanel" aria-labelledby="complementary-tab">
                                 <div className="row">
                                     <div className="col-sm-12 col-md-4 pb-4">
-                                        <label>&#191;Plan de salud diferente a la EPS&#63;</label>
+                                        <label>&#191;Plan de salud diferente a la Eps&#63;</label>
                                         <div className=" d-flex justify-content-around">
                                                     <input value="S" type="radio" onChange={() => {
                                                                         putInputRequerid('#diag-entity','textselectdate','add','diag-entity')

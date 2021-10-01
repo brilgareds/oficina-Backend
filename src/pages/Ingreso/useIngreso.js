@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { makeModal } from "../../generalHelpers";
 import { saveCheckIn, saveCheckOut } from "../../repositories/CheckInCheckOut/CheckInCheckOut";
 import { getCheckInAndCheckOutInfo } from "../../repositories/generalInfo";
+import { Redirect } from 'react-router-dom'
+import { routes } from "../../environments/environments";
 
 export const useIngreso = () => {
 
@@ -10,9 +12,9 @@ export const useIngreso = () => {
     const [finished, setFinished] = useState(false);
     const [formCheckIn, setFormCheckIn] = useState({});
 
-    const hasMainInfo     = !!(Object.keys(mainInfo || {}).length);
-    const userHasSurvey   = !!(Object.keys(mainInfo?.hasSurvey   || {}).length);
-    const userHasCheckIn  = !!(Object.keys(mainInfo?.hasCheckIn  || {}).length);
+    const hasMainInfo = !!(Object.keys(mainInfo || {}).length);
+    const userHasSurvey = !!(Object.keys(mainInfo?.hasSurvey || {}).length);
+    const userHasCheckIn = !!(Object.keys(mainInfo?.hasCheckIn || {}).length);
     const userHasCheckOut = !!(Object.keys(mainInfo?.hasCheckOut || {}).length);
 
     /*
@@ -27,17 +29,17 @@ export const useIngreso = () => {
             setFormCheckIn(oldData => ({
                 ...oldData,
                 longitude: pos?.coords?.longitude || null,
-                latitude:  pos?.coords?.latitude  || null
+                latitude: pos?.coords?.latitude || null
             }));
         };
 
-        navigator.geolocation.getCurrentPosition(success, ()=>{});
+        navigator.geolocation.getCurrentPosition(success, () => { });
         getCheckInAndCheckOutInfo().then(setMainInfo);
     }, []);
 
     useEffect(() => {
         if (hasMainInfo) {
-            
+
             setFormCheckIn(oldData => {
 
                 const a = {
@@ -63,8 +65,8 @@ export const useIngreso = () => {
 
     const tipoIngresos = [
         {
-           id: 1164, // CIN_TIPO_INGRESO
-           title: 'Home Office'
+            id: 1164, // CIN_TIPO_INGRESO
+            title: 'Home Office'
         },
         {
             id: 1165,
@@ -78,8 +80,6 @@ export const useIngreso = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-
-        console.log('formCheckIn: ', formCheckIn);
 
         if (!userHasCheckIn) {
 
@@ -95,10 +95,10 @@ export const useIngreso = () => {
                 otherSalePoint: ''
             };
 
-            return saveCheckIn({params})
-                .then(() => makeModal({text: 'Ingreso registrado con exito!', icon: 'success'}))
+            return saveCheckIn({ params })
+                .then(() => makeModal({ text: 'Ingreso registrado con exito!', icon: 'success' }))
                 .then(() => setFinished(true))
-                .catch(err => { console.warn(err); makeModal({text: err.toString(), icon: 'error', confirmButtonText: 'Aceptar'})});
+                .catch(err => { console.warn(err); makeModal({ text: err.toString(), icon: 'error', confirmButtonText: 'Aceptar', successAnswerFunction: ()=>{ console.log("cerró");} }) });
 
         } else if (!userHasCheckOut) {
 
@@ -107,12 +107,21 @@ export const useIngreso = () => {
                 temperature: parseFloat(formCheckIn?.temperatureCheckOut)
             };
 
-            return saveCheckOut({params})
-                .then(() => makeModal({text: 'Salida registrada con exito!', icon: 'success'}))
+            return saveCheckOut({ params })
+                .then(() => makeModal({ text: 'Salida registrada con exito!', icon: 'success' }))
                 .then(() => setFinished(true))
-                .catch(err => { console.warn(err); makeModal({text: err.toString(), icon: 'error', confirmButtonText: 'Aceptar'})});
+                .catch(err => { console.warn(err); makeModal({ text: err.toString(), icon: 'error', confirmButtonText: 'Aceptar' }) });
         }
     };
+
+    const handleRedirectIngreso = () => {
+        if (JSON.parse(localStorage.getItem('d_u')).ingresoExterno === true) {
+            localStorage.clear();
+            window.location.href = routes.login.url;
+        }else {
+            return <Redirect to='/' />;
+        }
+    }
 
     if (hasMainInfo && userHasSurvey && userHasCheckIn && userHasCheckOut && !finished) {
         Swal.fire({
@@ -137,6 +146,7 @@ export const useIngreso = () => {
         setFormCheckIn,
         userHasCheckOut,
         handleFormSubmit,
-        handleCheckUpdate
+        handleCheckUpdate,
+        handleRedirectIngreso
     }
 };

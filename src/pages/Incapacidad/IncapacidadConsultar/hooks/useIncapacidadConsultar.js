@@ -142,8 +142,8 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
         const columnsTableDocumentos = [
             { title: '#' },
-            { title: 'DOCUMENTO' },
-            { title: 'ARCHIVO' },
+            { title: 'Documento' },
+            { title: 'Archivo' },
         ];
 
         let thHeader = ``;
@@ -257,9 +257,6 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
 
     const desplegarModalActualizarDatos = (dataIncapacityObj) => {
 
-
-        console.log("dataIncapacityObj", dataIncapacityObj);
-
         const { dataIncapacity, documentsIncapacity } = dataIncapacityObj;
 
         if (
@@ -270,10 +267,10 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
         }
 
         const columnsTableDocumentos = [
-            { title: 'DOCUMENTO' },
-            { title: 'ESTADO' },
-            { title: 'MOTIVO RECHAZO' },
-            { title: 'ARCHIVO' },
+            { title: 'Documento' },
+            { title: 'Estado' },
+            { title: 'Motivo rechazo' },
+            { title: 'Archivo' },
         ];
 
         let thHeader = ``;
@@ -289,8 +286,7 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                     <td>${estado}</td>
                     <td>${(data.RECHAZO !== null) ? data.RECHAZO.toUpperCase() : "N/A"}</td>
                     <td>
-                    <label for="inputFile_${key}" class="btn fileButton"> Subir archivo </label>
-                        <input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem; display:none">
+                        <input ${habilitado} name="inputFile_${key}" id="inputFile_${key}" data-target="${data.ARCH_CODIGO}" class="form-control" type="file" accept=".pdf" style="width: 18rem;">
                     </td>
                 </tr>`
                 ;
@@ -447,10 +443,12 @@ export const useIncapacidadConsultar = (formInitialState = {}, dataUser) => {
                 url: api.postUpdateDisabilityFiling,
                 params: dataForm
             })
+
+            
                 .then(() => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos actualizados correctamente.',
+                        html: `Los documentos para su incapacidad radicada con el número #${numerIncapacidad} fueron subidos nuevamente para su aprobación.`,
                         confirmButtonText: 'Cerrar',
                         confirmButtonColor: "#A6A6A6",
                     }).then((result) => {

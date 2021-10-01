@@ -1,4 +1,4 @@
-import { DataTabla } from '../../../components/DataTable/DataTabla';
+import { AsteriskRequired } from '../../../components/AsteriskRequired/AsteriskRequired';
 import { getFullNameUser } from '../../../generalHelpers';
 import { useMiBilletera } from './hooks/useMiBilletera';
 import './MiBilletera.css';
@@ -10,18 +10,18 @@ export const MiBilletera = () => {
     const headerStyles = { backgroundColor: '#FFFFFF', color: '#344050', zIndex: 0 };
     const {
         formValue,
-        rowsTable,
         stateSalarioUsuario,
         stateSumaDeGastos,
         statetTatalDisponible,
+        tbodyTest,
         onChangeInputHandle,
         onClickGuardar,
     } = useMiBilletera(
         {
             columnsDataTable: [
-                { title: 'GASTO', field: 'gasto', headerStyle: headerStyles },
-                { title: 'COSTO', field: 'costo', headerStyle: headerStyles },
-                { title: 'ELIMINAR', field: 'accion', headerStyle: headerStyles },
+                { title: 'Gasto', field: 'gasto', headerStyle: headerStyles },
+                { title: 'Costo', field: 'costo', headerStyle: headerStyles },
+                { title: 'Eliminar', field: 'accion', headerStyle: headerStyles },
             ],
             rowsDataTable: [],
             gasto: "",
@@ -36,7 +36,7 @@ export const MiBilletera = () => {
         dataUser
     );
 
-    const { columnsDataTable, gasto, valorGasto } = formValue;
+    const {gasto, valorGasto } = formValue;
 
 
     return (
@@ -63,19 +63,19 @@ export const MiBilletera = () => {
                                 Ingresar nuevo gasto:
                             </div>
                             <div className="col-12 col-lg-12 mb-3 text-center">
-                                <span className="form-label texto2rio" htmlFor="gasto">Gasto: </span>
+                                <span className="form-label texto2rio" htmlFor="gasto">Gasto:  <AsteriskRequired /> </span>
                                 <input onChange={onChangeInputHandle} value={gasto} name="gasto" id="gasto" className="form-control inputsMiBilletera" placeholder="Tipo de gasto" type="text" />
                             </div>
                             <div className="col-12 col-lg-12 mb-4 text-center">
-                                <span className="form-label texto2rio" htmlFor="valorGasto">valor: </span>
+                                <span className="form-label texto2rio" htmlFor="valorGasto">Valor:  <AsteriskRequired /> </span>
                                 <input onChange={onChangeInputHandle} value={valorGasto} name="valorGasto" id="valorGasto" className="form-control inputsMiBilletera" placeholder="Valor del gasto" type="text" />
                             </div>
 
                             <div className="col-12 col-lg-12 mb-4 text-left">
                                 <span className="textoSalario">SALARIO: ${stateSalarioUsuario}</span>
-                                <hr />
+                                <hr className="hrDividor" />
                                 <span className="texto2rio">Total gastos: ${stateSumaDeGastos}</span>
-                                <hr />
+                                <hr className="hrDividor" />
                                 <span className="texto2rio">Total disponible: ${statetTatalDisponible}</span>
                             </div>
 
@@ -94,7 +94,23 @@ export const MiBilletera = () => {
                                 <span className="texto2rio">{getFullNameUser()}</span>
                             </div>
                             <div className="col-md-12">
-                                <DataTabla title={""} columns={columnsDataTable} data={rowsTable} toolbar={false} inputSearch={false} />
+                                {/* <DataTabla title={""} columns={columnsDataTable} data={rowsTable} toolbar={false} inputSearch={false} /> */}
+                                <div className="row">
+                                    <div className="col-md-12 table-responsive scrollbar" style={{ height: "300px" }}>
+                                        <table className="tablle_billetera table table-striped overflow-hidden bg-light">
+                                            <thead>
+                                                <tr>
+                                                    <th>Gasto</th>
+                                                    <th>Costo</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {tbodyTest || ""}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

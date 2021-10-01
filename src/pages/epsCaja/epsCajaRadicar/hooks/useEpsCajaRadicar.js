@@ -107,9 +107,12 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                     });
 
                     setstatetipoParentesco(optionsCategory);
+                    setStateForm(oldValue => ({
+                        ...oldValue,
+                        tipoParentesco: optionsCategory?.[0].value
+                    }));
 
                 });
-
         }
     }, [stateBeneficioPara])
 
@@ -172,16 +175,15 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                         documento: (element.TIP_NOMBRE).toUpperCase(),
                         archivo:
                             <>
-                                <label htmlFor={`file_${numberRow}`} className="btn fileButton"> Subir archivo </label>
                                 <input
                                     onChange={values => { onChangeInputFileHandle({ tipoArchivo: element.TIP_CODIGO, documento: (element.TIP_NOMBRE).toUpperCase(), target: values, }) }}
                                     key={key}
-                                    id={`file_${numberRow}`} 
+                                    id={`file_${numberRow}`}
                                     name={`file_${numberRow}`}
                                     className="form-control"
                                     type="file"
                                     accept=".pdf"
-                                    style={{ display: "none" }}
+                                    required={element?.TIP_ATRIBUTO3}
                                 />
                             </>
                     });
@@ -205,13 +207,13 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
 
                 switch (Number(resGetConsultarParentesco[0].cod_enti)) {
                     case 21:
-                        mensaje = `Queremos informarle que la caja de compensaci&oacuten a la cual pertenece, tiene un sistema de autogesti&oacuten que le permitir&aacute; hacer la inclusi&oacuten de sus beneficiarios, por lo cual le invitamos a hacer el tr&aacutemite directamente en la p&aacutegina www.comfenalco.com.co.`;
+                        mensaje = `Queremos informarle que la caja de compensaci&oacuten a la cual pertenece, tiene un sistema de autogesti&oacuten que le permitir&aacute; hacer la inclusi&oacuten de sus beneficiarios, por lo cual le invitamos a hacer el tr&aacutemite directamente en la p&aacutegina<br><br>www.comfenalco.com.co`;
                         break;
                     case 49:
-                        mensaje = `Estimado (a) trabajador, queremos informarle que la Caja de compensacion a la cual pertenece  tiene un sistema de autogestion, que le permitira hacer  la inclusion de sus beneficiarios, por  lo  cual lo invitamos a realizar este  tramite directamente en la pagina www.colsubsidio.com Si tiene alguna dificultad o inquietud no dude en contactar a Jakeline Rueda Celular 3222569460, quien estara para asesorarlo en este proceso\n`;
+                        mensaje = `Estimado (a) trabajador, queremos informarle que la Caja de compensacion a la cual pertenece  tiene un sistema de autogestion, que le permitira hacer  la inclusion de sus beneficiarios, por  lo  cual lo invitamos a realizar este  tramite directamente en la pagina<br><br>www.colsubsidio.com<br>Si tiene alguna dificultad o inquietud no dude en contactar a Jakeline Rueda Celular 3222569460, quien estara para asesorarlo en este proceso\n`;
                         break;
                     case 50:
-                        mensaje = `Estimado (a) trabajador, queremos informarle que la Caja de compensacion a la cual pertenece  tiene un sistema de autogestion, que le permitirÃ¡ hacer  la inclusion de sus beneficiarios, por  lo  cual lo invitamos a realizar este  tramite directamente en la pagina www.colsubsidio.com Si tiene alguna dificultad o inquietud no dude en contactar a Jakeline Rueda Celular 3222569460, quien estara para asesorarlo en este proceso\n`;
+                        mensaje = `Estimado (a) trabajador, queremos informarle que la Caja de compensacion a la cual pertenece  tiene un sistema de autogestion, que le permitirÃ¡ hacer  la inclusion de sus beneficiarios, por  lo  cual lo invitamos a realizar este  tramite directamente en la pagina<br><br>www.colsubsidio.com<br>Si tiene alguna dificultad o inquietud no dude en contactar a Jakeline Rueda Celular 3222569460, quien estara para asesorarlo en este proceso\n`;
                         break;
                     default:
                         break;
@@ -219,7 +221,7 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
 
                 Swal.fire({
                     icon: 'info',
-                    title: mensaje,
+                    html: mensaje,
                     showConfirmButton: false,
                     showCancelButton: true,
                     cancelButtonText: 'Continuar',
@@ -243,7 +245,7 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
         })
             .then((resGetTipoDocumentoBeneficiario) => {
 
-                let optionsCategory = [{ value: null, label: "SELECCIONE..." }];
+                let optionsCategory = [{ value: '', label: "SELECCIONE..." }];
 
                 resGetTipoDocumentoBeneficiario.forEach(element => {
                     optionsCategory.push({ value: element.TIP_CODIGO, label: element.TIP_NOMBRE.toUpperCase() })
@@ -285,8 +287,6 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
             const dataForm = new FormData();
             dataForm.append("allData", JSON.stringify(allData));
 
-            console.log("allData", allData);
-
             filesState.forEach(file => {
                 dataForm.append("file", file.fileInfo);
                 dataForm.append("filesNames", file.tipoDocumento);
@@ -298,9 +298,12 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
                 params: dataForm
             })
                 .then(() => {
+
+                    let inclusion = (stateBeneficioPara === "eps") ? "SERVICIO DE SALUD (EPS)" : "CAJA DE COMPENSACION FAMILIAR";
+
                     Swal.fire({
                         icon: 'success',
-                        title: 'Datos guardados correctamente.',
+                        html: `Su solicitud para la inclusion del usuario ${formValue?.apellidoBeneficiario} ${formValue?.apellidoBeneficiario} con numero de cedula ${formValue?.cedulaBeneficiario} al ${inclusion}.", fue radicada con exito. Al correo se le estara informando del avance de este proceso.`,
                         confirmButtonText: 'Cerrar',
                         confirmButtonColor: "#A6A6A6",
                     }).then((result) => {
@@ -335,7 +338,8 @@ export const useEpsCajaRadicar = (formInitialState = {}, dataUser) => {
             exprRegNumeros.test(tipoDocumento) &&
             exprRegNumeros.test(cedulaBeneficiario) &&
             exprRegSoloLetras.test(nombreBeneficiario) &&
-            exprRegSoloLetras.test(apellidoBeneficiario)
+            exprRegSoloLetras.test(apellidoBeneficiario) &&
+            filesState.length !== 0
         ) {
             return true;
         }

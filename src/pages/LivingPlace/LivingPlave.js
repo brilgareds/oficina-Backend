@@ -102,7 +102,7 @@ class LivingPlace extends Component{
                     })
                     this.loadDataPrincipal();
                 }else{
-                    console.log('trusky',result[0]);
+                    
                 }
             })
 
@@ -153,9 +153,6 @@ class LivingPlace extends Component{
         getData(urlServices).then(result =>{
             let option = result.map((value,x) => {   
             let valSer = false
-        
-            console.log(this.state.SERVICIOS);
-
 
             if(this.state.SERVICIOS){
                 valSer = this.state.SERVICIOS.indexOf(value["TIP_NOMBRE"]) > -1 ? true:false
