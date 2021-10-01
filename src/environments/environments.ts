@@ -82,7 +82,8 @@ const routes = {
 };
 
 const files = {
-    novedadesEmpresariales: { url: `${frontendPath}/assets/documents/novedades_empresariales.pdf` }
+    novedadesEmpresariales: { url: `https://controlfdata.blob.core.windows.net/vumoffice/assets/docs/novedades_vum.pdf` },
+    recomendacionesGenerales: { url: `https://controlfdata.blob.core.windows.net/vumoffice/assets/docs/Recomendaciones_generales.pdf` },
 };
 
 const direccionesPorEmpresa = {
